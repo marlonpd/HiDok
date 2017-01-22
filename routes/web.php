@@ -23,6 +23,7 @@ Route::get('login', 'Auth\LoginController@getLogin');
 Route::post('login', 'Auth\LoginController@postLogin');
 Route::get('logout', 'Auth\LogoutController@getLogout');
 
+Route::get('settings', 'SettingsController@index');
 
 Auth::routes();
 

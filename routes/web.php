@@ -69,6 +69,10 @@ Route::get('logout', 'Auth\LogoutController@getLogout');
 
 
 
+Route::get('foo', function(){
+	return "foo";
+});
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');

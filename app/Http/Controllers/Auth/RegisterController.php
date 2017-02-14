@@ -6,6 +6,9 @@ use App\User;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\Request;
 
 class RegisterController extends Controller
 {
@@ -73,9 +76,42 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         return User::create([
-           // 'name' => $data['name'],
+            'lastname' => $data['lastname'],
+            'firstname' => $data['firstname'],
+            'middlename' => $data['middlename'],
             'email' => $data['email'],
+            'account_type' => $data['account_type'],
             'password' => bcrypt($data['password']),
         ]);
     }
+
+    protected function create_medical_facility(array $data)
+    {
+        return User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'account_type' => $data['account_type'],
+            'password' => bcrypt($data['password']),
+        ]);
+    }
+
+
+    protected function post_register(request $request)
+    {
+        $this->validator($request->all())->validate();
+
+        if($request->input('account_type') == 2){
+            event(new Registered($user = $this->create_medical_facility($request->all())));
+        }else{
+            event(new Registered($user = $this->create($request->all())));
+        }
+
+        $this->guard()->login($user);
+
+        return $this->registered($request, $user)
+            ?: redirect($this->redirectPath());
+    
+    }
+
+
 }

@@ -1,8 +1,10 @@
+
+
 <footer class="footer-distributed">
 
 			<div class="footer-left">
 
-				<h3>Company<span>logo</span></h3>
+				<h3><img src="/images/logo.png" width="200px"></h3>
 
 				<p class="footer-links">
 					<a href="#">Home</a>

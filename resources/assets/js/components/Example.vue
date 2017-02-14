@@ -1,23 +1,45 @@
 <template>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Example Component</div>
+    <div class="modal" id="login" tabindex="-1" role="dialog" aria-labelledby="login" aria-hidden="true">
+      <div class="modal-dialog">
 
-                    <div class="panel-body">
-                        I'm an example component!
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+
+
+    <!-- /.modal-content --> 
+  </div>
+      <!-- /.modal-dialog --> 
+</div>
 </template>
 
 <script>
+
     export default {
         mounted() {
-            console.log('Component ready.')
-        }
+
+        },
+
+        created: function() {
+           
+        },
+
+       
+        data(){
+            return {
+                
+                user : {
+                    
+                },
+
+            }
+        },
+
+        events: {
+
+        },
+
+        methods: {
+
+        },
+
+   
     }
 </script>

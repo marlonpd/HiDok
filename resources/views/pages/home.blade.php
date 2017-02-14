@@ -15,3 +15,14 @@
     </div>
 </div>
 @endsection
+
+
+
+
+@section('javascripts')
+    <script>
+        var childMixin = {
+
+        };
+    </script>
+@endsection

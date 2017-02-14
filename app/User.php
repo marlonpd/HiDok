@@ -1,13 +1,17 @@
 <?php
 
 namespace App;
+use Eloquent;
 
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Auth\Authenticatable as AuthenticableTrait;
 
-class User extends Authenticatable
+
+class User extends Eloquent implements Authenticatable
 {
     use Notifiable;
+    use AuthenticableTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -15,7 +19,9 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'lastname','firstname','middlename','account_type','name', 
+        'email', 'password','address','contact_no','height','weight',
+        'religion','gender','photo', 'thumbnail',
     ];
 
     /**
@@ -26,4 +32,17 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+
+    public function avatar()
+    {
+        return $this->photo == "" ? '/images/default_avatar_male.jpg' : $this->thumbnail;
+    }
+
+    public function is_doctor()
+    {
+        return $this->account_type == config('constants.account_type.doctor') ? true : false;
+    }
+
+    
 }

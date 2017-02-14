@@ -3,24 +3,27 @@
 @section('content')
 	 <div class="row">
     <div class="col-sm-4 col-sm-offset-4">
-      <h2>Please sign up | Doctor</h2>
+      <h2>Please sign up | Patient</h2>
 
       <form method="post" action="{{ url('/register') }}">
         {!! csrf_field() !!}
 
+        <input type="hidden" name="account_type" id="account_type" value="{{ Config::get('constants.account_type.patient') }}">
+
+
         <div class="form-group">
           <label for="exampleInputEmail1">Lastname</label>
-          <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Lastname" name="lastname" id="lastname" value="{{ old('lastname') }}" required>
+          <input type="text" class="form-control" placeholder="Lastname" name="lastname" id="lastname" value="{{ old('lastname') }}" required>
         </div>
 
         <div class="form-group">
           <label for="exampleInputEmail1">Firstname</label>
-          <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Firstname" name="firstname" id="firstname" value="{{ old('firstname') }}" required>
+          <input type="text" class="form-control" placeholder="Firstname" name="firstname" id="firstname" value="{{ old('firstname') }}" required>
         </div>
 
         <div class="form-group">
           <label for="exampleInputEmail1">Middle name</label>
-          <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Middle name" name="middlename" id="middlename" value="{{ old('middlename') }}" required>
+          <input type="text" class="form-control" placeholder="Middle name" name="middlename" id="middlename" value="{{ old('middlename') }}" required>
         </div>
 
         <div class="form-group">

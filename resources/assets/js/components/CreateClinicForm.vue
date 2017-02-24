@@ -1,46 +1,58 @@
 <template>
 
-    <div class="modal" id="create" tabindex="-1" role="dialog" aria-labelledby="create" aria-hidden="true">
+    <div class="modal" id="create-clinic-form" tabindex="-1" role="dialog" aria-labelledby="create-clinic-form" aria-hidden="true">
       <div class="modal-dialog">
     <div class="modal-content">
           <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times-circle fa-1" aria-hidden="true"></i></button>
-        <h4 class="modal-title custom_align" id="Heading">Create New Schedule</h4>
+        <h4 class="modal-title custom_align" id="Heading">Create New Clinic</h4>
       </div>
           <div class="modal-body">
          
     <form class="form-horizontal">
 
+
         <div class="form-group">
-            <label class="control-label col-xs-3">Day available:</label>
-            <div class="col-xs-3">
-                <select class="form-control" v-model="schedule.from_day">
-                    <option>Sunday</option>
-                    <option>Monday</option>
-                    <option>Tuesday</option>
-                    <option>Wednesday</option>
-                    <option>Thursday</option>
-                    <option>Friday</option>
-                    <option>Saturday</option>
-                </select>
+            <label class="control-label col-xs-3" for="name">Name:</label>
+            <div class="col-xs-9">
+                <input class="form-control" id="name" v-model="clinic.name" placeholder="Name" type="text">
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            <label class="control-label col-xs-3">Day(s) available:</label>
+            <div class="col-xs-6">
+                
+                <ul class="no-bullet">
+                  <li>
+                    <input type="checkbox"  v-model="clinic.open_sunday"  v-bind:true-value="1" v-bind:false-value="0" > Sunday
+                  </li>
+                  <li>
+                    <input type="checkbox"  v-model="clinic.open_monday"  v-bind:true-value="1" v-bind:false-value="0" > Monday
+                  </li>
+                  <li>
+                    <input type="checkbox"  v-model="clinic.open_tuesday"  v-bind:true-value="1" v-bind:false-value="0" > Tuesday
+                  </li>
+                  <li>
+                    <input type="checkbox"  v-model="clinic.open_wednesday"  v-bind:true-value="1" v-bind:false-value="0" > Wednesday
+                  </li>
+                  <li>
+                    <input type="checkbox"  v-model="clinic.open_thursday"  v-bind:true-value="1" v-bind:false-value="0" > Thursday
+                  </li>
+                  <li>
+                    <input type="checkbox"  v-model="clinic.open_friday"  v-bind:true-value="1" v-bind:false-value="0" > Friday
+                  </li>
+                  <li>
+                    <input type="checkbox"  v-model="clinic.open_saturday"  v-bind:true-value="1" v-bind:false-value="0" > Saturday
+                  </li>
+                </ul>
 
                 
             </div>
-            <div class="col-xs-1">
-            to
-            </div>
-            <div class="col-xs-3">
-                <select class="form-control" v-model="schedule.to_day">
-                    <option>Sunday</option>
-                    <option>Monday</option>
-                    <option>Tuesday</option>
-                    <option>Wednesday</option>
-                    <option>Thursday</option>
-                    <option>Friday</option>
-                    <option>Saturday</option>
-                </select>
-            </div>
-
+         
+     
         </div>
 
 
@@ -48,7 +60,7 @@
           <div class="form-group">
             <label class="control-label col-xs-3">Time available:</label>
             <div class="col-xs-3">
-                <select class="form-control" v-model="schedule.from_time">
+                <select class="form-control" v-model="clinic.from_time">
                     <option>1:00 a.m.</option>
                     <option>2:00 a.m.</option>
                     <option>3:00 a.m.</option>
@@ -77,7 +89,7 @@
             </div>
             <div class="col-xs-1">to</div>
             <div class="col-xs-3">
-                <select class="form-control" v-model="schedule.to_time">
+                <select class="form-control" v-model="clinic.to_time">
                     <option>1:00 a.m.</option>
                     <option>2:00 a.m.</option>
                     <option>3:00 a.m.</option>
@@ -112,7 +124,7 @@
             <div class="form-group">
             <label class="control-label col-xs-3" for="phoneNumber">Address:</label>
             <div class="col-xs-9">
-                <input class="form-control" id="phoneNumber" v-model="schedule.address" placeholder="Address" type="tel">
+                <input class="form-control" id="phoneNumber" v-model="clinic.address" placeholder="Address" type="tel">
             </div>
           </div>
 
@@ -120,7 +132,7 @@
           <div class="form-group">
             <div class="col-xs-offset-3 col-xs-9">
                 <label class="checkbox-inline">
-                    <input value="news" type="checkbox" v-model="schedule.default_address"> Set as default schedule.
+                    <input value="news" type="checkbox" v-model="clinic.default_address"> Set as default clinic.
                 </label>
             </div>
         </div>
@@ -130,7 +142,7 @@
 
           </div>
           <div class="modal-footer ">
-        <button type="button" @click="createSchedule($event)" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span>Create</button>
+        <button type="button" @click="createClinic($event)" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span>Create</button>
       </div>
         </div>
     <!-- /.modal-content --> 
@@ -148,21 +160,27 @@
         },
 
         created: function() {
-
         },
 
 
-        props : ['schedules', 'id'],
 
         data(){
             return {
 
-                schedule: {
-                  from_time : null,
+                clinic: {
+                  name : null,
                   to_time : null,
-                  from_day : null, 
-                  to_day : null,
+                  from_time : null, 
+                  open_sunday : 0,
+                  open_monday : 0,
+                  open_tuesday : 0,
+                  open_wednesday : 0,
+                  open_thursday : 0,
+                  open_friday : 0,
+                  open_saturday : 0,
                   address : null,
+                  gmap_lat : null,
+                  gmap_lng : null,
                   default_address : false,
                 }
             }
@@ -173,7 +191,7 @@
         },
 
         methods: {
-          createSchedule: function(event){
+          createClinic: function(event){
             event.preventDefault();
 
             swal({
@@ -187,15 +205,14 @@
               }
             )
 
-            this.$http.post('/api/schedule/create/post', this.schedule, function(data){
+            this.$http.post('/api/clinic/create/post', this.clinic, function(data){
               if(data == 'success'){
-                $('#create').modal('hide');
+                $('#create-clinic-form').modal('hide');
               
-               // this.$parent.$options.methods.fetchSchedules(0);
 
                 swal({
                   title: 'Success!',
-                  text: 'Successfully created new schedule.',
+                  text: 'Successfully created new clinic.',
                   showConfirmButton : false,
                   timer: 1000,
                   type : 'success',

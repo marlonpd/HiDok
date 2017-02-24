@@ -11,11 +11,11 @@
 
                     <div id="accordion">
                       
-                       @foreach ($schedules as $schedule)
-                          <h3>{{ $schedule->address }}, {{ $schedule->from_day }}-{{ $schedule->to_day }} @ {{ $schedule->from_time }} - {{ $schedule->to_time }}</h3>
+                       @foreach ($clinics as $clinic)
+                          <h3>{{ $clinic->name }}, {{ $clinic->address }}, {{ $clinic->from_day }}-{{ $clinic->to_day }} @ {{ $clinic->from_time }} - {{ $clinic->to_time }}</h3>
                           <div>
                             <p>
-                                <schedule-appointment :schedule_id = {!! $schedule->id !!} ></schedule-appointment>
+                                <schedule-appointment :clinic_id={!! $clinic->id !!} :appointments = appointments[{!! $clinic->id !!}] ></schedule-appointment>
                             </p>
                           </div>
                        @endforeach
@@ -24,6 +24,8 @@
 
 
 
+                    @{{ editAppointment | json }}
+
                 </div>
             </div>
         </div>
@@ -31,7 +33,9 @@
 </div>
 
 
-<re-schedule :schedule="schedule" :id="{!! Auth::user()->id !!}" ></re-schedule>
+<re-schedule :appointment="editAppointment" ></re-schedule>
+
+
 
 @endsection
 
@@ -50,21 +54,39 @@
                 
             },
             created: function() {
-                //this.fetchAppointment();
-                //this.fetchSchedules('{!! Auth::user()->id !!}');                
+                this.fetchAllAppointments();                
             },
 
 
 
             data: function(){
                 return {
-                   schedule : {},     
+                   schedule : {},   
+                   appointments : {},  
+                   appoinment_id : 0,
+                   editAppointment : {},
                 }
             },
 
             methods:{
 
+                setAppointmentMain : function(appointment){
+                    this.editAppointment = appointment;
+                    Vue.nextTick(function () {});
 
+               
+
+
+                },
+
+                fetchAllAppointments: function(){
+                    this.$http.get('/api/auth/appointment/all/get', function(data){
+                        this.appointments = data['appointments'];
+                    });
+                },
+
+
+  
 
             }
 

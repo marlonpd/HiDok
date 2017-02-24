@@ -4,13 +4,13 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Appointment extends Model
+class ITR extends Model
 {
     public $timestamps = true;
 
-    protected $table = "appointment";
+    protected $table = "itr";
 
-    protected $fillable = ['clinic_id','doctor_id', 'patient_id' , 'appointment_date' ,'note' ,'confirmed'];
+    protected $fillable = ['doctor_id','appointment_id', 'patient_id' , 'assessment' ,'laboratory' ,'diagnosis','treatment'];
 
 	public function patient()
 	{

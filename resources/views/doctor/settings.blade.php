@@ -48,9 +48,31 @@
       <input type="text" class="form-control" placeholder="Contact no." name="contact_no" id="contact_no" value="{{ Auth::user()->contact_no }}" required>
     </div>
 
-    <div class="form-group">
+
+    <div class="form-group">  
+      <label for="exampleInputEmail1">Specialization</label>
+    
+      <select name="specialization" id="specialization" v-model="authUser.specialization"  class="form-control">
+          <option disabled>Select...</option>
+          <template v-for="specialization in constants['specialization']">
+            <option  v-bind:value="specialization" >@{{ specialization }}</option>
+          </template>
+      </select>
+
+    </div>
+
+
+    <div class="form-group">  
       <label for="exampleInputEmail1">Gender</label>
-      <input type="text" class="form-control" placeholder="Gender" name="gender" id="gender" value="{{ Auth::user()->gender }}" required>
+     
+
+      <select name="gender" id="gender" v-model="authUser.gender"  class="form-control">
+          <option disabled>Select...</option>
+          <template v-for="gender in constants['gender']">
+            <option  v-bind:value="gender" >@{{ gender }}</option>
+          </template>
+      </select>
+
     </div>
 
     <div class="form-group">
@@ -79,4 +101,41 @@
 </div>
 </div>
 
+
+@{{ authUser | json }}
+
 @stop
+
+
+
+
+
+@section('javascripts')
+    <script>
+
+        var childMixin = {
+
+            mounted(){
+                    
+            },
+            created: function() {    
+
+              
+
+            },
+
+
+
+            data: function(){
+                return {
+                   
+                }
+            },
+
+            methods:{
+                
+            }
+
+        };
+    </script>
+@endsection

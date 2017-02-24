@@ -23,17 +23,10 @@ Route::get('{account_type}/profile/{id}', 'ProfileController@index');
 
 
 Route::post('/api/login/post','Auth\LoginController@login_post');
-
-//Patient
-
-//Doctor
 Route::post('doctor/register', 'Auth\RegisterController@post_register');
-Route::get('schedule', 'doctor\ScheduleController@index');
-Route::resource('schedule', 'doctor\ScheduleController');
-Route::post('/api/schedule/create/post','doctor\ScheduleController@store');
-Route::post('/api/schedule/update/post','doctor\ScheduleController@update');
-Route::get('/api/schedules/get/{id}','doctor\ScheduleController@api_schedules_get');
-Route::post('/api/schedule/delete/post','doctor\ScheduleController@destroy');
+
+Route::get('/header', 'HomeController@header');
+Route::get('/api/constants/get', 'PublicController@api_constants_get');
 
 
 Route::group(['middleware' => ['web'  ]], function () {
@@ -50,12 +43,40 @@ Route::group(['middleware' => ['web'  ]], function () {
 
 	Route::get('/appointment', 'AppointmentController@index');
 	Route::post('/api/appointment/request/post ','AppointmentController@api_appointment_request_post');
-	Route::get('/api/auth/appointment/get', 'AppointmentController@api_auth_appointment_get');
+	Route::get('/api/auth/appointment/get/{clinic_id}', 'AppointmentController@api_auth_appointment_get');
+	Route::get('/api/auth/appointment/all/get', 'AppointmentController@api_auth_appointment_all_get');
+
 	Route::get('/api/appointment/delete/post', 'AppointmentController@api_appointment_delete_post');
-	Route::get('/api/auth/schedule/appointment/get/{id}', 'AppointmentController@api_auth_schedule_appointment_get');
+	Route::get('/api/auth/appointment/get/{id}', 'AppointmentController@api_auth_schedule_appointment_get');
 	Route::post('/api/appointment/confirm/post', 'AppointmentController@api_appointment_confirm_post');
+	Route::post('/api/appointment/consult/post', 'AppointmentController@api_appointment_consult_post');
 	Route::post('/api/appointment/delete/post', 'AppointmentController@api_appointment_delete_post');
 	Route::post('/api/appointment/reschedule/post', 'AppointmentController@api_appointment_reschedule_post');
+
+	Route::get('/schedule', 'doctor\ScheduleController@index');
+
+
+	Route::get('/clinic', 'doctor\ClinicController@index');
+	Route::post('/api/clinic/create/post','doctor\ClinicController@store');
+	Route::post('/api/clinic/update/post','doctor\ClinicController@update');
+	Route::get('/api/clinics/get/{id}','doctor\ClinicController@api_clinics_get');
+	Route::post('/api/clinic/delete/post','doctor\ClinicController@destroy');
+
+	//doctor
+	Route::get('/patient/itr/{id}','ITRController@patient_itr');
+	Route::get('/api/patient/itr/get/{id}', 'ITRController@api_patient_itr_get');
+	Route::post('/api/itr/assessment/post', 'ITRController@api_itr_assessment_post');
+
+	Route::post('/api/itr/laboratory/post', 'ITRController@api_itr_laboratory_post');
+	Route::post('/api/itr/dx/post', 'ITRController@api_itr_dx_post');
+	Route::post('/api/itr/treatment/post', 'ITRController@api_itr_treatment_post');
+	Route::get('/print/dx/{id}','ITRController@print_dx');
+
+	//patient 
+	Route::get('/itr/{id}','ITRController@patient_itr');
+
+
+
 
 });
 

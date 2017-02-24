@@ -25,4 +25,10 @@ class HomeController extends Controller
     {
         return view('pages/home');
     }
+
+
+    public function header()
+    {
+        return view('header');
+    }
 }

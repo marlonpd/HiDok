@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateScheduleTable extends Migration
+class CreateClinicTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,19 @@ class CreateScheduleTable extends Migration
      */
     public function up()
     {
-        Schema::create('schedules', function (Blueprint $table) {
+        Schema::create('clinics', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id');
+            $table->string('name');
+            $table->integer('doctor_id');
             $table->string('from_time');
             $table->string('to_time');
-            $table->string('from_day');
-            $table->string('to_day');
+            $table->tinyInteger('open_sunday')->default(0);
+            $table->tinyInteger('open_monday')->default(0);
+            $table->tinyInteger('open_tuesday')->default(0);
+            $table->tinyInteger('open_wednesday')->default(0);
+            $table->tinyInteger('open_thursday')->default(0);
+            $table->tinyInteger('open_friday')->default(0);
+            $table->tinyInteger('open_saturday')->default(0);
             $table->string('address');
             $table->string('gmap_lat')->nullable();
             $table->string('gmap_lng')->nullable();
@@ -34,6 +40,6 @@ class CreateScheduleTable extends Migration
      */
     public function down()
     {
-        Schema::drop('schedules');
+        Schema::dropIfExists('clinics');
     }
 }

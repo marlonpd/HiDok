@@ -1,6 +1,6 @@
 <template>
 
-    <div class="modal" id="create-appointment" tabindex="-1" role="dialog" aria-labelledby="create-appointment" aria-hidden="true">
+    <div class="modal" id="create-appointment-form" tabindex="-1" role="dialog" aria-labelledby="create-appointment-form" aria-hidden="true">
       <div class="modal-dialog">
     <div class="modal-content">
           <div class="modal-header">
@@ -10,11 +10,24 @@
           <div class="modal-body">
          
               <div class="form-group">
-                Select Schedule
+                Select Clinic
                 <div class="schedule-list">
-                    <div class="radio" v-for="schedule in schedules">
-                      <label><input type="radio" value="0" name="optradio" @click="setSchedule(schedule.id)">{{ schedule.address }}
-                      <br> {{ schedule.from_day }}-{{ schedule.to_day }} {{ schedule.from_time }}-{{ schedule.to_time }}  </label>
+                    <div class="radio" v-for="clinic in clinics">
+                      <label><input type="radio" value="0" name="optradio" @click="setClinic(clinic.id)"> Clinic : {{ clinic.name }} , Address : {{ clinic.address }}
+                      <br> 
+                      <ul class="no-bullet" >
+                        <li style="float:left;" v-if="clinic.open_sunday == 1"> Sunday</li>
+                        <li style="float:left;" v-if="clinic.open_monday == 1">, Monday</li>
+                        <li style="float:left;" v-if="clinic.open_tuesday == 1">,Tuesday</li>
+                        <li style="float:left;" v-if="clinic.open_wednesday == 1">,Wednesday</li>
+                        <li style="float:left;" v-if="clinic.open_thursday == 1">,Thursday</li>
+                        <li style="float:left;" v-if="clinic.open_friday == 1">,Friday</li>
+                        <li style="float:left;" v-if="clinic.open_saturday == 1">Saturday</li>
+                        <li style="float:left;" > {{ clinic.from_day }}-{{ clinic.to_day }} {{ clinic.from_time }}-{{ clinic.to_time }} </li>
+                      </ul>
+
+
+                       </label>
                     </div>
                 </div>
               </div>
@@ -55,7 +68,7 @@
 
         },
 
-        props: ['schedules', 'doctor_id'],
+        props: ['clinics', 'doctor_id'],
 
         created: function() {
 
@@ -68,7 +81,7 @@
                   appointment_date :  null,
                   patient_id : null,
                   doctor_id : null,
-                  schedule_id : null,
+                  clinic_id : null,
                 }
             }
         },
@@ -78,9 +91,9 @@
         },
 
         methods: {
-          setSchedule: function(id){
+          setClinic: function(id){
 
-            this.appointment.schedule_id = id;
+            this.appointment.clinic_id = id;
             this.appointment.doctor_id = this.doctor_id;
 
           },
@@ -106,11 +119,11 @@
 
             this.$http.post('/api/appointment/request/post', this.appointment, function(data){
               if(data == 'success'){
-                $('#create-appointment').modal('hide');
+                $('#create-appointment-form').modal('hide');
                 
                 swal({
                   title: 'Success!',
-                  text: 'Successfully requested new schedule.',
+                  text: 'Successfully requested new appointment.',
                   showConfirmButton : false,
                   timer: 1000,
                   type : 'success',

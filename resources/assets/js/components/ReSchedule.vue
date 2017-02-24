@@ -5,14 +5,14 @@
     <div class="modal-content">
           <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times-circle fa-1" aria-hidden="true"></i></button>
-        <h4 class="modal-title custom_align" id="Heading">Re schedule an appointment</h4>
+        <h4 class="modal-title custom_align" id="Heading">Re schedule an appointmen {{ appointment | json }} t</h4>
       </div>
           <div class="modal-body">
          
-          		
+              
 
 
-          	<div class="form-group">
+            <div class="form-group">
 
 
                   Set new schedule date
@@ -25,7 +25,7 @@
 
 
                   Note
-          		  <div class="input-group col-md-12">
+                <div class="input-group col-md-12">
                      <textarea placeholder="Add some feedback?" width="100%" class="col-md-12" ></textarea>  
                   </div><!-- Widget Area -->
 
@@ -35,15 +35,20 @@
             
           </div>
           <div class="modal-footer ">
-        <button type="button" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span>Re-Schedule</button>
+        <button type="button" @click="submitNewSchedule()" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span>Re-Schedule</button>
       </div>
         </div>
 
+
+    
         
     <!-- /.modal-content --> 
   </div>
       <!-- /.modal-dialog --> 
 </div>
+
+
+
     
 </template>
 
@@ -66,13 +71,7 @@
 
         data(){
             return {
-        		    appointment :{
-                  appointment_date :  null,
-                  patient_id : null,
-                  doctor_id : null,
-                  schedule_id : null,
-                  note : null,
-                }
+ 
             }
         },
 
@@ -88,6 +87,14 @@
   		    	this.appointment.appointment_date = $("#appointment_date").val();
 
   		    },
+
+
+          submitNewSchedule : function(){
+           // alert(JSON.stringify(this.$parent.$options.data()));
+
+            alert(JSON.stringify(this.$parent));
+          // alert(this.$parent.editAppointment.id);
+          }
 
 	
   

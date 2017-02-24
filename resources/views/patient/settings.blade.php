@@ -58,18 +58,41 @@
 
     <div class="form-group">
       <label for="exampleInputEmail1">Religion</label>
-      <input type="text" class="form-control" placeholder="Weight" name="religion" id="religion" value="{{ Auth::user()->religion }}" required>
+          <select name="religion" id="religion" v-model="authUser.religion"  class="form-control">
+              <option disabled>Select...</option>
+              <template v-for="religion in constants['religion']">
+                <option  v-bind:value="religion" >@{{ religion }}</option>
+              </template>
+          </select>
     </div>
 
-    <div class="form-group">
+
+
+
+    <div class="form-group">  
       <label for="exampleInputEmail1">Gender</label>
-      <input type="text" class="form-control" placeholder="Gender" name="gender" id="gender" value="{{ Auth::user()->gender }}" required>
+     
+
+      <select name="gender" id="gender" v-model="authUser.gender"  class="form-control">
+          <option disabled>Select...</option>
+          <template v-for="gender in constants['gender']">
+            <option  v-bind:value="gender" >@{{ gender }}</option>
+          </template>
+      </select>
+
     </div>
 
     <div class="form-group">
       <label for="exampleInputEmail1">E-mail address</label>
       <input type="email" class="form-control"   placeholder="E-mail" name="email" value="{{ Auth::user()->email }}" required>
     </div>
+
+
+    <div class="form-group">
+      <label for="exampleInputEmail1">Health History</label>
+      <textarea class="form-control" rows="5"  name="health_history" id="health_history">{{ Auth::user()->health_history }}</textarea>
+    </div>
+
 
     <div class="form-group">
       <button class="btn btn-lg btn-primary btn-block" type="submit">Update</button>
@@ -92,4 +115,44 @@
 </div>
 </div>
 
+
+
 @stop
+
+
+  
+   
+
+
+
+
+@section('javascripts')
+    <script>
+
+        var childMixin = {
+
+            mounted(){
+                    
+            },
+            created: function() {    
+
+              
+
+            },
+
+
+
+            data: function(){
+                return {
+                   
+                }
+            },
+
+            methods:{
+                
+            }
+
+        };
+    </script>
+@endsection
+

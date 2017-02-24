@@ -61,6 +61,7 @@
                               <li><a href="/feedback"><i class="fa fa-address-book fa-3x"></i></a></li>
                           @endif
                           <li><a href="/appointment"><i class="fa fa-pencil-square-o fa-3x"></i></a></li>
+                          <li><a href="/itr/0"><i class="fa fa-medkit  fa-3x" aria-hidden="true"></i></a></li>
                           <li><a href="/settings"><i class="fa fa-cog fa-3x"></i></a></li>
                         @endif
            
@@ -72,6 +73,8 @@
                 
               <div class="main-container" >
                   @yield('content')
+
+
               </div>
    
               @if (!Auth::check())
@@ -96,14 +99,31 @@
             <script type="text/javascript">
               var main = {
 
+                
+
+                mounted(){
+                    
+                },
+                created: function() {    
+                  @if (Auth::check())
+                     this.fetchConstants();
+                     this.setAuthUser('{!! Auth::user() !!}');         
+                  @endif 
+                },
+
                 data: function(){
                     return {
                       dev : null,
-                      id : null
+                      id : null,
+                      authUser : {},
                     }
                 },
 
                 methods:{
+                  setAuthUser : function(authUser){
+                      this.authUser = JSON.parse(authUser);
+                  },
+
 
                 }
               };

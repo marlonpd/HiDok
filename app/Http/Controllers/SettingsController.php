@@ -36,6 +36,7 @@ class SettingsController extends Controller
 
 
 
+
         if ($request->hasFile('photo')) {
 
             $photo_dir = 'images/photo';
@@ -49,6 +50,8 @@ class SettingsController extends Controller
                            'thumbnail' => $photo_dir.'/thumb/'.$safename]);
 
         }
+
+       
         $user->update($request->all());       
 
         return redirect('settings');

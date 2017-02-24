@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Appointment;
-use App\Schedule;
+use App\Clinic;
+use App\ITR;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 
 class AppointmentController extends Controller
@@ -23,10 +25,10 @@ class AppointmentController extends Controller
     	if(Auth::user()->is_doctor())
         {
 
-            $schedules = Schedule::where('user_id' , '=' ,Auth::user()->id)
+            $clinics = Clinic::where('doctor_id' , '=' ,Auth::user()->id)
                                  ->get();
 
-        	return view('doctor/appointment', compact('schedules'));
+        	return view('doctor/appointment', compact('clinics'));
         }
         else
         {
@@ -52,7 +54,7 @@ class AppointmentController extends Controller
     protected function createAppointment(array $data)
     {
         return Appointment::create([
-        	 			    'schedule_id' => $data['schedule_id'],			
+        	 			    'clinic_id' => $data['clinic_id'],			
 				            'doctor_id'   => $data['doctor_id'],
 				            'patient_id'  => Auth::user()->id,
                             'creator_id'  => 0,
@@ -63,27 +65,28 @@ class AppointmentController extends Controller
     }
 
 
-    public function api_auth_schedule_appointment_get($schedule_id)
+    public function api_auth_appointment_get($clinic_id)
     {
 
         if(Auth::user()->is_doctor())
         {
             $appointments = Appointment::with('patient')
-                                    ->where('schedule_id' , '=' ,$schedule_id )
+                                    ->where('clinic_id' , '=' ,$clinic_id )
                                     ->get();
 
         }
         else
-        {                        
+        {            
+                    
             $appointments = Appointment::with('doctor')
-                                       ->where('schedule_id' , '=' ,$schedule_id )
+                                       ->where('clinic_id' , '=' ,$clinic_id )
                                        ->get();
         }                
 
         return json_pretty(['appointments' => $appointments]);
     }
 
-    public function api_auth_appointment_get()
+  /*  public function api_auth_appointment_get()
     {
     	$user_id = Auth::user()->id;
 
@@ -102,6 +105,42 @@ class AppointmentController extends Controller
 
 
         return $this->json_pretty(['appointments' => $appointments]);                    
+ 
+    }*/
+
+
+    public function api_auth_appointment_all_get()
+    {
+        $user_id = Auth::user()->id;
+
+        $appointments = array();
+
+        if(Auth::user()->is_doctor())
+        {
+            $clinics = Clinic::where('doctor_id', '=', $user_id)
+                              ->get();
+
+            foreach ($clinics as $clinic) 
+            {
+
+                $appointments[$clinic->id] = Appointment::with('patient')
+                                                        ->where('clinic_id' , '=' ,$clinic->id )
+                                                        ->get();
+            
+
+            }    
+
+
+        }
+        else
+        {
+            $appointments = Appointment::with('doctor')
+                                       ->where('patient_id' , '=' ,$user_id )
+                                       ->get();
+        }
+
+
+        return json_pretty(['appointments' => $appointments]);                    
  
     }
 
@@ -133,9 +172,44 @@ class AppointmentController extends Controller
 
         $appointment = Appointment::findOrFail($id);
 
-    	$appointment->update(['confirmed' => 1]);
+    	$appointment->update(['confirmed' => config('constants.appointment_status.confirm')]);
+
+
 
     	if($appointment)
+        {
+            return "success";
+        }
+        else
+        {
+            return "error";
+        }
+    }
+
+    //api/appointment/consult/post
+    public function api_appointment_consult_post(Request $request)
+    {
+        $id = $request->input('id');
+
+        $appointment = Appointment::findOrFail($id);
+
+        $appointment->update(['confirmed' => config('constants.appointment_status.consult')]);
+        
+        $timestamp = Carbon::now();
+
+        ITR::create(['doctor_id' => Auth::user()->id, 
+                     'appointment_id' => $id,  
+                     'patient_id' => $appointment->patient_id , 
+                     'assessment' => 'test-asses' ,
+                     'laboratory' => 'test-lab' ,
+                     'dx' => 'test-dx' ,
+                     'treatment'=> 'test-treatment',
+                     'created_at' => $timestamp,
+                     'updated_at' => $timestamp,
+                    ]);
+
+
+        if($appointment)
         {
             return "success";
         }

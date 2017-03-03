@@ -12,6 +12,7 @@
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
         <link rel="stylesheet" type="text/css" href="/css/app.css">
         <link rel="stylesheet" type="text/css" href="/css/all.css">
+        <link rel="stylesheet" type="text/css" href="/css/theme.css">
     </head>
     <body >
       <div id="app">
@@ -25,45 +26,59 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                       </button>
-                      <a class="navbar-brand" href="#"><img src="/images/logo.png" alt="" width="45px;" class="img-rounded img-responsive"></a>
+                      <a class="navbar-brand" href="/home"><img src="/images/logo.png" alt="" width="60px;" class="img-rounded img-responsive"><h4>HiDok</h4></a>
                     </div>
                     <div id="navbar" class="collapse navbar-collapse">
                       <ul class="nav navbar-nav">
                         <li>
-                          <a href="/"><i class="fa fa-home fa-3x"></i></a>
+                          <a href="/home">HOME</a>
                         </li>
+
+                        <li>
+                          <a href="/about">ABOUT</a>
+                        </li>
+
+                        <li>
+                          <a href="/contact">CONTACT</a>
+                        </li>
+
+                           @if (Auth::check())
+                             @if(Auth::user()->is_doctor())
+                                <li><a href="/clinics">CLINICS</a></li>
+                                 <li><a href="/feedback">FEEDBACK</a></li>
+                             @endif
+                          @endif
+
+                        
+
                       </ul>
 
                       <ul class="nav navbar-nav pull-right">
-                          <li class="active">
-                              <div class="box">
-                            <div class="container-1">
-                                <form action="/search" method="GET">  
-                                   <input type="text" id="search" name="search" placeholder="Search..." />
-                                   <button type="submit" class="icon">
-                                      <i class="fa fa-search"></i>
-                                  </button>
-                                </form>
-                            </div>
-                          </div>
+                          @if (Auth::check())
 
-                          </li>
-                        @if (!Auth::check())
-                          <li class="active"><a href="#" data-title="Register" data-toggle="modal" data-target="#register"><i class="fa fa-user-circle fa-3x"></i></a></li>
-                          <li><a  href="#" data-title="Login" data-toggle="modal" data-target="#login"><i class="fa fa-sign-in fa-3x"></i></a></li>
-                        @else
-                          <li><a href="/logout"><i class="fa fa-sign-out fa-3x"></i></a></li>
-                        @endif
-                        @if (Auth::check())
-
-                          @if(Auth::user()->is_doctor())
-                              <li><a href="/schedule"><i class="fa fa-clock-o fa-3x"></i></a></li>
-                              <li><a href="/feedback"><i class="fa fa-address-book fa-3x"></i></a></li>
+                            <li class="dropdown">
+                              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-search"></i></a>
+                              <ul class="dropdown-menu" style="padding:12px;">
+                                  <form class="form-inline" action="/search" method="get">
+                                  <select class="form-control pull-left" name="account">
+                                    <option value="doctor">Doctor</option>
+                                    <option value="hospital">Hospital</option>
+                                    <option value="laboratory">Laboratory</option>
+                                    <option value="pharmacy">Pharmacy</option>
+                                  </select>
+                              <button type="submit" class="btn btn-default pull-right"><i class="glyphicon glyphicon-search"></i></button><input class="form-control pull-left" placeholder="Search" type="text" name="name">
+                                  </form>
+                                </ul>
+                            </li>
                           @endif
-                          <li><a href="/appointment"><i class="fa fa-pencil-square-o fa-3x"></i></a></li>
-                          <li><a href="/itr/0"><i class="fa fa-medkit  fa-3x" aria-hidden="true"></i></a></li>
-                          <li><a href="/settings"><i class="fa fa-cog fa-3x"></i></a></li>
+                  
+                        @if (!Auth::check())
+           
+                          <li><a  href="#" data-title="Login" data-toggle="modal" data-target="#login"><i class="fa fa-user" aria-hidden="true"></i>Login</a></li>
+                        @else
+                          <li><a href="/logout"><i class="fa fa-user" aria-hidden="true"></i>Logout</a></li>
                         @endif
+                       
            
                       </ul>
 
@@ -73,8 +88,6 @@
                 
               <div class="main-container" >
                   @yield('content')
-
-
               </div>
    
               @if (!Auth::check())
@@ -82,7 +95,7 @@
                 <login-form ></login-form>
               @endif
 
-
+              @include('partials.top_footer')
               @include('partials.footer')
                        
               @include('partials.flash')
@@ -133,6 +146,6 @@
 
             <script src="/js/app.js"></script>
 
-              <feedback></feedback>
+            <feedback></feedback>
     </body>
 </html>

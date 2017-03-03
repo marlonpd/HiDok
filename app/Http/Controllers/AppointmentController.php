@@ -86,6 +86,21 @@ class AppointmentController extends Controller
         return json_pretty(['appointments' => $appointments]);
     }
 
+
+    public function api_auth_appointment_patient_get()
+    {
+
+        if(Auth::user()->is_patient())
+        {    
+            $appointments = Appointment::with('doctor')
+                                       ->get();
+
+             return json_pretty(['appointments' => $appointments]);
+        }                
+
+       
+    }
+
   /*  public function api_auth_appointment_get()
     {
     	$user_id = Auth::user()->id;
@@ -186,6 +201,18 @@ class AppointmentController extends Controller
         }
     }
 
+
+
+    public function add_patient( $patient_id)
+    {
+
+        $patient = new DoctorPatient();
+        $patient->patient_id = $patient_id;
+        $patient->doctor_id = Auth::user()->id;
+        $patient->save();
+
+    }
+
     //api/appointment/consult/post
     public function api_appointment_consult_post(Request $request)
     {
@@ -202,7 +229,7 @@ class AppointmentController extends Controller
                      'patient_id' => $appointment->patient_id , 
                      'assessment' => 'test-asses' ,
                      'laboratory' => 'test-lab' ,
-                     'dx' => 'test-dx' ,
+                     'diagnosis' => 'test-diagnosis' ,
                      'treatment'=> 'test-treatment',
                      'created_at' => $timestamp,
                      'updated_at' => $timestamp,
@@ -211,6 +238,7 @@ class AppointmentController extends Controller
 
         if($appointment)
         {
+            $this->add_patient($appointment->patient_id);
             return "success";
         }
         else
@@ -228,15 +256,19 @@ class AppointmentController extends Controller
 
         $appointment->update(['appointment_date' => date("Y-m-d H:i:s", strtotime($request->input('appointment_date'))),
                               'note' =>  $request->input('note'),
+                              're_schedule_by_id' => Auth::user()->id,
                       ]);
 
         if($appointment)
         {
-            return "success";
+           
+
+             return json_pretty(['status' => 'success',
+                                 'appointment' => $appointment]);
         }
         else
         {
-            return "error";
+            return json_pretty(['status' => 'error']);
         }
     }
 

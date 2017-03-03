@@ -6,7 +6,9 @@
                   <form>
                     <input type="text" name="email" v-model="user.email" placeholder="Email">
                     <input type="password" name="password" v-model="user.password" placeholder="Password">
-                    <input type="submit" name="login" class="login loginmodal-submit" value="Login" @click="login($event)">
+                  
+
+                    <button value="Login" @click="login($event)" style="width:100%;" name="login" class="login loginmodal-submit btn btn-primary ladda-button" data-style="expand-left"><span class="ladda-label">Login</span></button>
                   </form>
                     
                   <div class="login-help">
@@ -52,19 +54,12 @@
                 
                 event.preventDefault();
 
-                swal({
-                  text: 'Logging in....',
-                  timer: 1000,
-                  showConfirmButton : false,
-                  type : 'info',
-                }).then(
-                  function () {},
-                  function (dismiss) {
-                  }
-                )
-
+                var l = Ladda.create(document.querySelector( '.login' ));
+                l.start();
 
                 this.$http.post('/api/login/post', this.user, function(data){
+
+                    l.stop();
                     
                     if(data == 'success'){
                         swal({

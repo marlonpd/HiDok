@@ -25,6 +25,8 @@ Route::get('{account_type}/profile/{id}', 'ProfileController@index');
 Route::post('/api/login/post','Auth\LoginController@login_post');
 Route::post('doctor/register', 'Auth\RegisterController@post_register');
 
+
+
 Route::get('/header', 'HomeController@header');
 Route::get('/api/constants/get', 'PublicController@api_constants_get');
 
@@ -44,6 +46,9 @@ Route::group(['middleware' => ['web'  ]], function () {
 	Route::get('/appointment', 'AppointmentController@index');
 	Route::post('/api/appointment/request/post ','AppointmentController@api_appointment_request_post');
 	Route::get('/api/auth/appointment/get/{clinic_id}', 'AppointmentController@api_auth_appointment_get');
+
+	Route::get('/api/auth/appointment/patient/get/', 'AppointmentController@api_auth_appointment_patient_get');
+
 	Route::get('/api/auth/appointment/all/get', 'AppointmentController@api_auth_appointment_all_get');
 
 	Route::get('/api/appointment/delete/post', 'AppointmentController@api_appointment_delete_post');
@@ -76,12 +81,19 @@ Route::group(['middleware' => ['web'  ]], function () {
 	Route::get('/itr/{id}','ITRController@patient_itr');
 
 
+	Route::get('/api/patient/my/get','DoctorPatient@api_patients_my_get');
+	Route::get('/api/doctors/my/get','DoctorPatient@api_doctors_my_get');
+	Route::post('/api/patient/remove/post','DoctorPatient@api_remove_patient_post');
+
+
 
 
 });
 
 
-Route::post('medical_facility/register', 'Auth\RegisterController@post_register');
+Route::post('hospital/register', 'Auth\RegisterController@post_register');
+Route::post('laboratory/register', 'Auth\RegisterController@post_register');
+Route::post('pharmacy/register', 'Auth\RegisterController@post_register');
 
 // Authentication routes...
 Route::get('login', 'Auth\LoginController@getLogin');

@@ -102,8 +102,6 @@
 </div>
 
 
-@{{ authUser | json }}
-
 @stop
 
 

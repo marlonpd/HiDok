@@ -7,8 +7,8 @@ window.VueRouter = require('vue-router');
 var VueResource = require('vue-resource-2');
 Vue.use(VueResource);
 
-var VueSelect2 = require('vue2-select2');
-Vue.use(VueSelect2);
+//var VueSelect2 = require('vue2-select2');
+//Vue.use(VueSelect2);
 
 Vue.config.debug = true; 
 Vue.http.options.root = '/api';
@@ -87,8 +87,11 @@ const app = new Vue({
   
 
     fetchClinics : function(id){
+
       this.$http.get('/api/clinics/get/'+id, function(data){
         this.clinics = data['clinics'];
+
+        alert(JSON.stringify(this.clinics));
       });
     },
 
@@ -177,6 +180,14 @@ const app = new Vue({
         }
       });
     },
+
+   fetchAllAppointments: function(){
+        this.$http.get('/api/auth/appointment/all/get', function(data){
+            this.appointments = data['appointments'];
+        });
+    },
+
+
 
 
     fetchAppointment : function(){

@@ -1,15 +1,4 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-module.exports = { "default": require("core-js/library/fn/json/stringify"), __esModule: true };
-},{"core-js/library/fn/json/stringify":2}],2:[function(require,module,exports){
-var core  = require('../../modules/_core')
-  , $JSON = core.JSON || (core.JSON = {stringify: JSON.stringify});
-module.exports = function stringify(it){ // eslint-disable-line no-unused-vars
-  return $JSON.stringify.apply($JSON, arguments);
-};
-},{"../../modules/_core":3}],3:[function(require,module,exports){
-var core = module.exports = {version: '2.4.0'};
-if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
-},{}],4:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -191,7 +180,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],5:[function(require,module,exports){
+},{}],2:[function(require,module,exports){
 var Vue // late bind
 var map = window.__VUE_HOT_MAP__ = Object.create(null)
 var installed = false
@@ -323,7 +312,7 @@ exports.reload = tryWrap(function (id, options) {
   })
 })
 
-},{}],6:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 /*!
  * vue-resource v0.7.4
  * https://github.com/vuejs/vue-resource
@@ -1692,7 +1681,7 @@ if (typeof window !== 'undefined' && window.Vue) {
 }
 
 module.exports = plugin;
-},{}],7:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 (function (process){
 /**
   * vue-router v2.1.3
@@ -3798,7 +3787,7 @@ if (inBrowser && window.Vue) {
 
 module.exports = VueRouter;
 }).call(this,require('_process'))
-},{"_process":4}],8:[function(require,module,exports){
+},{"_process":1}],5:[function(require,module,exports){
 (function (global){
 /*!
  * Vue.js v2.1.10
@@ -12370,7 +12359,7 @@ return Vue$3;
 })));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],9:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 (function (process,global){
 /*!
  * Vue.js v2.1.10
@@ -18582,7 +18571,7 @@ setTimeout(function () {
 module.exports = Vue$2;
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":4}],10:[function(require,module,exports){
+},{"_process":1}],7:[function(require,module,exports){
 var inserted = exports.cache = {}
 
 function noop () {}
@@ -18607,7 +18596,7 @@ exports.insert = function (css) {
   }
 }
 
-},{}],11:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict';
 
 window.Vue = require('vue/dist/vue.js');
@@ -18617,8 +18606,10 @@ window.VueRouter = require('vue-router');
 //Vue.use(require('vue-resource-2'));
 
 var VueResource = require('vue-resource-2');
-
 Vue.use(VueResource);
+
+//var VueSelect2 = require('vue2-select2');
+//Vue.use(VueSelect2);
 
 Vue.config.debug = true;
 Vue.http.options.root = '/api';
@@ -18673,7 +18664,8 @@ var app = new Vue({
       editSchedule: {},
       feedbacks: {},
       clinics: {},
-      constants: {}
+      constants: {},
+      authUser: {}
 
     };
   },
@@ -18685,8 +18677,11 @@ var app = new Vue({
   methods: {
 
     fetchClinics: function fetchClinics(id) {
+
       this.$http.get('/api/clinics/get/' + id, function (data) {
         this.clinics = data['clinics'];
+
+        alert(JSON.stringify(this.clinics));
       });
     },
 
@@ -18763,6 +18758,12 @@ var app = new Vue({
       });
     },
 
+    fetchAllAppointments: function fetchAllAppointments() {
+      this.$http.get('/api/auth/appointment/all/get', function (data) {
+        this.appointments = data['appointments'];
+      });
+    },
+
     fetchAppointment: function fetchAppointment() {
       this.$http.get('/api/auth/appointment/get', function (data) {
         this.appointments = data['appointments'];
@@ -18791,7 +18792,7 @@ var app = new Vue({
   }
 });
 
-},{"./components/Appointment.vue":12,"./components/AssessmentForm.vue":13,"./components/CreateAppointmentForm.vue":14,"./components/CreateClinicForm.vue":15,"./components/CreateFeedbackForm.vue":16,"./components/CreateSchedule.vue":17,"./components/DiagnosisForm.vue":18,"./components/EditClinicForm.vue":19,"./components/EditSchedule.vue":20,"./components/Feedback.vue":21,"./components/LaboratoryForm.vue":22,"./components/Login.vue":23,"./components/PatientReSchedule.vue":24,"./components/ReSchedule.vue":25,"./components/Register.vue":26,"./components/TreatmentForm.vue":27,"vue-resource-2":6,"vue-router":7,"vue/dist/vue.js":8}],12:[function(require,module,exports){
+},{"./components/Appointment.vue":9,"./components/AssessmentForm.vue":10,"./components/CreateAppointmentForm.vue":11,"./components/CreateClinicForm.vue":12,"./components/CreateFeedbackForm.vue":13,"./components/CreateSchedule.vue":14,"./components/DiagnosisForm.vue":15,"./components/EditClinicForm.vue":16,"./components/EditSchedule.vue":17,"./components/Feedback.vue":18,"./components/LaboratoryForm.vue":19,"./components/Login.vue":20,"./components/PatientReSchedule.vue":21,"./components/ReSchedule.vue":22,"./components/Register.vue":23,"./components/TreatmentForm.vue":24,"vue-resource-2":3,"vue-router":4,"vue/dist/vue.js":5}],9:[function(require,module,exports){
 var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".ui-accordion-content{\n\theight: 300px!important;\n}")
 ;(function(){
 'use strict';
@@ -18901,12 +18902,12 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   module.hot.accept()
   module.hot.dispose(__vueify_style_dispose__)
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-13", __vue__options__)
+    hotAPI.createRecord("data-v-10", __vue__options__)
   } else {
-    hotAPI.reload("data-v-13", __vue__options__)
+    hotAPI.reload("data-v-10", __vue__options__)
   }
 })()}
-},{"vue":9,"vue-hot-reload-api":5,"vueify/lib/insert-css":10}],13:[function(require,module,exports){
+},{"vue":6,"vue-hot-reload-api":2,"vueify/lib/insert-css":7}],10:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -18965,12 +18966,12 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-9", __vue__options__)
+    hotAPI.createRecord("data-v-16", __vue__options__)
   } else {
-    hotAPI.reload("data-v-9", __vue__options__)
+    hotAPI.reload("data-v-16", __vue__options__)
   }
 })()}
-},{"vue":9,"vue-hot-reload-api":5}],14:[function(require,module,exports){
+},{"vue":6,"vue-hot-reload-api":2}],11:[function(require,module,exports){
 var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".schedule-list {\n    height: 100px;\n    overflow-y: scroll;\n}")
 ;(function(){
 'use strict';
@@ -19079,7 +19080,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-6", __vue__options__)
   }
 })()}
-},{"vue":9,"vue-hot-reload-api":5,"vueify/lib/insert-css":10}],15:[function(require,module,exports){
+},{"vue":6,"vue-hot-reload-api":2,"vueify/lib/insert-css":7}],12:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -19091,6 +19092,8 @@ exports.default = {
 
 
   created: function created() {},
+
+  props: ['clinics'],
 
   data: function data() {
     return {
@@ -19118,6 +19121,15 @@ exports.default = {
   events: {},
 
   methods: {
+    fetchClinics: function fetchClinics(id) {
+
+      this.$http.get('/api/clinics/get/' + id, function (data) {
+        this.clinics = data['clinics'];
+
+        alert('com');
+      });
+    },
+
     createClinic: function createClinic(event) {
       event.preventDefault();
 
@@ -19131,6 +19143,8 @@ exports.default = {
       this.$http.post('/api/clinic/create/post', this.clinic, function (data) {
         if (data == 'success') {
           $('#create-clinic-form').modal('hide');
+
+          this.fetchClinics(0);
 
           swal({
             title: 'Success!',
@@ -19174,12 +19188,12 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-2", __vue__options__)
+    hotAPI.createRecord("data-v-1", __vue__options__)
   } else {
-    hotAPI.reload("data-v-2", __vue__options__)
+    hotAPI.reload("data-v-1", __vue__options__)
   }
 })()}
-},{"vue":9,"vue-hot-reload-api":5}],16:[function(require,module,exports){
+},{"vue":6,"vue-hot-reload-api":2}],13:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -19265,12 +19279,12 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-12", __vue__options__)
+    hotAPI.createRecord("data-v-11", __vue__options__)
   } else {
-    hotAPI.reload("data-v-12", __vue__options__)
+    hotAPI.reload("data-v-11", __vue__options__)
   }
 })()}
-},{"vue":9,"vue-hot-reload-api":5}],17:[function(require,module,exports){
+},{"vue":6,"vue-hot-reload-api":2}],14:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -19359,12 +19373,12 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-4", __vue__options__)
+    hotAPI.createRecord("data-v-3", __vue__options__)
   } else {
-    hotAPI.reload("data-v-4", __vue__options__)
+    hotAPI.reload("data-v-3", __vue__options__)
   }
 })()}
-},{"vue":9,"vue-hot-reload-api":5}],18:[function(require,module,exports){
+},{"vue":6,"vue-hot-reload-api":2}],15:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -19427,12 +19441,12 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-14", __vue__options__)
+    hotAPI.createRecord("data-v-15", __vue__options__)
   } else {
-    hotAPI.reload("data-v-14", __vue__options__)
+    hotAPI.reload("data-v-15", __vue__options__)
   }
 })()}
-},{"vue":9,"vue-hot-reload-api":5}],19:[function(require,module,exports){
+},{"vue":6,"vue-hot-reload-api":2}],16:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -19511,12 +19525,12 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-3", __vue__options__)
+    hotAPI.createRecord("data-v-2", __vue__options__)
   } else {
-    hotAPI.reload("data-v-3", __vue__options__)
+    hotAPI.reload("data-v-2", __vue__options__)
   }
 })()}
-},{"vue":9,"vue-hot-reload-api":5}],20:[function(require,module,exports){
+},{"vue":6,"vue-hot-reload-api":2}],17:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -19603,12 +19617,12 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-11", __vue__options__)
+    hotAPI.createRecord("data-v-7", __vue__options__)
   } else {
-    hotAPI.reload("data-v-11", __vue__options__)
+    hotAPI.reload("data-v-7", __vue__options__)
   }
 })()}
-},{"vue":9,"vue-hot-reload-api":5}],21:[function(require,module,exports){
+},{"vue":6,"vue-hot-reload-api":2}],18:[function(require,module,exports){
 ;(function(){
 "use strict";
 
@@ -19646,12 +19660,12 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-5", __vue__options__)
+    hotAPI.createRecord("data-v-8", __vue__options__)
   } else {
-    hotAPI.reload("data-v-5", __vue__options__)
+    hotAPI.reload("data-v-8", __vue__options__)
   }
 })()}
-},{"vue":9,"vue-hot-reload-api":5}],22:[function(require,module,exports){
+},{"vue":6,"vue-hot-reload-api":2}],19:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -19710,12 +19724,101 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-15", __vue__options__)
+    hotAPI.createRecord("data-v-13", __vue__options__)
   } else {
-    hotAPI.reload("data-v-15", __vue__options__)
+    hotAPI.reload("data-v-13", __vue__options__)
   }
 })()}
-},{"vue":9,"vue-hot-reload-api":5}],23:[function(require,module,exports){
+},{"vue":6,"vue-hot-reload-api":2}],20:[function(require,module,exports){
+;(function(){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    mounted: function mounted() {},
+
+
+    created: function created() {},
+
+    data: function data() {
+        return {
+
+            user: {
+                email: null,
+                password: null
+            }
+
+        };
+    },
+
+
+    events: {},
+
+    methods: {
+        login: function login(event) {
+
+            event.preventDefault();
+
+            var l = Ladda.create(document.querySelector('.login'));
+            l.start();
+
+            this.$http.post('/api/login/post', this.user, function (data) {
+
+                l.stop();
+
+                if (data == 'success') {
+                    swal({
+                        title: 'Success!',
+                        text: 'Redirecting.',
+                        showConfirmButton: false,
+                        timer: 1000,
+                        type: 'success'
+                    }).then(function () {}, function (dismiss) {
+                        if (dismiss === 'timer') {
+                            console.log('I was closed by the timer');
+                        }
+                    });
+
+                    window.location = "/home";
+                } else {
+
+                    swal({
+                        title: 'Error!',
+                        text: 'Wrong username or password .',
+                        timer: 1000,
+                        type: 'error',
+                        showConfirmButton: false
+                    }).then(function () {}, function (dismiss) {
+                        if (dismiss === 'timer') {
+                            console.log('I was closed by the timer');
+                        }
+                    });
+                }
+            });
+        }
+
+    }
+
+};
+})()
+if (module.exports.__esModule) module.exports = module.exports.default
+var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
+if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
+__vue__options__.render = function(){with(this){return _c('div',{staticClass:"modal",attrs:{"id":"login","tabindex":"-1","role":"dialog","aria-labelledby":"login","aria-hidden":"true"}},[_c('div',{staticClass:"modal-dialog"},[_c('div',{staticClass:"loginmodal-container"},[_c('h1',[_v("Login to Your Account")]),_c('br'),_v(" "),_c('form',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(user.email),expression:"user.email"}],attrs:{"type":"text","name":"email","placeholder":"Email"},domProps:{"value":_s(user.email)},on:{"input":function($event){if($event.target.composing)return;user.email=$event.target.value}}}),_v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(user.password),expression:"user.password"}],attrs:{"type":"password","name":"password","placeholder":"Password"},domProps:{"value":_s(user.password)},on:{"input":function($event){if($event.target.composing)return;user.password=$event.target.value}}}),_v(" "),_c('button',{staticClass:"login loginmodal-submit btn btn-primary ladda-button",staticStyle:{"width":"100%"},attrs:{"value":"Login","name":"login","data-style":"expand-left"},on:{"click":function($event){login($event)}}},[_c('span',{staticClass:"ladda-label"},[_v("Login")])])]),_v(" "),_m(0)])])])}}
+__vue__options__.staticRenderFns = [function(){with(this){return _c('div',{staticClass:"login-help"},[_c('a',{attrs:{"href":"#"}},[_v("Register")]),_v(" - "),_c('a',{attrs:{"href":"#"}},[_v("Forgot Password")])])}}]
+if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-4", __vue__options__)
+  } else {
+    hotAPI.reload("data-v-4", __vue__options__)
+  }
+})()}
+},{"vue":6,"vue-hot-reload-api":2}],21:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -19723,58 +19826,56 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = {
-  mounted: function mounted() {},
+  mounted: function mounted() {
+    $(function () {
+      $('#appointment_date').datetimepicker();
+    });
+  },
 
 
   created: function created() {},
 
+  props: ['appointment'],
+
   data: function data() {
-    return {
-
-      user: {
-        email: null,
-        password: null
-      }
-
-    };
+    return {};
   },
 
 
   events: {},
 
   methods: {
-    login: function login(event) {
 
+    reschedAppointment: function reschedAppointment(appointment, event) {
       event.preventDefault();
+      this.appointment.appointment_date = $("#appointment_date").val();
+    },
 
-      swal({
-        text: 'Logging in....',
-        timer: 1000,
-        showConfirmButton: false,
-        type: 'info'
-      }).then(function () {}, function (dismiss) {});
+    submitNewSchedule: function submitNewSchedule() {
+      self = this;
+      this.$http.post('/api/appointment/reschedule/post', this.appointment, function (data) {
 
-      this.$http.post('/api/login/post', this.user, function (data) {
+        if (data['status'] == "success") {
+          this.appointment = data['appointment'];
 
-        if (data == 'success') {
           swal({
             title: 'Success!',
-            text: 'Redirecting.',
+            text: 'Successfully updated your schedule.',
             showConfirmButton: false,
             timer: 1000,
             type: 'success'
           }).then(function () {}, function (dismiss) {
             if (dismiss === 'timer') {
               console.log('I was closed by the timer');
+
+              $('#patient-reschedule').modal('hide');
             }
           });
-
-          window.location = "/home";
         } else {
 
           swal({
             title: 'Error!',
-            text: 'Wrong username or password .',
+            text: 'Unable to submit your new schedule, please try again!',
             timer: 1000,
             type: 'error',
             showConfirmButton: false
@@ -19794,143 +19895,108 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function(){with(this){return _c('div',{staticClass:"modal",attrs:{"id":"login","tabindex":"-1","role":"dialog","aria-labelledby":"login","aria-hidden":"true"}},[_c('div',{staticClass:"modal-dialog"},[_c('div',{staticClass:"loginmodal-container"},[_c('h1',[_v("Login to Your Account")]),_c('br'),_v(" "),_c('form',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(user.email),expression:"user.email"}],attrs:{"type":"text","name":"email","placeholder":"Email"},domProps:{"value":_s(user.email)},on:{"input":function($event){if($event.target.composing)return;user.email=$event.target.value}}}),_v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(user.password),expression:"user.password"}],attrs:{"type":"password","name":"password","placeholder":"Password"},domProps:{"value":_s(user.password)},on:{"input":function($event){if($event.target.composing)return;user.password=$event.target.value}}}),_v(" "),_c('input',{staticClass:"login loginmodal-submit",attrs:{"type":"submit","name":"login","value":"Login"},on:{"click":function($event){login($event)}}})]),_v(" "),_m(0)])])])}}
-__vue__options__.staticRenderFns = [function(){with(this){return _c('div',{staticClass:"login-help"},[_c('a',{attrs:{"href":"#"}},[_v("Register")]),_v(" - "),_c('a',{attrs:{"href":"#"}},[_v("Forgot Password")])])}}]
+__vue__options__.render = function(){with(this){return _c('div',{staticClass:"modal",attrs:{"id":"patient-reschedule","tabindex":"-1","role":"dialog","aria-labelledby":"patient-reschedule","aria-hidden":"true"}},[_c('div',{staticClass:"modal-dialog"},[_c('div',{staticClass:"modal-content"},[_m(0),_v(" "),_c('div',{staticClass:"modal-body"},[_c('div',{staticClass:"form-group"},[_v("\n\n\n                  Set new schedule date\n                  "),_c('div',{staticClass:"input-group date"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(appointment.appointment_date),expression:"appointment.appointment_date"}],staticClass:"form-control",attrs:{"type":"text","id":"appointment_date"},domProps:{"value":_s(appointment.appointment_date)},on:{"input":function($event){if($event.target.composing)return;appointment.appointment_date=$event.target.value}}}),_v(" "),_m(1)])])]),_v(" "),_c('div',{staticClass:"modal-footer "},[_c('button',{staticClass:"btn btn-warning btn-lg",staticStyle:{"width":"100%"},attrs:{"type":"button"},on:{"click":function($event){submitNewSchedule()}}},[_c('span',{staticClass:"glyphicon glyphicon-ok-sign"}),_v("Re-Schedule")])])])])])}}
+__vue__options__.staticRenderFns = [function(){with(this){return _c('div',{staticClass:"modal-header"},[_c('button',{staticClass:"close",attrs:{"type":"button","data-dismiss":"modal","aria-hidden":"true"}},[_c('i',{staticClass:"fa fa-times-circle fa-1",attrs:{"aria-hidden":"true"}})]),_v(" "),_c('h4',{staticClass:"modal-title custom_align",attrs:{"id":"Heading"}},[_v("Re schedule an appointment")])])}},function(){with(this){return _c('span',{staticClass:"input-group-addon"},[_c('span',{staticClass:"glyphicon glyphicon-calendar"})])}}]
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-1", __vue__options__)
+    hotAPI.createRecord("data-v-9", __vue__options__)
   } else {
-    hotAPI.reload("data-v-1", __vue__options__)
+    hotAPI.reload("data-v-9", __vue__options__)
   }
 })()}
-},{"vue":9,"vue-hot-reload-api":5}],24:[function(require,module,exports){
+},{"vue":6,"vue-hot-reload-api":2}],22:[function(require,module,exports){
 ;(function(){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 exports.default = {
-    mounted: function mounted() {
-        $(function () {
-            $('#appointment_date').datetimepicker();
-        });
+  mounted: function mounted() {
+    $(function () {
+      $('#appointment_date').datetimepicker();
+    });
+  },
+
+
+  created: function created() {},
+
+  props: ['appointment', 'userId'],
+
+  data: function data() {
+    return {};
+  },
+
+
+  events: {},
+
+  methods: {
+
+    reschedAppointment: function reschedAppointment(appointment, event) {
+      event.preventDefault();
+      this.appointment.appointment_date = $("#appointment_date").val();
     },
 
+    submitNewSchedule: function submitNewSchedule() {
+      self = this;
+      this.$http.post('/api/appointment/reschedule/post', this.appointment, function (data) {
 
-    created: function created() {},
+        if (data['status'] == "success") {
+          this.appointment = data['appointment'];
 
-    props: ['appointment'],
+          swal({
+            title: 'Success!',
+            text: 'Successfully updated your schedule.',
+            showConfirmButton: false,
+            timer: 1000,
+            type: 'success'
+          }).then(function () {}, function (dismiss) {
+            if (dismiss === 'timer') {
+              console.log('I was closed by the timer');
 
-    data: function data() {
-        return {
-            appointment: {
-                appointment_date: null,
-                patient_id: null,
-                doctor_id: null,
-                schedule_id: null,
-                note: null
+              $('#reschedule').modal('hide');
             }
-        };
-    },
+          });
+        } else {
 
-
-    events: {},
-
-    methods: {
-
-        reschedAppointment: function reschedAppointment(appointment, event) {
-            event.preventDefault();
-            this.appointment.appointment_date = $("#appointment_date").val();
+          swal({
+            title: 'Error!',
+            text: 'Unable to submit your new schedule, please try again!',
+            timer: 1000,
+            type: 'error',
+            showConfirmButton: false
+          }).then(function () {}, function (dismiss) {
+            if (dismiss === 'timer') {
+              console.log('I was closed by the timer');
+            }
+          });
         }
-
+      });
     }
+
+  }
 
 };
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function(){with(this){return _m(0)}}
-__vue__options__.staticRenderFns = [function(){with(this){return _c('div',{staticClass:"modal",attrs:{"id":"patient-reschedule","tabindex":"-1","role":"dialog","aria-labelledby":"patient-reschedule","aria-hidden":"true"}},[_c('div',{staticClass:"modal-dialog"},[_c('div',{staticClass:"modal-content"},[_c('div',{staticClass:"modal-header"},[_c('button',{staticClass:"close",attrs:{"type":"button","data-dismiss":"modal","aria-hidden":"true"}},[_c('i',{staticClass:"fa fa-times-circle fa-1",attrs:{"aria-hidden":"true"}})]),_v(" "),_c('h4',{staticClass:"modal-title custom_align",attrs:{"id":"Heading"}},[_v("Re schedule an appointment")])]),_v(" "),_c('div',{staticClass:"modal-body"},[_c('div',{staticClass:"form-group"},[_v("\n\n\n                  Set new schedule date\n                  "),_c('div',{staticClass:"input-group date"},[_c('input',{staticClass:"form-control",attrs:{"type":"text","id":"appointment_date"}}),_v(" "),_c('span',{staticClass:"input-group-addon"},[_c('span',{staticClass:"glyphicon glyphicon-calendar"})])])])]),_v(" "),_c('div',{staticClass:"modal-footer "},[_c('button',{staticClass:"btn btn-warning btn-lg",staticStyle:{"width":"100%"},attrs:{"type":"button"}},[_c('span',{staticClass:"glyphicon glyphicon-ok-sign"}),_v("Re-Schedule")])])])])])}}]
+__vue__options__.render = function(){with(this){return _c('div',{staticClass:"modal",attrs:{"id":"reschedule","tabindex":"-1","role":"dialog","aria-labelledby":"reschedule","aria-hidden":"true"}},[_c('div',{staticClass:"modal-dialog"},[_c('div',{staticClass:"modal-content"},[_c('div',{staticClass:"modal-header"},[_m(0),_v(" "),_c('h4',{staticClass:"modal-title custom_align",attrs:{"id":"Heading"}},[_v("Re schedule an appointment "+_s(_f("json")(appointment))+"s  ")])]),_v(" "),_c('div',{staticClass:"modal-body"},[_c('div',{staticClass:"form-group"},[_v("\n\n\n                  Set new schedule date\n                  "),_c('div',{staticClass:"input-group date"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(appointment.appointment_date),expression:"appointment.appointment_date"}],staticClass:"form-control",attrs:{"type":"text","id":"appointment_date"},domProps:{"value":_s(appointment.appointment_date)},on:{"input":function($event){if($event.target.composing)return;appointment.appointment_date=$event.target.value}}}),_v(" "),_m(1)]),_v("\n\n\n                  Note\n                "),_c('div',{staticClass:"input-group col-md-12"},[_c('textarea',{directives:[{name:"model",rawName:"v-model",value:(appointment.note),expression:"appointment.note"}],staticClass:"col-md-12",attrs:{"placeholder":"Add some note","width":"100%"},domProps:{"value":_s(appointment.note)},on:{"input":function($event){if($event.target.composing)return;appointment.note=$event.target.value}}})])])]),_v(" "),_c('div',{staticClass:"modal-footer "},[_c('button',{staticClass:"btn btn-warning btn-lg",staticStyle:{"width":"100%"},attrs:{"type":"button"},on:{"click":function($event){submitNewSchedule()}}},[_c('span',{staticClass:"glyphicon glyphicon-ok-sign"}),_v("Re-Schedule")])])])])])}}
+__vue__options__.staticRenderFns = [function(){with(this){return _c('button',{staticClass:"close",attrs:{"type":"button","data-dismiss":"modal","aria-hidden":"true"}},[_c('i',{staticClass:"fa fa-times-circle fa-1",attrs:{"aria-hidden":"true"}})])}},function(){with(this){return _c('span',{staticClass:"input-group-addon"},[_c('span',{staticClass:"glyphicon glyphicon-calendar"})])}}]
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-10", __vue__options__)
+    hotAPI.createRecord("data-v-12", __vue__options__)
   } else {
-    hotAPI.reload("data-v-10", __vue__options__)
+    hotAPI.reload("data-v-12", __vue__options__)
   }
 })()}
-},{"vue":9,"vue-hot-reload-api":5}],25:[function(require,module,exports){
-;(function(){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _stringify = require('babel-runtime/core-js/json/stringify');
-
-var _stringify2 = _interopRequireDefault(_stringify);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = {
-    mounted: function mounted() {
-        $(function () {
-            $('#appointment_date').datetimepicker();
-        });
-    },
-
-
-    created: function created() {},
-
-    props: ['appointment'],
-
-    data: function data() {
-        return {};
-    },
-
-
-    events: {},
-
-    methods: {
-
-        reschedAppointment: function reschedAppointment(appointment, event) {
-            event.preventDefault();
-            this.appointment.appointment_date = $("#appointment_date").val();
-        },
-
-        submitNewSchedule: function submitNewSchedule() {
-
-            alert((0, _stringify2.default)(this.$parent));
-        }
-
-    }
-
-};
-})()
-if (module.exports.__esModule) module.exports = module.exports.default
-var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
-if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function(){with(this){return _c('div',{staticClass:"modal",attrs:{"id":"reschedule","tabindex":"-1","role":"dialog","aria-labelledby":"reschedule","aria-hidden":"true"}},[_c('div',{staticClass:"modal-dialog"},[_c('div',{staticClass:"modal-content"},[_c('div',{staticClass:"modal-header"},[_m(0),_v(" "),_c('h4',{staticClass:"modal-title custom_align",attrs:{"id":"Heading"}},[_v("Re schedule an appointmen "+_s(_f("json")(appointment))+" t")])]),_v(" "),_m(1),_v(" "),_c('div',{staticClass:"modal-footer "},[_c('button',{staticClass:"btn btn-warning btn-lg",staticStyle:{"width":"100%"},attrs:{"type":"button"},on:{"click":function($event){submitNewSchedule()}}},[_c('span',{staticClass:"glyphicon glyphicon-ok-sign"}),_v("Re-Schedule")])])])])])}}
-__vue__options__.staticRenderFns = [function(){with(this){return _c('button',{staticClass:"close",attrs:{"type":"button","data-dismiss":"modal","aria-hidden":"true"}},[_c('i',{staticClass:"fa fa-times-circle fa-1",attrs:{"aria-hidden":"true"}})])}},function(){with(this){return _c('div',{staticClass:"modal-body"},[_c('div',{staticClass:"form-group"},[_v("\n\n\n                  Set new schedule date\n                  "),_c('div',{staticClass:"input-group date"},[_c('input',{staticClass:"form-control",attrs:{"type":"text","id":"appointment_date"}}),_v(" "),_c('span',{staticClass:"input-group-addon"},[_c('span',{staticClass:"glyphicon glyphicon-calendar"})])]),_v("\n\n\n                  Note\n                "),_c('div',{staticClass:"input-group col-md-12"},[_c('textarea',{staticClass:"col-md-12",attrs:{"placeholder":"Add some feedback?","width":"100%"}})])])])}}]
-if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), true)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-8", __vue__options__)
-  } else {
-    hotAPI.reload("data-v-8", __vue__options__)
-  }
-})()}
-},{"babel-runtime/core-js/json/stringify":1,"vue":9,"vue-hot-reload-api":5}],26:[function(require,module,exports){
+},{"vue":6,"vue-hot-reload-api":2}],23:[function(require,module,exports){
 ;(function(){
 "use strict";
 
@@ -19971,12 +20037,12 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-7", __vue__options__)
+    hotAPI.createRecord("data-v-5", __vue__options__)
   } else {
-    hotAPI.reload("data-v-7", __vue__options__)
+    hotAPI.reload("data-v-5", __vue__options__)
   }
 })()}
-},{"vue":9,"vue-hot-reload-api":5}],27:[function(require,module,exports){
+},{"vue":6,"vue-hot-reload-api":2}],24:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -20035,11 +20101,11 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-16", __vue__options__)
+    hotAPI.createRecord("data-v-14", __vue__options__)
   } else {
-    hotAPI.reload("data-v-16", __vue__options__)
+    hotAPI.reload("data-v-14", __vue__options__)
   }
 })()}
-},{"vue":9,"vue-hot-reload-api":5}]},{},[11]);
+},{"vue":6,"vue-hot-reload-api":2}]},{},[8]);
 
 //# sourceMappingURL=app.js.map

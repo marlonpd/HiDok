@@ -10,7 +10,7 @@ class Appointment extends Model
 
     protected $table = "appointment";
 
-    protected $fillable = ['clinic_id','doctor_id', 'patient_id' , 'appointment_date' ,'note' ,'confirmed'];
+    protected $fillable = ['clinic_id','doctor_id', 'patient_id' , 'appointment_date' ,'re_schedule_by_id' ,'note' ,'confirmed'];
 
 	public function patient()
 	{

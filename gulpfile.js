@@ -41,6 +41,9 @@ elixir(mix => {
             'libs/moment.min.js',
             'libs/bootstrap/bootstrap-datetimepicker.min.js',
     		'../../../node_modules/sweetalert2/dist/sweetalert2.min.js',
+            'libs/ladda/spin.min.js',
+            'libs/ladda/ladda.min.js',
+            'libs/bxslider/jquery.bxslider.js',
     	]);
     mix.styles([
  //           '../css/bootstrap/bootstrap.min.css', 
@@ -49,6 +52,8 @@ elixir(mix => {
     		'../css/font-awesome-4.7.0/css/font-awesome.css',
             '../css/offline/offline-theme-slide.css' ,
     		'../../../node_modules/sweetalert2/dist/sweetalert2.min.css',
+            '../css/ladda/ladda.min.css',
+            '../css/bxslider/jquery.bxslider.css',
     	]);
     mix.browserify('app.js');
     mix.browserSync({

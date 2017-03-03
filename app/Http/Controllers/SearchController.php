@@ -26,20 +26,94 @@ class SearchController extends Controller
      */
     public function index(Request $request)
     {	
-    	$key= $request->input('key');
+    	$account= $request->input('account');
+      $name= trim($request->input('name'));
+      $location= trim($request->input('location'));
 
-    	$doctors = User::where('lastname', 'like',  '%'.$key.'%')
-   					->where('firstname', 'like', '%'.$key.'%' )
-   					->where('middlename', 'like', '%'.$key.'%' )
-   					->where('account_type', '=', config('constants.account_type.doctor'))	
-   					->get();
+      if($account == 'doctor')
+      {
+          $specialization = trim($request->input('specialization'));
+          $doctors = array();
 
-   		$medical_facilities = User::where('name', 'like', '%' . $key . '%')
-   								  ->where('account_type', '=', config('constants.account_type.medical_facility'))	
-   								  ->get();
+          if($name != '' && $specialization == '' && $location == '')
+          {
+              $doctors = User::orWhere('lastname', 'like',  '%'.$name.'%')
+                             ->orWhere('firstname', 'like', '%'.$name.'%' )
+                             ->orWhere('middlename', 'like', '%'.$name.'%' )
+                             ->where('account_type', '=', config('constants.account_type.doctor'))  
+                             ->get();
 
+          }elseif ($name != '' && $specialization != '' && $location == '') {
+              $doctors = User::orWhere('lastname', 'like',  '%'.$name.'%')
+                             ->orWhere('firstname', 'like', '%'.$name.'%' )
+                             ->orWhere('middlename', 'like', '%'.$name.'%' )
+                             ->where('specialization', 'like', '%'.$specialization.'%' )
+                             ->where('account_type', '=', config('constants.account_type.doctor'))  
+                             ->get();
+          }elseif ($name != '' && $specialization != '' && $location != '') {
+              $doctors = User::orWhere('lastname', 'like',  '%'.$name.'%')
+                             ->orWhere('firstname', 'like', '%'.$name.'%' )
+                             ->orWhere('middlename', 'like', '%'.$name.'%' )
+                             ->where('specialization', 'like', '%'.$specialization.'%' )
+                             ->where('account_type', '=', config('constants.account_type.doctor'))  
+                             ->where('address', 'like', '%'.$location.'%' )
+                             ->get();
 
+          }elseif ($name == '' && $specialization == '' && $location == '') {
+              $doctors =array();
+            # code...
+          }elseif ($name == '' && $specialization != '' && $location == '') {
+              $doctors = User::where('specialization', 'like', '%'.$specialization.'%' )
+                             ->where('account_type', '=', config('constants.account_type.doctor')) 
+                             ->get();
+          }elseif ($name == '' && $specialization != '' && $location != '') {
+              $doctors = User::where('specialization', 'like', '%'.$specialization.'%' )
+                             ->where('address', 'like', '%'.$location.'%' )
+                             ->where('account_type', '=', config('constants.account_type.doctor'))  
+                             ->get();  
+          }elseif ($name == '' && $specialization == '' && $location != '') {
+              $doctors = User::where('address', 'like', '%'.$location.'%' )
+                             ->where('account_type', '=', config('constants.account_type.doctor'))   
+                             ->get();
+          }elseif ($name != '' && $specialization == '' && $location != '') {
+              $doctors = User::orWhere('lastname', 'like',  '%'.$name.'%')
+                             ->orWhere('firstname', 'like', '%'.$name.'%' )
+                             ->orWhere('middlename', 'like', '%'.$name.'%' )
+                             ->orWhere('address', 'like', '%'.$location.'%' )
+                             ->where('account_type', '=', config('constants.account_type.doctor'))  
+                             ->get();
+          }
 
-        return view('pages/search', compact('doctors' ,'medical_facilities'));
+          return view('doctor/search', compact('doctors','name','location', 'specialization'));
+
+      }
+      else
+      {
+        if($location != '' && $name != '')
+        {
+            $non_humans = User::where('name', 'like',  '%'.$name.'%')
+                              ->where('address', 'like', '%'.$location.'%' )
+                              ->where('account_type', '=', config('constants.account_type.'.$account)) 
+                              ->get();
+        }
+        elseif ($location == '' && $name != '') 
+        {
+            $non_humans = User::where('name', 'like',  '%'.$name.'%')
+                              ->where('account_type', '=', config('constants.account_type.'.$account)) 
+                              ->get();
+        
+        }
+        elseif ($location != '' && $name == '') 
+        {
+            $non_humans = User::where('address', 'like',  '%'.$location.'%')
+                              ->where('account_type', '=', config('constants.account_type.'.$account)) 
+                              ->get();
+        
+        }
+
+        return view('pages/search', compact('non_humans','name','location', 'account'));
+      }
+
+    	
     }
 }

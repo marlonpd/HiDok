@@ -34,9 +34,6 @@ class SettingsController extends Controller
     {
         $user = User::findOrFail(Auth::user()->id);
 
-
-
-
         if ($request->hasFile('photo')) {
 
             $photo_dir = 'images/photo';

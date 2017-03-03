@@ -3,10 +3,12 @@
 @section('content')
    <div class="row">
     <div class="col-sm-4 col-sm-offset-4">
-      <h2>Please sign up | Pharmacy</h2>
+      <h2>Please sign up | {{Config::get('constants.account_type_label.pharmacy') }}</h2>
 
-      <form method="post" action="{{ url('/register') }}">
+      <form method="post" action="{{ url('/pharmacy/register') }}">
         {!! csrf_field() !!}
+
+        <input type="hidden" name="account_type" id="account_type" value="{{ Config::get('constants.account_type.pharmacy') }}">
 
         <div class="form-group">
           <label for="exampleInputEmail1">Name</label>
@@ -14,18 +16,8 @@
         </div>
 
         <div class="form-group">
-          <label for="exampleInputEmail1">Address</label>
-          <input type="text" class="form-control" placeholder="Address" name="address" id="name" value="{{ old('Address') }}" required>
-        </div>
-
-        <div class="form-group">
-          <label for="exampleInputEmail1">Contact no.</label>
-          <input type="text" class="form-control" id="exampleInputEmail1" placeholder="contact_no" name="contact_no" id="contact_no" value="{{ old('contact_no') }}" required>
-        </div>
-
-        <div class="form-group">
           <label for="exampleInputEmail1">E-mail address</label>
-          <input type="email" class="form-control" id="exampleInputEmail1" placeholder="E-mail" name="email" value="{{ old('email') }}" required>
+          <input type="email" class="form-control" id="email" placeholder="E-mail" name="email" value="{{ old('email') }}" required>
         </div>
 
         <div class="form-group">

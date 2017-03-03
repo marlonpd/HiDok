@@ -65,7 +65,7 @@
     </div>
 </div>
 
-<create-clinic-form ></create-clinic-form>
+<create-clinic-form :clinics="clinics"></create-clinic-form>
 <edit-clinic-form :clinic="editableClinic"></edit-clinic-form>
 
 @endsection
@@ -81,6 +81,7 @@
               
             },
             created: function() {
+
                 this.fetchClinics(0);
             },
 

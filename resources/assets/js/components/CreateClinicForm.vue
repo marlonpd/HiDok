@@ -163,6 +163,7 @@
         },
 
 
+        props : ['clinics'],
 
         data(){
             return {
@@ -191,6 +192,16 @@
         },
 
         methods: {
+          fetchClinics : function(id){
+
+            this.$http.get('/api/clinics/get/'+id, function(data){
+              this.clinics = data['clinics'];
+
+              alert('com');
+            });
+          },
+
+
           createClinic: function(event){
             event.preventDefault();
 
@@ -208,7 +219,10 @@
             this.$http.post('/api/clinic/create/post', this.clinic, function(data){
               if(data == 'success'){
                 $('#create-clinic-form').modal('hide');
-              
+                
+
+                this.fetchClinics(0);
+
 
                 swal({
                   title: 'Success!',

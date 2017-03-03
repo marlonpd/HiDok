@@ -5,7 +5,7 @@
     <div class="modal-content">
           <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times-circle fa-1" aria-hidden="true"></i></button>
-        <h4 class="modal-title custom_align" id="Heading">Re schedule an appointmen {{ appointment | json }} t</h4>
+        <h4 class="modal-title custom_align" id="Heading">Re schedule an appointment {{ appointment | json }}s  </h4>
       </div>
           <div class="modal-body">
          
@@ -17,7 +17,7 @@
 
                   Set new schedule date
                   <div class='input-group date' >
-                      <input type='text' id='appointment_date' class="form-control" />
+                      <input type='text' id="appointment_date" v-model="appointment.appointment_date" class="form-control" />
                       <span class="input-group-addon">
                           <span class="glyphicon glyphicon-calendar"></span>
                       </span>
@@ -26,7 +26,7 @@
 
                   Note
                 <div class="input-group col-md-12">
-                     <textarea placeholder="Add some feedback?" width="100%" class="col-md-12" ></textarea>  
+                     <textarea placeholder="Add some note" v-model="appointment.note" width="100%" class="col-md-12" ></textarea>  
                   </div><!-- Widget Area -->
 
               </div>
@@ -67,7 +67,7 @@
         },
 
 
-        props : ['appointment'],
+        props : ['appointment' , 'userId'],
 
         data(){
             return {
@@ -90,10 +90,53 @@
 
 
           submitNewSchedule : function(){
-           // alert(JSON.stringify(this.$parent.$options.data()));
+              self = this;
+              this.$http.post('/api/appointment/reschedule/post', this.appointment, function(data){
+                      
+                      if(data['status'] == "success"){
+                            this.appointment =data['appointment'];
 
-            alert(JSON.stringify(this.$parent));
-          // alert(this.$parent.editAppointment.id);
+                            swal({
+                              title: 'Success!',
+                              text: 'Successfully updated your schedule.',
+                              showConfirmButton : false,
+                              timer: 1000,
+                              type : 'success',
+                            }).then(
+                              function () {},
+                              function (dismiss) {
+                                if (dismiss === 'timer') {
+                                  console.log('I was closed by the timer');
+                                 
+                                  $('#reschedule').modal('hide');
+
+                                }
+                              }
+                            );
+                        }else{
+
+
+                             swal({
+                                title: 'Error!',
+                                text: 'Unable to submit your new schedule, please try again!',
+                                timer: 1000,
+                                type : 'error',
+                                showConfirmButton : false,
+                              }).then(
+                                function () {},
+                                function (dismiss) {
+                                  if (dismiss === 'timer') {
+                                    console.log('I was closed by the timer')
+                                  }
+                                }
+                              )
+
+                        }
+
+
+              });
+
+     
           }
 
 	

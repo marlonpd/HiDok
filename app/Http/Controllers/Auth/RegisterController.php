@@ -85,7 +85,7 @@ class RegisterController extends Controller
         ]);
     }
 
-    protected function create_medical_facility(array $data)
+    protected function create_non_human_account(array $data)
     {
         return User::create([
             'name' => $data['name'],
@@ -100,12 +100,17 @@ class RegisterController extends Controller
     {
         $this->validator($request->all())->validate();
 
-        if($request->input('account_type') == 2){
-            event(new Registered($user = $this->create_medical_facility($request->all())));
-        }else{
+        $account_type = $request->input('account_type');
+        
+        if($account_type == config('constants.account_type.patient') || $account_type == config('constants.account_type.doctor') )
+        {
             event(new Registered($user = $this->create($request->all())));
         }
-
+        else
+        {
+            event(new Registered($user = $this->create_non_human_account($request->all())));
+        }
+        
         $this->guard()->login($user);
 
         return $this->registered($request, $user)

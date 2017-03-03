@@ -9,10 +9,6 @@
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 
 
-.main-container {
-    padding-top: 30px;
-}
-
 
 /* In our demo, the footers are fixed to the bottom of the page */
 .footer-distributed{
@@ -23,7 +19,6 @@
 	text-align: left;
 	font: bold 16px sans-serif;
 	padding: 55px 50px;
-	margin-top: 80px;
 }
 
 .footer-distributed .footer-left,
@@ -43,8 +38,8 @@
 
 .footer-distributed h3{
 	color:  #ffffff;
-	font: normal 36px 'Cookie', cursive;
 	margin: 0;
+  font-size: 50px;
 }
 
 .footer-distributed h3 span{
@@ -112,8 +107,9 @@
 }
 
 .footer-distributed .footer-center p a{
-	color:  #5383d3;
-	text-decoration: none;;
+	color:  #fff;
+	text-decoration: none;
+  font-weight: normal;
 }
 
 

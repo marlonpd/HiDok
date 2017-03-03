@@ -15,13 +15,13 @@ return ['constants' =>
 				'hospital' => 2,
 				'laboratory' => 3,
 				'pharmacy' => 4,
-
 		],
 		'account_type_label' => [
 				'patient' => 'Patient',
 				'doctor'  => 'Doctor',
 				'hospital' => 'Hospital',
-				'pharmacy' => 'Pharmacy'
+				'pharmacy' => 'Pharmacy',
+				'laboratory' => 'Laboratory',
 		],
 		'account_type_rev' => [
 				0 => 'patient',

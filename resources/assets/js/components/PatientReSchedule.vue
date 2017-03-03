@@ -17,7 +17,7 @@
 
                   Set new schedule date
                   <div class='input-group date' >
-                      <input type='text' id='appointment_date' class="form-control" />
+                      <input type='text' id='appointment_date' v-model ="appointment.appointment_date"class="form-control" />
                       <span class="input-group-addon">
                           <span class="glyphicon glyphicon-calendar"></span>
                       </span>
@@ -30,7 +30,7 @@
             
           </div>
           <div class="modal-footer ">
-        <button type="button" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span>Re-Schedule</button>
+        <button type="button"  @click="submitNewSchedule()" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span>Re-Schedule</button>
       </div>
         </div>
 
@@ -61,13 +61,7 @@
 
         data(){
             return {
-        		appointment :{
-                  appointment_date :  null,
-                  patient_id : null,
-                  doctor_id : null,
-                  schedule_id : null,
-                  note : null,
-                }
+
             }
         },
 
@@ -78,12 +72,64 @@
         methods: {
 
 
-		    reschedAppointment : function(appointment, event){
-		    	event.preventDefault();
-		    	this.appointment.appointment_date = $("#appointment_date").val();
+    		    reschedAppointment : function(appointment, event){
+    		    	event.preventDefault();
+    		    	this.appointment.appointment_date = $("#appointment_date").val();
 
 
-		    },
+    		    },
+
+
+
+            submitNewSchedule : function(){
+                self = this;
+                this.$http.post('/api/appointment/reschedule/post', this.appointment, function(data){
+                        
+                        if(data['status'] == "success"){
+                              this.appointment =data['appointment'];
+
+                              swal({
+                                title: 'Success!',
+                                text: 'Successfully updated your schedule.',
+                                showConfirmButton : false,
+                                timer: 1000,
+                                type : 'success',
+                              }).then(
+                                function () {},
+                                function (dismiss) {
+                                  if (dismiss === 'timer') {
+                                    console.log('I was closed by the timer');
+                                   
+                                    $('#patient-reschedule').modal('hide');
+
+                                  }
+                                }
+                              );
+                          }else{
+
+
+                               swal({
+                                  title: 'Error!',
+                                  text: 'Unable to submit your new schedule, please try again!',
+                                  timer: 1000,
+                                  type : 'error',
+                                  showConfirmButton : false,
+                                }).then(
+                                  function () {},
+                                  function (dismiss) {
+                                    if (dismiss === 'timer') {
+                                      console.log('I was closed by the timer')
+                                    }
+                                  }
+                                )
+
+                          }
+
+
+                });
+
+       
+            }
 
 	
   

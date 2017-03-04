@@ -41,18 +41,6 @@
           <input type="password" class="form-control" id="password_confirmation" placeholder="Password" name="password_confirmation" required>
         </div>
 
-        <div class="form-group">
-          <label for="exampleInputPassword1">Religion</label>
-          
-          <select  class="form-control">
-              <option disabled>Select...</option>
-              <option v-for="religion in constants['religion']" :value="religion">@{{ religion }}</option>
-          </select>
-
-        </div>
-
-
-
         
 
         <div class="form-group">

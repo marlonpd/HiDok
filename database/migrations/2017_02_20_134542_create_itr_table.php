@@ -16,10 +16,11 @@ class CreateItrTable extends Migration
 
 
         Schema::create('itr', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('appointment_id');
-            $table->integer('doctor_id');
-            $table->integer('patient_id');
+            $table->uuid('id');
+            $table->primary('id');
+            $table->char('appointment_id',36);
+            $table->char('doctor_id',36);
+            $table->char('patient_id',36);
             $table->string('assessment')->nullable();
             $table->string('laboratory')->nullable();
             $table->string('diagnosis')->nullable();

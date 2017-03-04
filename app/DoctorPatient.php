@@ -3,10 +3,15 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Alsofronie\Uuid\UuidModelTrait;
 
 class DoctorPatient extends Model
 {
     protected $table = 'doctor_patient';
+        use UuidModelTrait;
+    protected $primaryKey = 'id';
+    public $incrementing = false;
+    private static $uuidOptimization = true;
 
     public $timestamps = true;
     

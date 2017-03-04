@@ -14,9 +14,10 @@ class CreateClinicTable extends Migration
     public function up()
     {
         Schema::create('clinics', function (Blueprint $table) {
-            $table->increments('id');
+            $table->uuid('id');
+            $table->primary('id');
             $table->string('name');
-            $table->integer('doctor_id');
+            $table->char('doctor_id',36);
             $table->string('from_time');
             $table->string('to_time');
             $table->tinyInteger('open_sunday')->default(0);

@@ -3,10 +3,15 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Alsofronie\Uuid\UuidModelTrait;
 
 class Feedback extends Model
 {
     public $timestamps = true;
+    use UuidModelTrait;
+    protected $primaryKey = 'id';
+    public $incrementing = false;
+    private static $uuidOptimization = true;
 
     protected $fillable = ['doctor_id', 'patient_id' , 'content' ,'approved'];
 

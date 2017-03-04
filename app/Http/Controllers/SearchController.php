@@ -35,6 +35,24 @@ class SearchController extends Controller
           $specialization = trim($request->input('specialization'));
           $doctors = array();
 
+
+
+/*          query = User::query();
+
+          if ($this == $that) {
+            $query = $query->where('this', 'that');
+          }
+
+          if ($this == $another_thing) {
+            $query = $query->where('this', 'another_thing');
+          }
+
+          if ($this == $yet_another_thing) {
+            $query = $query->orderBy('this');
+          }
+
+          $results = $query->get();
+*/
           if($name != '' && $specialization == '' && $location == '')
           {
               $doctors = User::orWhere('lastname', 'like',  '%'.$name.'%')

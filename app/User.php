@@ -6,12 +6,18 @@ use Eloquent;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Auth\Authenticatable as AuthenticableTrait;
+use Alsofronie\Uuid\UuidModelTrait;
 
 
 class User extends Eloquent implements Authenticatable
 {
     use Notifiable;
     use AuthenticableTrait;
+    use UuidModelTrait;
+
+    protected $primaryKey = 'id';
+    public $incrementing = false;
+    private static $uuidOptimization = true;
 
     /**
      * The attributes that are mass assignable.

@@ -114,7 +114,6 @@
 	color: #fff;
 }
 
-
 .search-tabs-left li > a:hover,.search-tabs-left li.active > a:hover{
 	background: #D90000;
 	color: #fff;
@@ -125,7 +124,6 @@
 	color: #fff!important;
 	display: block;
 }
-
 
 .nav.nav-tabs.tabs-left.search-tabs-left > li {
     width: 94px;

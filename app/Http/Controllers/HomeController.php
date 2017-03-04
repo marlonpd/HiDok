@@ -42,7 +42,7 @@ class HomeController extends Controller
             }
             else
             {
-
+                return "hello doctor".Auth::user()->id;
             }
         }
 

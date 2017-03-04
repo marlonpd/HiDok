@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
+use Webpatser\Uuid\Uuid;
 
 class RegisterController extends Controller
 {
@@ -76,6 +77,7 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         return User::create([
+         //   'id'    => Uuid::generate(),
             'lastname' => $data['lastname'],
             'firstname' => $data['firstname'],
             'middlename' => $data['middlename'],

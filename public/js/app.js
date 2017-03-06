@@ -18651,6 +18651,7 @@ Vue.component('assessment-form', require('./components/AssessmentForm.vue'));
 Vue.component('laboratory-form', require('./components/LaboratoryForm.vue'));
 Vue.component('diagnosis-form', require('./components/DiagnosisForm.vue'));
 Vue.component('treatment-form', require('./components/TreatmentForm.vue'));
+Vue.component('patient-profile-form', require('./components/PatientProfileForm.vue'));
 
 var app = new Vue({
   router: router,
@@ -18792,7 +18793,7 @@ var app = new Vue({
   }
 });
 
-},{"./components/Appointment.vue":9,"./components/AssessmentForm.vue":10,"./components/CreateAppointmentForm.vue":11,"./components/CreateClinicForm.vue":12,"./components/CreateFeedbackForm.vue":13,"./components/CreateSchedule.vue":14,"./components/DiagnosisForm.vue":15,"./components/EditClinicForm.vue":16,"./components/EditSchedule.vue":17,"./components/Feedback.vue":18,"./components/LaboratoryForm.vue":19,"./components/Login.vue":20,"./components/PatientReSchedule.vue":21,"./components/ReSchedule.vue":22,"./components/Register.vue":23,"./components/TreatmentForm.vue":24,"vue-resource-2":3,"vue-router":4,"vue/dist/vue.js":5}],9:[function(require,module,exports){
+},{"./components/Appointment.vue":9,"./components/AssessmentForm.vue":10,"./components/CreateAppointmentForm.vue":11,"./components/CreateClinicForm.vue":12,"./components/CreateFeedbackForm.vue":13,"./components/CreateSchedule.vue":14,"./components/DiagnosisForm.vue":15,"./components/EditClinicForm.vue":16,"./components/EditSchedule.vue":17,"./components/Feedback.vue":18,"./components/LaboratoryForm.vue":19,"./components/Login.vue":20,"./components/PatientProfileForm.vue":21,"./components/PatientReSchedule.vue":22,"./components/ReSchedule.vue":23,"./components/Register.vue":24,"./components/TreatmentForm.vue":25,"vue-resource-2":3,"vue-router":4,"vue/dist/vue.js":5}],9:[function(require,module,exports){
 var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".ui-accordion-content{\n\theight: 300px!important;\n}")
 ;(function(){
 'use strict';
@@ -18902,9 +18903,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   module.hot.accept()
   module.hot.dispose(__vueify_style_dispose__)
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-10", __vue__options__)
+    hotAPI.createRecord("data-v-11", __vue__options__)
   } else {
-    hotAPI.reload("data-v-10", __vue__options__)
+    hotAPI.reload("data-v-11", __vue__options__)
   }
 })()}
 },{"vue":6,"vue-hot-reload-api":2,"vueify/lib/insert-css":7}],10:[function(require,module,exports){
@@ -18966,9 +18967,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-16", __vue__options__)
+    hotAPI.createRecord("data-v-15", __vue__options__)
   } else {
-    hotAPI.reload("data-v-16", __vue__options__)
+    hotAPI.reload("data-v-15", __vue__options__)
   }
 })()}
 },{"vue":6,"vue-hot-reload-api":2}],11:[function(require,module,exports){
@@ -19075,9 +19076,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   module.hot.accept()
   module.hot.dispose(__vueify_style_dispose__)
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-6", __vue__options__)
+    hotAPI.createRecord("data-v-7", __vue__options__)
   } else {
-    hotAPI.reload("data-v-6", __vue__options__)
+    hotAPI.reload("data-v-7", __vue__options__)
   }
 })()}
 },{"vue":6,"vue-hot-reload-api":2,"vueify/lib/insert-css":7}],12:[function(require,module,exports){
@@ -19279,9 +19280,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-11", __vue__options__)
+    hotAPI.createRecord("data-v-12", __vue__options__)
   } else {
-    hotAPI.reload("data-v-11", __vue__options__)
+    hotAPI.reload("data-v-12", __vue__options__)
   }
 })()}
 },{"vue":6,"vue-hot-reload-api":2}],14:[function(require,module,exports){
@@ -19441,9 +19442,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-15", __vue__options__)
+    hotAPI.createRecord("data-v-14", __vue__options__)
   } else {
-    hotAPI.reload("data-v-15", __vue__options__)
+    hotAPI.reload("data-v-14", __vue__options__)
   }
 })()}
 },{"vue":6,"vue-hot-reload-api":2}],16:[function(require,module,exports){
@@ -19525,9 +19526,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-2", __vue__options__)
+    hotAPI.createRecord("data-v-4", __vue__options__)
   } else {
-    hotAPI.reload("data-v-2", __vue__options__)
+    hotAPI.reload("data-v-4", __vue__options__)
   }
 })()}
 },{"vue":6,"vue-hot-reload-api":2}],17:[function(require,module,exports){
@@ -19617,9 +19618,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-7", __vue__options__)
+    hotAPI.createRecord("data-v-5", __vue__options__)
   } else {
-    hotAPI.reload("data-v-7", __vue__options__)
+    hotAPI.reload("data-v-5", __vue__options__)
   }
 })()}
 },{"vue":6,"vue-hot-reload-api":2}],18:[function(require,module,exports){
@@ -19660,9 +19661,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-8", __vue__options__)
+    hotAPI.createRecord("data-v-9", __vue__options__)
   } else {
-    hotAPI.reload("data-v-8", __vue__options__)
+    hotAPI.reload("data-v-9", __vue__options__)
   }
 })()}
 },{"vue":6,"vue-hot-reload-api":2}],19:[function(require,module,exports){
@@ -19813,12 +19814,64 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-4", __vue__options__)
+    hotAPI.createRecord("data-v-2", __vue__options__)
   } else {
-    hotAPI.reload("data-v-4", __vue__options__)
+    hotAPI.reload("data-v-2", __vue__options__)
   }
 })()}
 },{"vue":6,"vue-hot-reload-api":2}],21:[function(require,module,exports){
+;(function(){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    mounted: function mounted() {},
+
+
+    props: ['constants'],
+
+    created: function created() {
+        this.fetchAuthUser();
+    },
+
+    data: function data() {
+        return {
+            authUser: {}
+        };
+    },
+
+
+    events: {},
+
+    methods: {
+        fetchAuthUser: function fetchAuthUser() {
+            this.$http.get('/api/auth/user/get', function (data) {
+                this.authUser = data['user'];
+            });
+        }
+
+    }
+
+};
+})()
+if (module.exports.__esModule) module.exports = module.exports.default
+var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
+if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
+__vue__options__.render = function(){with(this){return _c('div',{staticClass:"col-md-12 col-md-offset-0"},[_c('div',{staticClass:"panel panel-default"},[_c('div',{staticClass:"panel-heading"},[_v("Profile")]),_v(" "),_c('div',{staticClass:"panel-body"},[_c('form',{attrs:{"action":"/settings/update","method":"POST"}},[_c('div',{staticClass:"col-md-6 pull-left"},[_c('div',{staticClass:"form-group"},[_c('div',{staticClass:"file-preview-thumbnails"},[_c('div',{staticClass:"file-default-preview"},[_c('img',{staticStyle:{"width":"200px"},attrs:{"src":authUser.avatar}})])])]),_v(" "),_m(0),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{attrs:{"for":"exampleInputEmail1"}},[_v("Last name")]),_v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(authUser.lastname),expression:"authUser.lastname"}],staticClass:"form-control",attrs:{"type":"text","placeholder":"lastname","name":"lastname","id":"lastname","required":""},domProps:{"value":_s(authUser.lastname)},on:{"input":function($event){if($event.target.composing)return;authUser.lastname=$event.target.value}}})]),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{attrs:{"for":"exampleInputEmail1"}},[_v("First name")]),_v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(authUser.firstname),expression:"authUser.firstname"}],staticClass:"form-control",attrs:{"type":"text","placeholder":"Firstname","name":"firstname","id":"firstname","required":""},domProps:{"value":_s(authUser.firstname)},on:{"input":function($event){if($event.target.composing)return;authUser.firstname=$event.target.value}}})]),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{attrs:{"for":"exampleInputEmail1"}},[_v("Middle name")]),_v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(authUser.middlename),expression:"authUser.middlename"}],staticClass:"form-control",attrs:{"type":"text","placeholder":"Middlename","name":"middlename","id":"middlename","required":""},domProps:{"value":_s(authUser.middlename)},on:{"input":function($event){if($event.target.composing)return;authUser.middlename=$event.target.value}}})]),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{attrs:{"for":"exampleInputEmail1"}},[_v("Address")]),_v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(authUser.address),expression:"authUser.address"}],staticClass:"form-control",attrs:{"type":"text","placeholder":"Address","name":"address","id":"address","required":""},domProps:{"value":_s(authUser.address)},on:{"input":function($event){if($event.target.composing)return;authUser.address=$event.target.value}}})])]),_v(" "),_c('div',{staticClass:"col-md-6 pull-right"},[_c('div',{staticClass:"form-group"},[_c('label',{attrs:{"for":"exampleInputEmail1"}},[_v("Contact")]),_v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(authUser.contact_no),expression:"authUser.contact_no"}],staticClass:"form-control",attrs:{"type":"text","placeholder":"Contact no.","name":"contact_no","id":"contact_no","required":""},domProps:{"value":_s(authUser.contact_no)},on:{"input":function($event){if($event.target.composing)return;authUser.contact_no=$event.target.value}}})]),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{attrs:{"for":"exampleInputEmail1"}},[_v("Height")]),_v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(authUser.height),expression:"authUser.height"}],staticClass:"form-control",attrs:{"type":"text","placeholder":"Height","name":"height","id":"height","required":""},domProps:{"value":_s(authUser.height)},on:{"input":function($event){if($event.target.composing)return;authUser.height=$event.target.value}}})]),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{attrs:{"for":"exampleInputEmail1"}},[_v("Weight")]),_v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(authUser.weight),expression:"authUser.weight"}],staticClass:"form-control",attrs:{"type":"text","placeholder":"Weight","name":"weight","id":"weight","required":""},domProps:{"value":_s(authUser.weight)},on:{"input":function($event){if($event.target.composing)return;authUser.weight=$event.target.value}}})]),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{attrs:{"for":"exampleInputEmail1"}},[_v("Religion")]),_v(" "),_c('select',{directives:[{name:"model",rawName:"v-model",value:(authUser.religion),expression:"authUser.religion"}],staticClass:"form-control",attrs:{"name":"religion","id":"religion"},on:{"change":function($event){authUser.religion=Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val})[0]}}},[_c('option',{attrs:{"disabled":""}},[_v("Select...")]),_v(" "),_l((constants['religion']),function(religion){return [_c('option',{domProps:{"value":religion}},[_v(_s(religion))])]})],2)]),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{attrs:{"for":"exampleInputEmail1"}},[_v("Gender")]),_v(" "),_c('select',{directives:[{name:"model",rawName:"v-model",value:(authUser.gender),expression:"authUser.gender"}],staticClass:"form-control",attrs:{"name":"gender","id":"gender"},on:{"change":function($event){authUser.gender=Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val})[0]}}},[_c('option',{attrs:{"disabled":""}},[_v("Select...")]),_v(" "),_l((constants['gender']),function(gender){return [_c('option',{domProps:{"value":gender}},[_v(_s(gender))])]})],2)]),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{attrs:{"for":"exampleInputEmail1"}},[_v("E-mail address")]),_v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(authUser.email),expression:"authUser.email"}],staticClass:"form-control",attrs:{"type":"email","placeholder":"E-mail","name":"email","required":""},domProps:{"value":_s(authUser.email)},on:{"input":function($event){if($event.target.composing)return;authUser.email=$event.target.value}}})]),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{attrs:{"for":"exampleInputEmail1"}},[_v("Health History")]),_v(" "),_c('textarea',{staticClass:"form-control",attrs:{"rows":"5","name":"health_history","id":"health_history"}},[_v(_s(authUser.health_history))])]),_v(" "),_m(1)])])])])])}}
+__vue__options__.staticRenderFns = [function(){with(this){return _c('div',{staticClass:"form-group"},[_c('label',{staticClass:"form-control btn btn-default file-browse-btn btn-file"},[_v("\n                            Browse  "),_c('input',{attrs:{"name":"photo","type":"file"}})])])}},function(){with(this){return _c('div',{staticClass:"form-group"},[_c('button',{staticClass:"btn btn-lg btn-primary btn-block",attrs:{"type":"submit"}},[_v("Update")])])}}]
+if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-17", __vue__options__)
+  } else {
+    hotAPI.reload("data-v-17", __vue__options__)
+  }
+})()}
+},{"vue":6,"vue-hot-reload-api":2}],22:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -19902,12 +19955,12 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-9", __vue__options__)
+    hotAPI.createRecord("data-v-10", __vue__options__)
   } else {
-    hotAPI.reload("data-v-9", __vue__options__)
+    hotAPI.reload("data-v-10", __vue__options__)
   }
 })()}
-},{"vue":6,"vue-hot-reload-api":2}],22:[function(require,module,exports){
+},{"vue":6,"vue-hot-reload-api":2}],23:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -19991,12 +20044,12 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-12", __vue__options__)
+    hotAPI.createRecord("data-v-8", __vue__options__)
   } else {
-    hotAPI.reload("data-v-12", __vue__options__)
+    hotAPI.reload("data-v-8", __vue__options__)
   }
 })()}
-},{"vue":6,"vue-hot-reload-api":2}],23:[function(require,module,exports){
+},{"vue":6,"vue-hot-reload-api":2}],24:[function(require,module,exports){
 ;(function(){
 "use strict";
 
@@ -20037,12 +20090,12 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-5", __vue__options__)
+    hotAPI.createRecord("data-v-6", __vue__options__)
   } else {
-    hotAPI.reload("data-v-5", __vue__options__)
+    hotAPI.reload("data-v-6", __vue__options__)
   }
 })()}
-},{"vue":6,"vue-hot-reload-api":2}],24:[function(require,module,exports){
+},{"vue":6,"vue-hot-reload-api":2}],25:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -20101,9 +20154,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-14", __vue__options__)
+    hotAPI.createRecord("data-v-16", __vue__options__)
   } else {
-    hotAPI.reload("data-v-14", __vue__options__)
+    hotAPI.reload("data-v-16", __vue__options__)
   }
 })()}
 },{"vue":6,"vue-hot-reload-api":2}]},{},[8]);

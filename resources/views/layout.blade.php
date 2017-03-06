@@ -112,11 +112,9 @@
             <script type="text/javascript">
               var main = {
 
-                
-
-                mounted(){
-                    
+                mounted(){    
                 },
+
                 created: function() {    
                   @if (Auth::check())
                      this.fetchConstants();
@@ -136,8 +134,6 @@
                   setAuthUser : function(authUser){
                       this.authUser = JSON.parse(authUser);
                   },
-
-
                 }
               };
 
@@ -145,7 +141,5 @@
             
 
             <script src="/js/app.js"></script>
-
-            <feedback></feedback>
     </body>
 </html>

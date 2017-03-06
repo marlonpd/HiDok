@@ -11,31 +11,30 @@
 |
 */
 
-Route::get('/', function () {
-    return view('pages/home');
-});
+
 //General
+Route::get('/', 'HomeController@index');
 Route::get('/{account_type}/register','Auth\RegisterController@index');
 Route::get('settings', 'SettingsController@index');
 Route::post('settings/update', 'SettingsController@update');
 Route::get('search', 'SearchController@index');
 Route::get('{account_type}/profile/{id}', 'ProfileController@index');
 
+Route::post('hospital/register', 'Auth\RegisterController@post_register');
+Route::post('laboratory/register', 'Auth\RegisterController@post_register');
+Route::post('pharmacy/register', 'Auth\RegisterController@post_register');
 
 Route::post('/api/login/post','Auth\LoginController@login_post');
 Route::post('doctor/register', 'Auth\RegisterController@post_register');
 
-
-
-Route::get('/header', 'HomeController@header');
 Route::get('/api/constants/get', 'PublicController@api_constants_get');
-
 
 Route::group(['middleware' => ['web'  ]], function () {
 	
 	Route::auth();
 
-	
+	Route::get('/api/auth/user/get', 'auth\AuthController@api_auth_user_get');
+
 	Route::get('/feedback', 'doctor\FeedbackController@index');
 	Route::get('/api/feedbacks/get/', 'doctor\FeedbackController@api_feedbacks_get');
 	Route::post('/api/feedback/post', 'doctor\FeedbackController@store');
@@ -46,11 +45,8 @@ Route::group(['middleware' => ['web'  ]], function () {
 	Route::get('/appointment', 'AppointmentController@index');
 	Route::post('/api/appointment/request/post ','AppointmentController@api_appointment_request_post');
 	Route::get('/api/auth/appointment/get/{clinic_id}', 'AppointmentController@api_auth_appointment_get');
-
 	Route::get('/api/auth/appointment/patient/get/', 'AppointmentController@api_auth_appointment_patient_get');
-
 	Route::get('/api/auth/appointment/all/get', 'AppointmentController@api_auth_appointment_all_get');
-
 	Route::get('/api/appointment/delete/post', 'AppointmentController@api_appointment_delete_post');
 	Route::get('/api/auth/appointment/get/{id}', 'AppointmentController@api_auth_schedule_appointment_get');
 	Route::post('/api/appointment/confirm/post', 'AppointmentController@api_appointment_confirm_post');
@@ -58,8 +54,7 @@ Route::group(['middleware' => ['web'  ]], function () {
 	Route::post('/api/appointment/delete/post', 'AppointmentController@api_appointment_delete_post');
 	Route::post('/api/appointment/reschedule/post', 'AppointmentController@api_appointment_reschedule_post');
 
-	Route::get('/schedule', 'doctor\ScheduleController@index');
-
+	//Route::get('/schedule', 'doctor\ScheduleController@index');
 
 	Route::get('/clinic', 'doctor\ClinicController@index');
 	Route::post('/api/clinic/create/post','doctor\ClinicController@store');
@@ -80,7 +75,6 @@ Route::group(['middleware' => ['web'  ]], function () {
 	//patient 
 	Route::get('/itr/{id}','ITRController@patient_itr');
 
-
 	Route::get('/api/patient/my/get','DoctorPatient@api_patients_my_get');
 	Route::get('/api/doctors/my/get','DoctorPatient@api_doctors_my_get');
 	Route::post('/api/patient/remove/post','DoctorPatient@api_remove_patient_post');
@@ -91,21 +85,13 @@ Route::group(['middleware' => ['web'  ]], function () {
 });
 
 
-Route::post('hospital/register', 'Auth\RegisterController@post_register');
-Route::post('laboratory/register', 'Auth\RegisterController@post_register');
-Route::post('pharmacy/register', 'Auth\RegisterController@post_register');
-
 // Authentication routes...
 Route::get('login', 'Auth\LoginController@getLogin');
 Route::post('login', 'Auth\LoginController@postLogin');
 Route::get('logout', 'Auth\LogoutController@getLogout');
 
-
-
-Route::get('foo', function(){
-	return "foo";
-});
+//testing
+Route::get('/header', 'HomeController@header');
 
 Auth::routes();
-
 Route::get('/home', 'HomeController@index');

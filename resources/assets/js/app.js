@@ -54,6 +54,7 @@ Vue.component('assessment-form', require('./components/AssessmentForm.vue'));
 Vue.component('laboratory-form', require('./components/LaboratoryForm.vue'));
 Vue.component('diagnosis-form', require('./components/DiagnosisForm.vue'));
 Vue.component('treatment-form', require('./components/TreatmentForm.vue'));
+Vue.component('patient-profile-form', require('./components/PatientProfileForm.vue'));
 
 
 const app = new Vue({

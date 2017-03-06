@@ -57,5 +57,11 @@ class User extends Eloquent implements Authenticatable
         return $this->account_type == config('constants.account_type.patient') ? true : false;
     }
 
+
+    public function fullname()
+    {
+        return ($this->account_type == config('constants.account_type.patient') || $this->account_type == config('constants.account_type.doctor')) ? ($this->firstname.' '.$this->middlename.' '.$this->lastname) : ($this->name); 
+    }
+
     
 }

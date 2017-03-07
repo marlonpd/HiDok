@@ -55,6 +55,7 @@ Vue.component('laboratory-form', require('./components/LaboratoryForm.vue'));
 Vue.component('diagnosis-form', require('./components/DiagnosisForm.vue'));
 Vue.component('treatment-form', require('./components/TreatmentForm.vue'));
 Vue.component('patient-profile-form', require('./components/PatientProfileForm.vue'));
+Vue.component('doctor-profile-form', require('./components/DoctorProfileForm.vue'));
 
 
 const app = new Vue({
@@ -85,14 +86,9 @@ const app = new Vue({
 
   methods:{
 
-  
-
     fetchClinics : function(id){
-
       this.$http.get('/api/clinics/get/'+id, function(data){
         this.clinics = data['clinics'];
-
-        alert(JSON.stringify(this.clinics));
       });
     },
 

@@ -16,13 +16,13 @@
 
         <div class="tab-content ">
           <div class="tab-pane active" id="1">  
-              <patient-profile-form :constants="constants" :authUser="authUser"></patient-profile-form>
+              <doctor-profile-form :constants="constants" :authUser="authUser"></doctor-profile-form>
           </div>
           <div class="tab-pane" id="2">
-               @include('patient.partials.appointment')
+              appointment
           </div>
           <div class="tab-pane" id="3">
-             @include('patient.partials.itr')
+            history
           </div>
         </div>
   </div>

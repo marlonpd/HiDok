@@ -379,15 +379,25 @@
 /* end */
 
 /* custom theme */
-.dropdown-menu {
-	left: -342px;
+.search-menu {
+	left: -187px;
 	top: 85px;
 }
+
+.search-menu button{
+    background: #d80100 none repeat scroll 0 0;
+    color: #fff;
+}
+
 .accordion-group {
 	border-width:0;
 }
 
-.dropdown-menu {
+.search-menu select {
+    margin-right: 10px;
+}
+
+.search-menu {
 	min-width: 383px;
 }
 
@@ -416,3 +426,96 @@
 .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
     background-color: #D80100;
 }
+
+
+.navbar-login{
+    width: 305px;
+    padding: 10px;
+    padding-bottom: 0px;
+}
+
+.navbar-login-session{
+    padding: 10px;
+    padding-bottom: 0px;
+    padding-top: 0px;
+}
+
+.icon-size{
+    font-size: 87px;
+}
+
+
+.account-menu {
+	left: -198px;
+	top: 85px;
+}
+
+
+.notification-menu{
+    left: -257px;
+	top: 85px;
+}
+
+
+.glyphicon-bell {
+   
+    font-size:1.5rem;
+  }
+
+.notifications {
+   min-width:420px; 
+  }
+  
+  .notifications-wrapper {
+     overflow:auto;
+      max-height:250px;
+    }
+    
+ .menu-title {
+     color:#D80100;
+     font-size:1.5rem;
+      display:inline-block;
+      }
+ 
+.glyphicon-circle-arrow-right {
+      margin-left:10px;     
+   }
+  
+   
+ .notification-heading, .notification-footer  {
+ 	padding:2px 10px;
+       }
+      
+        
+.dropdown-menu.divider {
+  margin:5px 0;          
+  }
+
+.item-title {
+  
+ font-size:1.3rem;
+ color:#000;
+    
+}
+
+.notifications a.content {
+ text-decoration:none;
+ background:#ccc;
+
+ }
+    
+.notification-item {
+ padding:10px;
+ margin:5px;
+ background:#ccc;
+ border-radius:4px;
+ }
+
+
+.dropdown.notification {
+    display:inline-block;
+    margin-left:20px;
+    padding:10px;
+  }
+
+

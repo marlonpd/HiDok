@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Appointment;
+use App\Clinic;
 
 class HomeController extends Controller
 {
@@ -42,7 +43,10 @@ class HomeController extends Controller
             }
             else
             {
-                return "hello doctor".Auth::user()->id;
+                $clinics = Clinic::where('doctor_id' , '=' ,Auth::user()->id)
+                                 ->get();
+
+                return view(config('constants.account_type_rev.'.Auth::user()->account_type).'/home',compact('clinics'));
             }
         }
 

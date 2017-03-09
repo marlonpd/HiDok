@@ -25,7 +25,7 @@
             <label class="control-label col-xs-3">Day(s) available:</label>
             <div class="col-xs-6">
                 
-                <ul class="no-bullet">
+                <ul class="no-bullet list-inline">
                   <li>
                     <input type="checkbox"  v-model="clinic.open_sunday"  v-bind:true-value="1" v-bind:false-value="0" > Sunday
                   </li>
@@ -119,9 +119,7 @@
 
         </div>
 
-
-
-            <div class="form-group">
+          <div class="form-group">
             <label class="control-label col-xs-3" for="phoneNumber">Address:</label>
             <div class="col-xs-9">
                 <input class="form-control" id="phoneNumber" v-model="clinic.address" placeholder="Address" type="tel">
@@ -135,6 +133,19 @@
                     <input value="news" type="checkbox" v-model="clinic.default_address"> Set as default clinic.
                 </label>
             </div>
+        </div>
+
+
+        <div class="form-group">
+          <div id="google_map2" style="width: 95%; height: 400px; margin:auto;margin-bottom: 10px"></div>
+
+          <div class="col-xs-6">
+            <input class="form-control" v-model="clinic.gmap_lat" id="gmap_lat2" placeholder="Latitude" type="tel">
+          </div>
+          
+          <div class="col-xs-6">
+            <input class="form-control" v-model="clinic.gmap_lng" id="gmap_lng2" placeholder="Longitude" type="tel">
+          </div> 
         </div>
  
     </form>
@@ -171,6 +182,9 @@
             }
         },
 
+        mounted(){
+        },
+
         events: {
 
         },
@@ -189,6 +203,8 @@
               function (dismiss) {
               }
             )
+            this.clinic.gmap_lat = document.getElementById('gmap_lat2').value;
+            this.clinic.gmap_lng = document.getElementById('gmap_lng2').value;
 
             this.$http.post('/api/clinic/update/post', this.clinic, function(data){
               if(data == 'success'){

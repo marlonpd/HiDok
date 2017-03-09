@@ -1,4 +1,220 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+module.exports = { "default": require("core-js/library/fn/object/define-property"), __esModule: true };
+},{"core-js/library/fn/object/define-property":3}],2:[function(require,module,exports){
+"use strict";
+
+exports.__esModule = true;
+
+var _defineProperty = require("../core-js/object/define-property");
+
+var _defineProperty2 = _interopRequireDefault(_defineProperty);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function (obj, key, value) {
+  if (key in obj) {
+    (0, _defineProperty2.default)(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+};
+},{"../core-js/object/define-property":1}],3:[function(require,module,exports){
+require('../../modules/es6.object.define-property');
+var $Object = require('../../modules/_core').Object;
+module.exports = function defineProperty(it, key, desc){
+  return $Object.defineProperty(it, key, desc);
+};
+},{"../../modules/_core":6,"../../modules/es6.object.define-property":19}],4:[function(require,module,exports){
+module.exports = function(it){
+  if(typeof it != 'function')throw TypeError(it + ' is not a function!');
+  return it;
+};
+},{}],5:[function(require,module,exports){
+var isObject = require('./_is-object');
+module.exports = function(it){
+  if(!isObject(it))throw TypeError(it + ' is not an object!');
+  return it;
+};
+},{"./_is-object":15}],6:[function(require,module,exports){
+var core = module.exports = {version: '2.4.0'};
+if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
+},{}],7:[function(require,module,exports){
+// optional / simple context binding
+var aFunction = require('./_a-function');
+module.exports = function(fn, that, length){
+  aFunction(fn);
+  if(that === undefined)return fn;
+  switch(length){
+    case 1: return function(a){
+      return fn.call(that, a);
+    };
+    case 2: return function(a, b){
+      return fn.call(that, a, b);
+    };
+    case 3: return function(a, b, c){
+      return fn.call(that, a, b, c);
+    };
+  }
+  return function(/* ...args */){
+    return fn.apply(that, arguments);
+  };
+};
+},{"./_a-function":4}],8:[function(require,module,exports){
+// Thank's IE8 for his funny defineProperty
+module.exports = !require('./_fails')(function(){
+  return Object.defineProperty({}, 'a', {get: function(){ return 7; }}).a != 7;
+});
+},{"./_fails":11}],9:[function(require,module,exports){
+var isObject = require('./_is-object')
+  , document = require('./_global').document
+  // in old IE typeof document.createElement is 'object'
+  , is = isObject(document) && isObject(document.createElement);
+module.exports = function(it){
+  return is ? document.createElement(it) : {};
+};
+},{"./_global":12,"./_is-object":15}],10:[function(require,module,exports){
+var global    = require('./_global')
+  , core      = require('./_core')
+  , ctx       = require('./_ctx')
+  , hide      = require('./_hide')
+  , PROTOTYPE = 'prototype';
+
+var $export = function(type, name, source){
+  var IS_FORCED = type & $export.F
+    , IS_GLOBAL = type & $export.G
+    , IS_STATIC = type & $export.S
+    , IS_PROTO  = type & $export.P
+    , IS_BIND   = type & $export.B
+    , IS_WRAP   = type & $export.W
+    , exports   = IS_GLOBAL ? core : core[name] || (core[name] = {})
+    , expProto  = exports[PROTOTYPE]
+    , target    = IS_GLOBAL ? global : IS_STATIC ? global[name] : (global[name] || {})[PROTOTYPE]
+    , key, own, out;
+  if(IS_GLOBAL)source = name;
+  for(key in source){
+    // contains in native
+    own = !IS_FORCED && target && target[key] !== undefined;
+    if(own && key in exports)continue;
+    // export native or passed
+    out = own ? target[key] : source[key];
+    // prevent global pollution for namespaces
+    exports[key] = IS_GLOBAL && typeof target[key] != 'function' ? source[key]
+    // bind timers to global for call from export context
+    : IS_BIND && own ? ctx(out, global)
+    // wrap global constructors for prevent change them in library
+    : IS_WRAP && target[key] == out ? (function(C){
+      var F = function(a, b, c){
+        if(this instanceof C){
+          switch(arguments.length){
+            case 0: return new C;
+            case 1: return new C(a);
+            case 2: return new C(a, b);
+          } return new C(a, b, c);
+        } return C.apply(this, arguments);
+      };
+      F[PROTOTYPE] = C[PROTOTYPE];
+      return F;
+    // make static versions for prototype methods
+    })(out) : IS_PROTO && typeof out == 'function' ? ctx(Function.call, out) : out;
+    // export proto methods to core.%CONSTRUCTOR%.methods.%NAME%
+    if(IS_PROTO){
+      (exports.virtual || (exports.virtual = {}))[key] = out;
+      // export proto methods to core.%CONSTRUCTOR%.prototype.%NAME%
+      if(type & $export.R && expProto && !expProto[key])hide(expProto, key, out);
+    }
+  }
+};
+// type bitmap
+$export.F = 1;   // forced
+$export.G = 2;   // global
+$export.S = 4;   // static
+$export.P = 8;   // proto
+$export.B = 16;  // bind
+$export.W = 32;  // wrap
+$export.U = 64;  // safe
+$export.R = 128; // real proto method for `library` 
+module.exports = $export;
+},{"./_core":6,"./_ctx":7,"./_global":12,"./_hide":13}],11:[function(require,module,exports){
+module.exports = function(exec){
+  try {
+    return !!exec();
+  } catch(e){
+    return true;
+  }
+};
+},{}],12:[function(require,module,exports){
+// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
+var global = module.exports = typeof window != 'undefined' && window.Math == Math
+  ? window : typeof self != 'undefined' && self.Math == Math ? self : Function('return this')();
+if(typeof __g == 'number')__g = global; // eslint-disable-line no-undef
+},{}],13:[function(require,module,exports){
+var dP         = require('./_object-dp')
+  , createDesc = require('./_property-desc');
+module.exports = require('./_descriptors') ? function(object, key, value){
+  return dP.f(object, key, createDesc(1, value));
+} : function(object, key, value){
+  object[key] = value;
+  return object;
+};
+},{"./_descriptors":8,"./_object-dp":16,"./_property-desc":17}],14:[function(require,module,exports){
+module.exports = !require('./_descriptors') && !require('./_fails')(function(){
+  return Object.defineProperty(require('./_dom-create')('div'), 'a', {get: function(){ return 7; }}).a != 7;
+});
+},{"./_descriptors":8,"./_dom-create":9,"./_fails":11}],15:[function(require,module,exports){
+module.exports = function(it){
+  return typeof it === 'object' ? it !== null : typeof it === 'function';
+};
+},{}],16:[function(require,module,exports){
+var anObject       = require('./_an-object')
+  , IE8_DOM_DEFINE = require('./_ie8-dom-define')
+  , toPrimitive    = require('./_to-primitive')
+  , dP             = Object.defineProperty;
+
+exports.f = require('./_descriptors') ? Object.defineProperty : function defineProperty(O, P, Attributes){
+  anObject(O);
+  P = toPrimitive(P, true);
+  anObject(Attributes);
+  if(IE8_DOM_DEFINE)try {
+    return dP(O, P, Attributes);
+  } catch(e){ /* empty */ }
+  if('get' in Attributes || 'set' in Attributes)throw TypeError('Accessors not supported!');
+  if('value' in Attributes)O[P] = Attributes.value;
+  return O;
+};
+},{"./_an-object":5,"./_descriptors":8,"./_ie8-dom-define":14,"./_to-primitive":18}],17:[function(require,module,exports){
+module.exports = function(bitmap, value){
+  return {
+    enumerable  : !(bitmap & 1),
+    configurable: !(bitmap & 2),
+    writable    : !(bitmap & 4),
+    value       : value
+  };
+};
+},{}],18:[function(require,module,exports){
+// 7.1.1 ToPrimitive(input [, PreferredType])
+var isObject = require('./_is-object');
+// instead of the ES6 spec version, we didn't implement @@toPrimitive case
+// and the second argument - flag - preferred type is a string
+module.exports = function(it, S){
+  if(!isObject(it))return it;
+  var fn, val;
+  if(S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it)))return val;
+  if(typeof (fn = it.valueOf) == 'function' && !isObject(val = fn.call(it)))return val;
+  if(!S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it)))return val;
+  throw TypeError("Can't convert object to primitive value");
+};
+},{"./_is-object":15}],19:[function(require,module,exports){
+var $export = require('./_export');
+// 19.1.2.4 / 15.2.3.6 Object.defineProperty(O, P, Attributes)
+$export($export.S + $export.F * !require('./_descriptors'), 'Object', {defineProperty: require('./_object-dp').f});
+},{"./_descriptors":8,"./_export":10,"./_object-dp":16}],20:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -180,7 +396,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],2:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 var Vue // late bind
 var map = window.__VUE_HOT_MAP__ = Object.create(null)
 var installed = false
@@ -312,7 +528,7 @@ exports.reload = tryWrap(function (id, options) {
   })
 })
 
-},{}],3:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 /*!
  * vue-resource v0.7.4
  * https://github.com/vuejs/vue-resource
@@ -1681,7 +1897,7 @@ if (typeof window !== 'undefined' && window.Vue) {
 }
 
 module.exports = plugin;
-},{}],4:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 (function (process){
 /**
   * vue-router v2.1.3
@@ -3787,7 +4003,7 @@ if (inBrowser && window.Vue) {
 
 module.exports = VueRouter;
 }).call(this,require('_process'))
-},{"_process":1}],5:[function(require,module,exports){
+},{"_process":20}],24:[function(require,module,exports){
 (function (global){
 /*!
  * Vue.js v2.1.10
@@ -12359,7 +12575,7 @@ return Vue$3;
 })));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],6:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 (function (process,global){
 /*!
  * Vue.js v2.1.10
@@ -18571,7 +18787,7 @@ setTimeout(function () {
 module.exports = Vue$2;
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":1}],7:[function(require,module,exports){
+},{"_process":20}],26:[function(require,module,exports){
 var inserted = exports.cache = {}
 
 function noop () {}
@@ -18596,7 +18812,7 @@ exports.insert = function (css) {
   }
 }
 
-},{}],8:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 'use strict';
 
 window.Vue = require('vue/dist/vue.js');
@@ -18791,7 +19007,7 @@ var app = new Vue({
   }
 });
 
-},{"./components/Appointment.vue":9,"./components/AssessmentForm.vue":10,"./components/CreateAppointmentForm.vue":11,"./components/CreateClinicForm.vue":12,"./components/CreateFeedbackForm.vue":13,"./components/CreateSchedule.vue":14,"./components/DiagnosisForm.vue":15,"./components/DoctorProfileForm.vue":16,"./components/EditClinicForm.vue":17,"./components/EditSchedule.vue":18,"./components/Feedback.vue":19,"./components/LaboratoryForm.vue":20,"./components/Login.vue":21,"./components/PatientProfileForm.vue":22,"./components/PatientReSchedule.vue":23,"./components/ReSchedule.vue":24,"./components/Register.vue":25,"./components/TreatmentForm.vue":26,"vue-resource-2":3,"vue-router":4,"vue/dist/vue.js":5}],9:[function(require,module,exports){
+},{"./components/Appointment.vue":28,"./components/AssessmentForm.vue":29,"./components/CreateAppointmentForm.vue":30,"./components/CreateClinicForm.vue":31,"./components/CreateFeedbackForm.vue":32,"./components/CreateSchedule.vue":33,"./components/DiagnosisForm.vue":34,"./components/DoctorProfileForm.vue":35,"./components/EditClinicForm.vue":36,"./components/EditSchedule.vue":37,"./components/Feedback.vue":38,"./components/LaboratoryForm.vue":39,"./components/Login.vue":40,"./components/PatientProfileForm.vue":41,"./components/PatientReSchedule.vue":42,"./components/ReSchedule.vue":43,"./components/Register.vue":44,"./components/TreatmentForm.vue":45,"vue-resource-2":22,"vue-router":23,"vue/dist/vue.js":24}],28:[function(require,module,exports){
 var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".ui-accordion-content{\n\theight: 300px!important;\n}")
 ;(function(){
 'use strict';
@@ -18901,12 +19117,12 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   module.hot.accept()
   module.hot.dispose(__vueify_style_dispose__)
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-10", __vue__options__)
+    hotAPI.createRecord("data-v-8", __vue__options__)
   } else {
-    hotAPI.reload("data-v-10", __vue__options__)
+    hotAPI.reload("data-v-8", __vue__options__)
   }
 })()}
-},{"vue":6,"vue-hot-reload-api":2,"vueify/lib/insert-css":7}],10:[function(require,module,exports){
+},{"vue":25,"vue-hot-reload-api":21,"vueify/lib/insert-css":26}],29:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -18965,12 +19181,12 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-5", __vue__options__)
+    hotAPI.createRecord("data-v-10", __vue__options__)
   } else {
-    hotAPI.reload("data-v-5", __vue__options__)
+    hotAPI.reload("data-v-10", __vue__options__)
   }
 })()}
-},{"vue":6,"vue-hot-reload-api":2}],11:[function(require,module,exports){
+},{"vue":25,"vue-hot-reload-api":21}],30:[function(require,module,exports){
 var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".schedule-list {\n    height: 100px;\n    overflow-y: scroll;\n}")
 ;(function(){
 'use strict';
@@ -18986,7 +19202,7 @@ exports.default = {
   },
 
 
-  props: ['clinics', 'doctor_id'],
+  props: ['clinics', 'doctorId'],
 
   created: function created() {},
 
@@ -19009,7 +19225,7 @@ exports.default = {
     setClinic: function setClinic(id) {
 
       this.appointment.clinic_id = id;
-      this.appointment.doctor_id = this.doctor_id;
+      this.appointment.doctor_id = this.doctorId;
     },
 
     setExactDate: function setExactDate(event) {
@@ -19074,12 +19290,12 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   module.hot.accept()
   module.hot.dispose(__vueify_style_dispose__)
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-7", __vue__options__)
+    hotAPI.createRecord("data-v-5", __vue__options__)
   } else {
-    hotAPI.reload("data-v-7", __vue__options__)
+    hotAPI.reload("data-v-5", __vue__options__)
   }
 })()}
-},{"vue":6,"vue-hot-reload-api":2,"vueify/lib/insert-css":7}],12:[function(require,module,exports){
+},{"vue":25,"vue-hot-reload-api":21,"vueify/lib/insert-css":26}],31:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -19124,8 +19340,6 @@ exports.default = {
 
       this.$http.get('/api/clinics/get/' + id, function (data) {
         this.clinics = data['clinics'];
-
-        alert('com');
       });
     },
 
@@ -19138,12 +19352,30 @@ exports.default = {
         showConfirmButton: false,
         type: 'info'
       }).then(function () {}, function (dismiss) {});
+      this.clinic.gmap_lat = document.getElementById(LATITUDE_ELEMENT_ID).value;
+      this.clinic.gmap_lng = document.getElementById(LONGITUDE_ELEMENT_ID).value;
 
       this.$http.post('/api/clinic/create/post', this.clinic, function (data) {
+
         if (data == 'success') {
           $('#create-clinic-form').modal('hide');
 
-          this.fetchClinics(0);
+          this.clinic = {
+            name: null,
+            to_time: null,
+            from_time: null,
+            open_sunday: 0,
+            open_monday: 0,
+            open_tuesday: 0,
+            open_wednesday: 0,
+            open_thursday: 0,
+            open_friday: 0,
+            open_saturday: 0,
+            address: null,
+            gmap_lat: null,
+            gmap_lng: null,
+            default_address: false
+          };
 
           swal({
             title: 'Success!',
@@ -19180,19 +19412,19 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function(){with(this){return _c('div',{staticClass:"modal",attrs:{"id":"create-clinic-form","tabindex":"-1","role":"dialog","aria-labelledby":"create-clinic-form","aria-hidden":"true"}},[_c('div',{staticClass:"modal-dialog"},[_c('div',{staticClass:"modal-content"},[_m(0),_v(" "),_c('div',{staticClass:"modal-body"},[_c('form',{staticClass:"form-horizontal"},[_c('div',{staticClass:"form-group"},[_c('label',{staticClass:"control-label col-xs-3",attrs:{"for":"name"}},[_v("Name:")]),_v(" "),_c('div',{staticClass:"col-xs-9"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.name),expression:"clinic.name"}],staticClass:"form-control",attrs:{"id":"name","placeholder":"Name","type":"text"},domProps:{"value":_s(clinic.name)},on:{"input":function($event){if($event.target.composing)return;clinic.name=$event.target.value}}})])]),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{staticClass:"control-label col-xs-3"},[_v("Day(s) available:")]),_v(" "),_c('div',{staticClass:"col-xs-6"},[_c('ul',{staticClass:"no-bullet"},[_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_sunday),expression:"clinic.open_sunday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_sunday)?_i(clinic.open_sunday,null)>-1:_q(clinic.open_sunday,1)},on:{"click":function($event){var $$a=clinic.open_sunday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_sunday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_sunday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_sunday=$$c}}}}),_v(" Sunday\n                  ")]),_v(" "),_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_monday),expression:"clinic.open_monday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_monday)?_i(clinic.open_monday,null)>-1:_q(clinic.open_monday,1)},on:{"click":function($event){var $$a=clinic.open_monday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_monday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_monday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_monday=$$c}}}}),_v(" Monday\n                  ")]),_v(" "),_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_tuesday),expression:"clinic.open_tuesday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_tuesday)?_i(clinic.open_tuesday,null)>-1:_q(clinic.open_tuesday,1)},on:{"click":function($event){var $$a=clinic.open_tuesday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_tuesday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_tuesday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_tuesday=$$c}}}}),_v(" Tuesday\n                  ")]),_v(" "),_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_wednesday),expression:"clinic.open_wednesday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_wednesday)?_i(clinic.open_wednesday,null)>-1:_q(clinic.open_wednesday,1)},on:{"click":function($event){var $$a=clinic.open_wednesday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_wednesday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_wednesday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_wednesday=$$c}}}}),_v(" Wednesday\n                  ")]),_v(" "),_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_thursday),expression:"clinic.open_thursday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_thursday)?_i(clinic.open_thursday,null)>-1:_q(clinic.open_thursday,1)},on:{"click":function($event){var $$a=clinic.open_thursday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_thursday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_thursday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_thursday=$$c}}}}),_v(" Thursday\n                  ")]),_v(" "),_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_friday),expression:"clinic.open_friday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_friday)?_i(clinic.open_friday,null)>-1:_q(clinic.open_friday,1)},on:{"click":function($event){var $$a=clinic.open_friday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_friday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_friday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_friday=$$c}}}}),_v(" Friday\n                  ")]),_v(" "),_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_saturday),expression:"clinic.open_saturday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_saturday)?_i(clinic.open_saturday,null)>-1:_q(clinic.open_saturday,1)},on:{"click":function($event){var $$a=clinic.open_saturday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_saturday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_saturday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_saturday=$$c}}}}),_v(" Saturday\n                  ")])])])]),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{staticClass:"control-label col-xs-3"},[_v("Time available:")]),_v(" "),_c('div',{staticClass:"col-xs-3"},[_c('select',{directives:[{name:"model",rawName:"v-model",value:(clinic.from_time),expression:"clinic.from_time"}],staticClass:"form-control",on:{"change":function($event){clinic.from_time=Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val})[0]}}},[_c('option',[_v("1:00 a.m.")]),_v(" "),_c('option',[_v("2:00 a.m.")]),_v(" "),_c('option',[_v("3:00 a.m.")]),_v(" "),_c('option',[_v("4:00 a.m.")]),_v(" "),_c('option',[_v("5:00 a.m.")]),_v(" "),_c('option',[_v("6:00 a.m.")]),_v(" "),_c('option',[_v("7:00 a.m.")]),_v(" "),_c('option',[_v("8:00 a.m.")]),_v(" "),_c('option',[_v("9:00 a.m.")]),_v(" "),_c('option',[_v("10:00 a.m.")]),_v(" "),_c('option',[_v("11:00 a.m.")]),_v(" "),_c('option',[_v("12:00 a.m.")]),_v(" "),_c('option',[_v("1:00 p.m.")]),_v(" "),_c('option',[_v("2:00 p.m.")]),_v(" "),_c('option',[_v("3:00 p.m.")]),_v(" "),_c('option',[_v("4:00 p.m.")]),_v(" "),_c('option',[_v("5:00 p.m.")]),_v(" "),_c('option',[_v("6:00 p.m.")]),_v(" "),_c('option',[_v("7:00 p.m.")]),_v(" "),_c('option',[_v("8:00 p.m.")]),_v(" "),_c('option',[_v("9:00 p.m.")]),_v(" "),_c('option',[_v("10:00 p.m.")]),_v(" "),_c('option',[_v("11:00 p.m.")]),_v(" "),_c('option',[_v("12:00 p.m.")])])]),_v(" "),_c('div',{staticClass:"col-xs-1"},[_v("to")]),_v(" "),_c('div',{staticClass:"col-xs-3"},[_c('select',{directives:[{name:"model",rawName:"v-model",value:(clinic.to_time),expression:"clinic.to_time"}],staticClass:"form-control",on:{"change":function($event){clinic.to_time=Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val})[0]}}},[_c('option',[_v("1:00 a.m.")]),_v(" "),_c('option',[_v("2:00 a.m.")]),_v(" "),_c('option',[_v("3:00 a.m.")]),_v(" "),_c('option',[_v("4:00 a.m.")]),_v(" "),_c('option',[_v("5:00 a.m.")]),_v(" "),_c('option',[_v("6:00 a.m.")]),_v(" "),_c('option',[_v("7:00 a.m.")]),_v(" "),_c('option',[_v("8:00 a.m.")]),_v(" "),_c('option',[_v("9:00 a.m.")]),_v(" "),_c('option',[_v("10:00 a.m.")]),_v(" "),_c('option',[_v("11:00 a.m.")]),_v(" "),_c('option',[_v("12:00 a.m.")]),_v(" "),_c('option',[_v("1:00 p.m.")]),_v(" "),_c('option',[_v("2:00 p.m.")]),_v(" "),_c('option',[_v("3:00 p.m.")]),_v(" "),_c('option',[_v("4:00 p.m.")]),_v(" "),_c('option',[_v("5:00 p.m.")]),_v(" "),_c('option',[_v("6:00 p.m.")]),_v(" "),_c('option',[_v("7:00 p.m.")]),_v(" "),_c('option',[_v("8:00 p.m.")]),_v(" "),_c('option',[_v("9:00 p.m.")]),_v(" "),_c('option',[_v("10:00 p.m.")]),_v(" "),_c('option',[_v("11:00 p.m.")]),_v(" "),_c('option',[_v("12:00 p.m.")])])])]),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{staticClass:"control-label col-xs-3",attrs:{"for":"phoneNumber"}},[_v("Address:")]),_v(" "),_c('div',{staticClass:"col-xs-9"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.address),expression:"clinic.address"}],staticClass:"form-control",attrs:{"id":"phoneNumber","placeholder":"Address","type":"tel"},domProps:{"value":_s(clinic.address)},on:{"input":function($event){if($event.target.composing)return;clinic.address=$event.target.value}}})])]),_v(" "),_c('div',{staticClass:"form-group"},[_c('div',{staticClass:"col-xs-offset-3 col-xs-9"},[_c('label',{staticClass:"checkbox-inline"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.default_address),expression:"clinic.default_address"}],attrs:{"value":"news","type":"checkbox"},domProps:{"checked":Array.isArray(clinic.default_address)?_i(clinic.default_address,"news")>-1:(clinic.default_address)},on:{"click":function($event){var $$a=clinic.default_address,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v="news",$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.default_address=$$a.concat($$v))}else{$$i>-1&&(clinic.default_address=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.default_address=$$c}}}}),_v(" Set as default clinic.\n                ")])])])])]),_v(" "),_c('div',{staticClass:"modal-footer "},[_c('button',{staticClass:"btn btn-warning btn-lg",staticStyle:{"width":"100%"},attrs:{"type":"button"},on:{"click":function($event){createClinic($event)}}},[_c('span',{staticClass:"glyphicon glyphicon-ok-sign"}),_v("Create")])])])])])}}
+__vue__options__.render = function(){with(this){return _c('div',{staticClass:"modal",attrs:{"id":"create-clinic-form","tabindex":"-1","role":"dialog","aria-labelledby":"create-clinic-form","aria-hidden":"true"}},[_c('div',{staticClass:"modal-dialog"},[_c('div',{staticClass:"modal-content"},[_m(0),_v(" "),_c('div',{staticClass:"modal-body"},[_c('form',{staticClass:"form-horizontal"},[_c('div',{staticClass:"form-group"},[_c('label',{staticClass:"control-label col-xs-3",attrs:{"for":"name"}},[_v("Name:")]),_v(" "),_c('div',{staticClass:"col-xs-9"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.name),expression:"clinic.name"}],staticClass:"form-control",attrs:{"id":"name","placeholder":"Name","type":"text"},domProps:{"value":_s(clinic.name)},on:{"input":function($event){if($event.target.composing)return;clinic.name=$event.target.value}}})])]),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{staticClass:"control-label col-xs-3"},[_v("Day(s) available:")]),_v(" "),_c('div',{staticClass:"col-xs-6"},[_c('ul',{staticClass:"no-bullet list-inline"},[_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_sunday),expression:"clinic.open_sunday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_sunday)?_i(clinic.open_sunday,null)>-1:_q(clinic.open_sunday,1)},on:{"click":function($event){var $$a=clinic.open_sunday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_sunday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_sunday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_sunday=$$c}}}}),_v(" Sunday\n                  ")]),_v(" "),_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_monday),expression:"clinic.open_monday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_monday)?_i(clinic.open_monday,null)>-1:_q(clinic.open_monday,1)},on:{"click":function($event){var $$a=clinic.open_monday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_monday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_monday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_monday=$$c}}}}),_v(" Monday\n                  ")]),_v(" "),_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_tuesday),expression:"clinic.open_tuesday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_tuesday)?_i(clinic.open_tuesday,null)>-1:_q(clinic.open_tuesday,1)},on:{"click":function($event){var $$a=clinic.open_tuesday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_tuesday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_tuesday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_tuesday=$$c}}}}),_v(" Tuesday\n                  ")]),_v(" "),_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_wednesday),expression:"clinic.open_wednesday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_wednesday)?_i(clinic.open_wednesday,null)>-1:_q(clinic.open_wednesday,1)},on:{"click":function($event){var $$a=clinic.open_wednesday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_wednesday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_wednesday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_wednesday=$$c}}}}),_v(" Wednesday\n                  ")]),_v(" "),_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_thursday),expression:"clinic.open_thursday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_thursday)?_i(clinic.open_thursday,null)>-1:_q(clinic.open_thursday,1)},on:{"click":function($event){var $$a=clinic.open_thursday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_thursday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_thursday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_thursday=$$c}}}}),_v(" Thursday\n                  ")]),_v(" "),_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_friday),expression:"clinic.open_friday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_friday)?_i(clinic.open_friday,null)>-1:_q(clinic.open_friday,1)},on:{"click":function($event){var $$a=clinic.open_friday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_friday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_friday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_friday=$$c}}}}),_v(" Friday\n                  ")]),_v(" "),_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_saturday),expression:"clinic.open_saturday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_saturday)?_i(clinic.open_saturday,null)>-1:_q(clinic.open_saturday,1)},on:{"click":function($event){var $$a=clinic.open_saturday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_saturday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_saturday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_saturday=$$c}}}}),_v(" Saturday\n                  ")])])])]),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{staticClass:"control-label col-xs-3"},[_v("Time available:")]),_v(" "),_c('div',{staticClass:"col-xs-3"},[_c('select',{directives:[{name:"model",rawName:"v-model",value:(clinic.from_time),expression:"clinic.from_time"}],staticClass:"form-control",on:{"change":function($event){clinic.from_time=Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val})[0]}}},[_c('option',[_v("1:00 a.m.")]),_v(" "),_c('option',[_v("2:00 a.m.")]),_v(" "),_c('option',[_v("3:00 a.m.")]),_v(" "),_c('option',[_v("4:00 a.m.")]),_v(" "),_c('option',[_v("5:00 a.m.")]),_v(" "),_c('option',[_v("6:00 a.m.")]),_v(" "),_c('option',[_v("7:00 a.m.")]),_v(" "),_c('option',[_v("8:00 a.m.")]),_v(" "),_c('option',[_v("9:00 a.m.")]),_v(" "),_c('option',[_v("10:00 a.m.")]),_v(" "),_c('option',[_v("11:00 a.m.")]),_v(" "),_c('option',[_v("12:00 a.m.")]),_v(" "),_c('option',[_v("1:00 p.m.")]),_v(" "),_c('option',[_v("2:00 p.m.")]),_v(" "),_c('option',[_v("3:00 p.m.")]),_v(" "),_c('option',[_v("4:00 p.m.")]),_v(" "),_c('option',[_v("5:00 p.m.")]),_v(" "),_c('option',[_v("6:00 p.m.")]),_v(" "),_c('option',[_v("7:00 p.m.")]),_v(" "),_c('option',[_v("8:00 p.m.")]),_v(" "),_c('option',[_v("9:00 p.m.")]),_v(" "),_c('option',[_v("10:00 p.m.")]),_v(" "),_c('option',[_v("11:00 p.m.")]),_v(" "),_c('option',[_v("12:00 p.m.")])])]),_v(" "),_c('div',{staticClass:"col-xs-1"},[_v("to")]),_v(" "),_c('div',{staticClass:"col-xs-3"},[_c('select',{directives:[{name:"model",rawName:"v-model",value:(clinic.to_time),expression:"clinic.to_time"}],staticClass:"form-control",on:{"change":function($event){clinic.to_time=Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val})[0]}}},[_c('option',[_v("1:00 a.m.")]),_v(" "),_c('option',[_v("2:00 a.m.")]),_v(" "),_c('option',[_v("3:00 a.m.")]),_v(" "),_c('option',[_v("4:00 a.m.")]),_v(" "),_c('option',[_v("5:00 a.m.")]),_v(" "),_c('option',[_v("6:00 a.m.")]),_v(" "),_c('option',[_v("7:00 a.m.")]),_v(" "),_c('option',[_v("8:00 a.m.")]),_v(" "),_c('option',[_v("9:00 a.m.")]),_v(" "),_c('option',[_v("10:00 a.m.")]),_v(" "),_c('option',[_v("11:00 a.m.")]),_v(" "),_c('option',[_v("12:00 a.m.")]),_v(" "),_c('option',[_v("1:00 p.m.")]),_v(" "),_c('option',[_v("2:00 p.m.")]),_v(" "),_c('option',[_v("3:00 p.m.")]),_v(" "),_c('option',[_v("4:00 p.m.")]),_v(" "),_c('option',[_v("5:00 p.m.")]),_v(" "),_c('option',[_v("6:00 p.m.")]),_v(" "),_c('option',[_v("7:00 p.m.")]),_v(" "),_c('option',[_v("8:00 p.m.")]),_v(" "),_c('option',[_v("9:00 p.m.")]),_v(" "),_c('option',[_v("10:00 p.m.")]),_v(" "),_c('option',[_v("11:00 p.m.")]),_v(" "),_c('option',[_v("12:00 p.m.")])])])]),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{staticClass:"control-label col-xs-3",attrs:{"for":"phoneNumber"}},[_v("Address:")]),_v(" "),_c('div',{staticClass:"col-xs-9"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.address),expression:"clinic.address"}],staticClass:"form-control",attrs:{"id":"phoneNumber","placeholder":"Address","type":"tel"},domProps:{"value":_s(clinic.address)},on:{"input":function($event){if($event.target.composing)return;clinic.address=$event.target.value}}})])]),_v(" "),_c('div',{staticClass:"form-group"},[_c('div',{staticClass:"col-xs-offset-3 col-xs-9"},[_c('label',{staticClass:"checkbox-inline"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.default_address),expression:"clinic.default_address"}],attrs:{"value":"news","type":"checkbox"},domProps:{"checked":Array.isArray(clinic.default_address)?_i(clinic.default_address,"news")>-1:(clinic.default_address)},on:{"click":function($event){var $$a=clinic.default_address,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v="news",$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.default_address=$$a.concat($$v))}else{$$i>-1&&(clinic.default_address=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.default_address=$$c}}}}),_v(" Set as default clinic.\n                ")])])]),_v(" "),_c('div',{staticClass:"form-group"},[_c('div',{staticStyle:{"width":"95%","height":"400px","margin":"auto","margin-bottom":"10px"},attrs:{"id":"google_map"}}),_v(" "),_c('div',{staticClass:"col-xs-6"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.gmap_lat),expression:"clinic.gmap_lat"}],staticClass:"form-control",attrs:{"id":"gmap_lat","placeholder":"Latitude","type":"tel"},domProps:{"value":_s(clinic.gmap_lat)},on:{"input":function($event){if($event.target.composing)return;clinic.gmap_lat=$event.target.value}}})]),_v(" "),_c('div',{staticClass:"col-xs-6"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.gmap_lng),expression:"clinic.gmap_lng"}],staticClass:"form-control",attrs:{"id":"gmap_lng","placeholder":"Longitude","type":"tel"},domProps:{"value":_s(clinic.gmap_lng)},on:{"input":function($event){if($event.target.composing)return;clinic.gmap_lng=$event.target.value}}})])])])]),_v(" "),_c('div',{staticClass:"modal-footer "},[_c('button',{staticClass:"btn btn-warning btn-lg",staticStyle:{"width":"100%"},attrs:{"type":"button"},on:{"click":function($event){createClinic($event)}}},[_c('span',{staticClass:"glyphicon glyphicon-ok-sign"}),_v("Create")])])])])])}}
 __vue__options__.staticRenderFns = [function(){with(this){return _c('div',{staticClass:"modal-header"},[_c('button',{staticClass:"close",attrs:{"type":"button","data-dismiss":"modal","aria-hidden":"true"}},[_c('i',{staticClass:"fa fa-times-circle fa-1",attrs:{"aria-hidden":"true"}})]),_v(" "),_c('h4',{staticClass:"modal-title custom_align",attrs:{"id":"Heading"}},[_v("Create New Clinic")])])}}]
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-2", __vue__options__)
+    hotAPI.createRecord("data-v-1", __vue__options__)
   } else {
-    hotAPI.reload("data-v-2", __vue__options__)
+    hotAPI.reload("data-v-1", __vue__options__)
   }
 })()}
-},{"vue":6,"vue-hot-reload-api":2}],13:[function(require,module,exports){
+},{"vue":25,"vue-hot-reload-api":21}],32:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -19278,12 +19510,12 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-15", __vue__options__)
+    hotAPI.createRecord("data-v-14", __vue__options__)
   } else {
-    hotAPI.reload("data-v-15", __vue__options__)
+    hotAPI.reload("data-v-14", __vue__options__)
   }
 })()}
-},{"vue":6,"vue-hot-reload-api":2}],14:[function(require,module,exports){
+},{"vue":25,"vue-hot-reload-api":21}],33:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -19372,12 +19604,12 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-6", __vue__options__)
+    hotAPI.createRecord("data-v-4", __vue__options__)
   } else {
-    hotAPI.reload("data-v-6", __vue__options__)
+    hotAPI.reload("data-v-4", __vue__options__)
   }
 })()}
-},{"vue":6,"vue-hot-reload-api":2}],15:[function(require,module,exports){
+},{"vue":25,"vue-hot-reload-api":21}],34:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -19440,12 +19672,12 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-12", __vue__options__)
+    hotAPI.createRecord("data-v-13", __vue__options__)
   } else {
-    hotAPI.reload("data-v-12", __vue__options__)
+    hotAPI.reload("data-v-13", __vue__options__)
   }
 })()}
-},{"vue":6,"vue-hot-reload-api":2}],16:[function(require,module,exports){
+},{"vue":25,"vue-hot-reload-api":21}],35:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -19485,7 +19717,7 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function(){with(this){return _c('div',{staticClass:"col-md-12 col-md-offset-0"},[_c('div',{staticClass:"panel panel-default"},[_c('div',{staticClass:"panel-heading"},[_v("Profile")]),_v(" "),_c('div',{staticClass:"panel-body"},[_c('form',{attrs:{"action":"/settings/update","method":"POST"}},[_c('div',{staticClass:"col-md-6 pull-left"},[_c('div',{staticClass:"form-group"},[_c('div',{staticClass:"file-preview-thumbnails"},[_c('div',{staticClass:"file-default-preview"},[_c('img',{staticStyle:{"width":"200px"},attrs:{"src":authUser.avatar}})])])]),_v(" "),_m(0),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{attrs:{"for":"exampleInputEmail1"}},[_v("Last name")]),_v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(authUser.lastname),expression:"authUser.lastname"}],staticClass:"form-control",attrs:{"type":"text","placeholder":"lastname","name":"lastname","id":"lastname","required":""},domProps:{"value":_s(authUser.lastname)},on:{"input":function($event){if($event.target.composing)return;authUser.lastname=$event.target.value}}})]),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{attrs:{"for":"exampleInputEmail1"}},[_v("First name")]),_v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(authUser.firstname),expression:"authUser.firstname"}],staticClass:"form-control",attrs:{"type":"text","placeholder":"Firstname","name":"firstname","id":"firstname","required":""},domProps:{"value":_s(authUser.firstname)},on:{"input":function($event){if($event.target.composing)return;authUser.firstname=$event.target.value}}})]),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{attrs:{"for":"exampleInputEmail1"}},[_v("Middle name")]),_v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(authUser.middlename),expression:"authUser.middlename"}],staticClass:"form-control",attrs:{"type":"text","placeholder":"Middlename","name":"middlename","id":"middlename","required":""},domProps:{"value":_s(authUser.middlename)},on:{"input":function($event){if($event.target.composing)return;authUser.middlename=$event.target.value}}})]),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{attrs:{"for":"exampleInputEmail1"}},[_v("Address")]),_v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(authUser.address),expression:"authUser.address"}],staticClass:"form-control",attrs:{"type":"text","placeholder":"Address","name":"address","id":"address","required":""},domProps:{"value":_s(authUser.address)},on:{"input":function($event){if($event.target.composing)return;authUser.address=$event.target.value}}})]),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{attrs:{"for":"exampleInputEmail1"}},[_v("Specialization")]),_v(" "),_c('select',{directives:[{name:"model",rawName:"v-model",value:(authUser.specialization),expression:"authUser.specialization"}],staticClass:"form-control",attrs:{"name":"specialization","id":"specialization"},on:{"change":function($event){authUser.specialization=Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val})[0]}}},[_c('option',{attrs:{"disabled":""}},[_v("Select...")]),_v(" "),_l((constants['specialization']),function(specialization){return [_c('option',{domProps:{"value":specialization}},[_v("@"+_s(specialization))])]})],2)])]),_v(" "),_c('div',{staticClass:"col-md-6 pull-right"},[_c('div',{staticClass:"form-group"},[_c('label',{attrs:{"for":"exampleInputEmail1"}},[_v("Specialization")]),_v(" "),_c('select',{directives:[{name:"model",rawName:"v-model",value:(authUser.specialization),expression:"authUser.specialization"}],staticClass:"form-control",attrs:{"name":"specialization","id":"specialization"},on:{"change":function($event){authUser.specialization=Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val})[0]}}},[_c('option',{attrs:{"disabled":""}},[_v("Select...")]),_v(" "),_l((constants['specialization']),function(specialization){return [_c('option',{domProps:{"value":specialization}},[_v(_s(specialization))])]})],2)]),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{attrs:{"for":"exampleInputEmail1"}},[_v("Gender")]),_v(" "),_c('select',{directives:[{name:"model",rawName:"v-model",value:(authUser.gender),expression:"authUser.gender"}],staticClass:"form-control",attrs:{"name":"gender","id":"gender"},on:{"change":function($event){authUser.gender=Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val})[0]}}},[_c('option',{attrs:{"disabled":""}},[_v("Select...")]),_v(" "),_l((constants['gender']),function(gender){return [_c('option',{domProps:{"value":gender}},[_v(_s(gender))])]})],2)]),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{attrs:{"for":"exampleInputEmail1"}},[_v("E-mail address")]),_v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(authUser.email),expression:"authUser.email"}],staticClass:"form-control",attrs:{"type":"email","placeholder":"E-mail","name":"email","required":""},domProps:{"value":_s(authUser.email)},on:{"input":function($event){if($event.target.composing)return;authUser.email=$event.target.value}}})]),_v(" "),_m(1)])])])])])}}
+__vue__options__.render = function(){with(this){return _c('div',{staticClass:"col-md-12 col-md-offset-0"},[_c('div',{staticClass:"panel panel-default"},[_c('div',{staticClass:"panel-heading"},[_v("Profile")]),_v(" "),_c('div',{staticClass:"panel-body"},[_c('form',{attrs:{"action":"/settings/update","method":"POST"}},[_c('div',{staticClass:"col-md-6 pull-left"},[_c('div',{staticClass:"form-group"},[_c('div',{staticClass:"file-preview-thumbnails"},[_c('div',{staticClass:"file-default-preview"},[_c('img',{staticStyle:{"width":"200px"},attrs:{"src":authUser.avatar}})])])]),_v(" "),_m(0),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{attrs:{"for":"exampleInputEmail1"}},[_v("Last name")]),_v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(authUser.lastname),expression:"authUser.lastname"}],staticClass:"form-control",attrs:{"type":"text","placeholder":"lastname","name":"lastname","id":"lastname","required":""},domProps:{"value":_s(authUser.lastname)},on:{"input":function($event){if($event.target.composing)return;authUser.lastname=$event.target.value}}})]),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{attrs:{"for":"exampleInputEmail1"}},[_v("First name")]),_v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(authUser.firstname),expression:"authUser.firstname"}],staticClass:"form-control",attrs:{"type":"text","placeholder":"Firstname","name":"firstname","id":"firstname","required":""},domProps:{"value":_s(authUser.firstname)},on:{"input":function($event){if($event.target.composing)return;authUser.firstname=$event.target.value}}})]),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{attrs:{"for":"exampleInputEmail1"}},[_v("Middle name")]),_v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(authUser.middlename),expression:"authUser.middlename"}],staticClass:"form-control",attrs:{"type":"text","placeholder":"Middlename","name":"middlename","id":"middlename","required":""},domProps:{"value":_s(authUser.middlename)},on:{"input":function($event){if($event.target.composing)return;authUser.middlename=$event.target.value}}})]),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{attrs:{"for":"exampleInputEmail1"}},[_v("Address")]),_v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(authUser.address),expression:"authUser.address"}],staticClass:"form-control",attrs:{"type":"text","placeholder":"Address","name":"address","id":"address","required":""},domProps:{"value":_s(authUser.address)},on:{"input":function($event){if($event.target.composing)return;authUser.address=$event.target.value}}})])]),_v(" "),_c('div',{staticClass:"col-md-6 pull-right"},[_c('div',{staticClass:"form-group"},[_c('label',{attrs:{"for":"exampleInputEmail1"}},[_v("Specialization")]),_v(" "),_c('select',{directives:[{name:"model",rawName:"v-model",value:(authUser.specialization),expression:"authUser.specialization"}],staticClass:"form-control",attrs:{"name":"specialization","id":"specialization"},on:{"change":function($event){authUser.specialization=Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val})[0]}}},[_c('option',{attrs:{"disabled":""}},[_v("Select...")]),_v(" "),_l((constants['specialization']),function(specialization){return [_c('option',{domProps:{"value":specialization}},[_v(_s(specialization))])]})],2)]),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{attrs:{"for":"exampleInputEmail1"}},[_v("Gender")]),_v(" "),_c('select',{directives:[{name:"model",rawName:"v-model",value:(authUser.gender),expression:"authUser.gender"}],staticClass:"form-control",attrs:{"name":"gender","id":"gender"},on:{"change":function($event){authUser.gender=Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val})[0]}}},[_c('option',{attrs:{"disabled":""}},[_v("Select...")]),_v(" "),_l((constants['gender']),function(gender){return [_c('option',{domProps:{"value":gender}},[_v(_s(gender))])]})],2)]),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{attrs:{"for":"exampleInputEmail1"}},[_v("E-mail address")]),_v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(authUser.email),expression:"authUser.email"}],staticClass:"form-control",attrs:{"type":"email","placeholder":"E-mail","name":"email","required":""},domProps:{"value":_s(authUser.email)},on:{"input":function($event){if($event.target.composing)return;authUser.email=$event.target.value}}})]),_v(" "),_m(1)])])])])])}}
 __vue__options__.staticRenderFns = [function(){with(this){return _c('div',{staticClass:"form-group"},[_c('label',{staticClass:"btn btn-default file-browse-btn btn-file"},[_v("\n                            Browse  "),_c('input',{attrs:{"name":"photo","type":"file"}})])])}},function(){with(this){return _c('div',{staticClass:"form-group"},[_c('button',{staticClass:"btn btn-lg btn-primary btn-block",attrs:{"type":"submit"}},[_v("Update")])])}}]
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -19497,14 +19729,23 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-16", __vue__options__)
   }
 })()}
-},{"vue":6,"vue-hot-reload-api":2}],17:[function(require,module,exports){
+},{"vue":25,"vue-hot-reload-api":21}],36:[function(require,module,exports){
 ;(function(){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = {
+
+var _defineProperty2 = require('babel-runtime/helpers/defineProperty');
+
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+var _mounted$created$prop;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = (_mounted$created$prop = {
   mounted: function mounted() {},
 
 
@@ -19514,74 +19755,70 @@ exports.default = {
 
   data: function data() {
     return {};
-  },
+  }
+}, (0, _defineProperty3.default)(_mounted$created$prop, 'mounted', function mounted() {}), (0, _defineProperty3.default)(_mounted$created$prop, 'events', {}), (0, _defineProperty3.default)(_mounted$created$prop, 'methods', {
+  createClinic: function createClinic(event) {
+    event.preventDefault();
 
+    swal({
+      text: 'Creating....',
+      timer: 1000,
+      showConfirmButton: false,
+      type: 'info'
+    }).then(function () {}, function (dismiss) {});
+    this.clinic.gmap_lat = document.getElementById('gmap_lat2').value;
+    this.clinic.gmap_lng = document.getElementById('gmap_lng2').value;
 
-  events: {},
+    this.$http.post('/api/clinic/update/post', this.clinic, function (data) {
+      if (data == 'success') {
+        $('#edit-clinic-form').modal('hide');
 
-  methods: {
-    createClinic: function createClinic(event) {
-      event.preventDefault();
+        swal({
+          title: 'Success!',
+          text: 'Successfully updated ' + this.clinic.name,
+          showConfirmButton: false,
+          timer: 1000,
+          type: 'success'
+        }).then(function () {}, function (dismiss) {
+          if (dismiss === 'timer') {
+            console.log('I was closed by the timer');
+          }
+        });
+      } else {
 
-      swal({
-        text: 'Creating....',
-        timer: 1000,
-        showConfirmButton: false,
-        type: 'info'
-      }).then(function () {}, function (dismiss) {});
-
-      this.$http.post('/api/clinic/update/post', this.clinic, function (data) {
-        if (data == 'success') {
-          $('#edit-clinic-form').modal('hide');
-
-          swal({
-            title: 'Success!',
-            text: 'Successfully updated ' + this.clinic.name,
-            showConfirmButton: false,
-            timer: 1000,
-            type: 'success'
-          }).then(function () {}, function (dismiss) {
-            if (dismiss === 'timer') {
-              console.log('I was closed by the timer');
-            }
-          });
-        } else {
-
-          swal({
-            title: 'Error!',
-            text: 'Unable to save please try again!',
-            timer: 1000,
-            type: 'error',
-            showConfirmButton: false
-          }).then(function () {}, function (dismiss) {
-            if (dismiss === 'timer') {
-              console.log('I was closed by the timer');
-            }
-          });
-        }
-      });
-    }
-
+        swal({
+          title: 'Error!',
+          text: 'Unable to save please try again!',
+          timer: 1000,
+          type: 'error',
+          showConfirmButton: false
+        }).then(function () {}, function (dismiss) {
+          if (dismiss === 'timer') {
+            console.log('I was closed by the timer');
+          }
+        });
+      }
+    });
   }
 
-};
+}), _mounted$created$prop);
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function(){with(this){return _c('div',{staticClass:"modal",attrs:{"id":"edit-clinic-form","tabindex":"-1","role":"dialog","aria-labelledby":"edit-clinic-form","aria-hidden":"true"}},[_c('div',{staticClass:"modal-dialog"},[_c('div',{staticClass:"modal-content"},[_m(0),_v(" "),_c('div',{staticClass:"modal-body"},[_c('form',{staticClass:"form-horizontal"},[_c('div',{staticClass:"form-group"},[_c('label',{staticClass:"control-label col-xs-3",attrs:{"for":"name"}},[_v("Name:")]),_v(" "),_c('div',{staticClass:"col-xs-9"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.name),expression:"clinic.name"}],staticClass:"form-control",attrs:{"id":"name","placeholder":"Name","type":"text"},domProps:{"value":_s(clinic.name)},on:{"input":function($event){if($event.target.composing)return;clinic.name=$event.target.value}}})])]),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{staticClass:"control-label col-xs-3"},[_v("Day(s) available:")]),_v(" "),_c('div',{staticClass:"col-xs-6"},[_c('ul',{staticClass:"no-bullet"},[_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_sunday),expression:"clinic.open_sunday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_sunday)?_i(clinic.open_sunday,null)>-1:_q(clinic.open_sunday,1)},on:{"click":function($event){var $$a=clinic.open_sunday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_sunday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_sunday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_sunday=$$c}}}}),_v(" Sunday\n                  ")]),_v(" "),_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_monday),expression:"clinic.open_monday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_monday)?_i(clinic.open_monday,null)>-1:_q(clinic.open_monday,1)},on:{"click":function($event){var $$a=clinic.open_monday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_monday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_monday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_monday=$$c}}}}),_v(" Monday\n                  ")]),_v(" "),_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_tuesday),expression:"clinic.open_tuesday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_tuesday)?_i(clinic.open_tuesday,null)>-1:_q(clinic.open_tuesday,1)},on:{"click":function($event){var $$a=clinic.open_tuesday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_tuesday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_tuesday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_tuesday=$$c}}}}),_v(" Tuesday\n                  ")]),_v(" "),_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_wednesday),expression:"clinic.open_wednesday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_wednesday)?_i(clinic.open_wednesday,null)>-1:_q(clinic.open_wednesday,1)},on:{"click":function($event){var $$a=clinic.open_wednesday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_wednesday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_wednesday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_wednesday=$$c}}}}),_v(" Wednesday\n                  ")]),_v(" "),_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_thursday),expression:"clinic.open_thursday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_thursday)?_i(clinic.open_thursday,null)>-1:_q(clinic.open_thursday,1)},on:{"click":function($event){var $$a=clinic.open_thursday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_thursday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_thursday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_thursday=$$c}}}}),_v(" Thursday\n                  ")]),_v(" "),_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_friday),expression:"clinic.open_friday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_friday)?_i(clinic.open_friday,null)>-1:_q(clinic.open_friday,1)},on:{"click":function($event){var $$a=clinic.open_friday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_friday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_friday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_friday=$$c}}}}),_v(" Friday\n                  ")]),_v(" "),_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_saturday),expression:"clinic.open_saturday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_saturday)?_i(clinic.open_saturday,null)>-1:_q(clinic.open_saturday,1)},on:{"click":function($event){var $$a=clinic.open_saturday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_saturday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_saturday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_saturday=$$c}}}}),_v(" Saturday\n                  ")])])])]),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{staticClass:"control-label col-xs-3"},[_v("Time available:")]),_v(" "),_c('div',{staticClass:"col-xs-3"},[_c('select',{directives:[{name:"model",rawName:"v-model",value:(clinic.from_time),expression:"clinic.from_time"}],staticClass:"form-control",on:{"change":function($event){clinic.from_time=Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val})[0]}}},[_c('option',[_v("1:00 a.m.")]),_v(" "),_c('option',[_v("2:00 a.m.")]),_v(" "),_c('option',[_v("3:00 a.m.")]),_v(" "),_c('option',[_v("4:00 a.m.")]),_v(" "),_c('option',[_v("5:00 a.m.")]),_v(" "),_c('option',[_v("6:00 a.m.")]),_v(" "),_c('option',[_v("7:00 a.m.")]),_v(" "),_c('option',[_v("8:00 a.m.")]),_v(" "),_c('option',[_v("9:00 a.m.")]),_v(" "),_c('option',[_v("10:00 a.m.")]),_v(" "),_c('option',[_v("11:00 a.m.")]),_v(" "),_c('option',[_v("12:00 a.m.")]),_v(" "),_c('option',[_v("1:00 p.m.")]),_v(" "),_c('option',[_v("2:00 p.m.")]),_v(" "),_c('option',[_v("3:00 p.m.")]),_v(" "),_c('option',[_v("4:00 p.m.")]),_v(" "),_c('option',[_v("5:00 p.m.")]),_v(" "),_c('option',[_v("6:00 p.m.")]),_v(" "),_c('option',[_v("7:00 p.m.")]),_v(" "),_c('option',[_v("8:00 p.m.")]),_v(" "),_c('option',[_v("9:00 p.m.")]),_v(" "),_c('option',[_v("10:00 p.m.")]),_v(" "),_c('option',[_v("11:00 p.m.")]),_v(" "),_c('option',[_v("12:00 p.m.")])])]),_v(" "),_c('div',{staticClass:"col-xs-1"},[_v("to")]),_v(" "),_c('div',{staticClass:"col-xs-3"},[_c('select',{directives:[{name:"model",rawName:"v-model",value:(clinic.to_time),expression:"clinic.to_time"}],staticClass:"form-control",on:{"change":function($event){clinic.to_time=Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val})[0]}}},[_c('option',[_v("1:00 a.m.")]),_v(" "),_c('option',[_v("2:00 a.m.")]),_v(" "),_c('option',[_v("3:00 a.m.")]),_v(" "),_c('option',[_v("4:00 a.m.")]),_v(" "),_c('option',[_v("5:00 a.m.")]),_v(" "),_c('option',[_v("6:00 a.m.")]),_v(" "),_c('option',[_v("7:00 a.m.")]),_v(" "),_c('option',[_v("8:00 a.m.")]),_v(" "),_c('option',[_v("9:00 a.m.")]),_v(" "),_c('option',[_v("10:00 a.m.")]),_v(" "),_c('option',[_v("11:00 a.m.")]),_v(" "),_c('option',[_v("12:00 a.m.")]),_v(" "),_c('option',[_v("1:00 p.m.")]),_v(" "),_c('option',[_v("2:00 p.m.")]),_v(" "),_c('option',[_v("3:00 p.m.")]),_v(" "),_c('option',[_v("4:00 p.m.")]),_v(" "),_c('option',[_v("5:00 p.m.")]),_v(" "),_c('option',[_v("6:00 p.m.")]),_v(" "),_c('option',[_v("7:00 p.m.")]),_v(" "),_c('option',[_v("8:00 p.m.")]),_v(" "),_c('option',[_v("9:00 p.m.")]),_v(" "),_c('option',[_v("10:00 p.m.")]),_v(" "),_c('option',[_v("11:00 p.m.")]),_v(" "),_c('option',[_v("12:00 p.m.")])])])]),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{staticClass:"control-label col-xs-3",attrs:{"for":"phoneNumber"}},[_v("Address:")]),_v(" "),_c('div',{staticClass:"col-xs-9"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.address),expression:"clinic.address"}],staticClass:"form-control",attrs:{"id":"phoneNumber","placeholder":"Address","type":"tel"},domProps:{"value":_s(clinic.address)},on:{"input":function($event){if($event.target.composing)return;clinic.address=$event.target.value}}})])]),_v(" "),_c('div',{staticClass:"form-group"},[_c('div',{staticClass:"col-xs-offset-3 col-xs-9"},[_c('label',{staticClass:"checkbox-inline"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.default_address),expression:"clinic.default_address"}],attrs:{"value":"news","type":"checkbox"},domProps:{"checked":Array.isArray(clinic.default_address)?_i(clinic.default_address,"news")>-1:(clinic.default_address)},on:{"click":function($event){var $$a=clinic.default_address,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v="news",$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.default_address=$$a.concat($$v))}else{$$i>-1&&(clinic.default_address=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.default_address=$$c}}}}),_v(" Set as default clinic.\n                ")])])])])]),_v(" "),_c('div',{staticClass:"modal-footer "},[_c('button',{staticClass:"btn btn-warning btn-lg",staticStyle:{"width":"100%"},attrs:{"type":"button"},on:{"click":function($event){createClinic($event)}}},[_c('span',{staticClass:"glyphicon glyphicon-ok-sign"}),_v("Update")])])])])])}}
+__vue__options__.render = function(){with(this){return _c('div',{staticClass:"modal",attrs:{"id":"edit-clinic-form","tabindex":"-1","role":"dialog","aria-labelledby":"edit-clinic-form","aria-hidden":"true"}},[_c('div',{staticClass:"modal-dialog"},[_c('div',{staticClass:"modal-content"},[_m(0),_v(" "),_c('div',{staticClass:"modal-body"},[_c('form',{staticClass:"form-horizontal"},[_c('div',{staticClass:"form-group"},[_c('label',{staticClass:"control-label col-xs-3",attrs:{"for":"name"}},[_v("Name:")]),_v(" "),_c('div',{staticClass:"col-xs-9"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.name),expression:"clinic.name"}],staticClass:"form-control",attrs:{"id":"name","placeholder":"Name","type":"text"},domProps:{"value":_s(clinic.name)},on:{"input":function($event){if($event.target.composing)return;clinic.name=$event.target.value}}})])]),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{staticClass:"control-label col-xs-3"},[_v("Day(s) available:")]),_v(" "),_c('div',{staticClass:"col-xs-6"},[_c('ul',{staticClass:"no-bullet list-inline"},[_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_sunday),expression:"clinic.open_sunday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_sunday)?_i(clinic.open_sunday,null)>-1:_q(clinic.open_sunday,1)},on:{"click":function($event){var $$a=clinic.open_sunday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_sunday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_sunday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_sunday=$$c}}}}),_v(" Sunday\n                  ")]),_v(" "),_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_monday),expression:"clinic.open_monday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_monday)?_i(clinic.open_monday,null)>-1:_q(clinic.open_monday,1)},on:{"click":function($event){var $$a=clinic.open_monday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_monday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_monday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_monday=$$c}}}}),_v(" Monday\n                  ")]),_v(" "),_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_tuesday),expression:"clinic.open_tuesday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_tuesday)?_i(clinic.open_tuesday,null)>-1:_q(clinic.open_tuesday,1)},on:{"click":function($event){var $$a=clinic.open_tuesday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_tuesday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_tuesday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_tuesday=$$c}}}}),_v(" Tuesday\n                  ")]),_v(" "),_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_wednesday),expression:"clinic.open_wednesday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_wednesday)?_i(clinic.open_wednesday,null)>-1:_q(clinic.open_wednesday,1)},on:{"click":function($event){var $$a=clinic.open_wednesday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_wednesday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_wednesday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_wednesday=$$c}}}}),_v(" Wednesday\n                  ")]),_v(" "),_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_thursday),expression:"clinic.open_thursday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_thursday)?_i(clinic.open_thursday,null)>-1:_q(clinic.open_thursday,1)},on:{"click":function($event){var $$a=clinic.open_thursday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_thursday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_thursday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_thursday=$$c}}}}),_v(" Thursday\n                  ")]),_v(" "),_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_friday),expression:"clinic.open_friday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_friday)?_i(clinic.open_friday,null)>-1:_q(clinic.open_friday,1)},on:{"click":function($event){var $$a=clinic.open_friday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_friday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_friday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_friday=$$c}}}}),_v(" Friday\n                  ")]),_v(" "),_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_saturday),expression:"clinic.open_saturday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_saturday)?_i(clinic.open_saturday,null)>-1:_q(clinic.open_saturday,1)},on:{"click":function($event){var $$a=clinic.open_saturday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_saturday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_saturday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_saturday=$$c}}}}),_v(" Saturday\n                  ")])])])]),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{staticClass:"control-label col-xs-3"},[_v("Time available:")]),_v(" "),_c('div',{staticClass:"col-xs-3"},[_c('select',{directives:[{name:"model",rawName:"v-model",value:(clinic.from_time),expression:"clinic.from_time"}],staticClass:"form-control",on:{"change":function($event){clinic.from_time=Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val})[0]}}},[_c('option',[_v("1:00 a.m.")]),_v(" "),_c('option',[_v("2:00 a.m.")]),_v(" "),_c('option',[_v("3:00 a.m.")]),_v(" "),_c('option',[_v("4:00 a.m.")]),_v(" "),_c('option',[_v("5:00 a.m.")]),_v(" "),_c('option',[_v("6:00 a.m.")]),_v(" "),_c('option',[_v("7:00 a.m.")]),_v(" "),_c('option',[_v("8:00 a.m.")]),_v(" "),_c('option',[_v("9:00 a.m.")]),_v(" "),_c('option',[_v("10:00 a.m.")]),_v(" "),_c('option',[_v("11:00 a.m.")]),_v(" "),_c('option',[_v("12:00 a.m.")]),_v(" "),_c('option',[_v("1:00 p.m.")]),_v(" "),_c('option',[_v("2:00 p.m.")]),_v(" "),_c('option',[_v("3:00 p.m.")]),_v(" "),_c('option',[_v("4:00 p.m.")]),_v(" "),_c('option',[_v("5:00 p.m.")]),_v(" "),_c('option',[_v("6:00 p.m.")]),_v(" "),_c('option',[_v("7:00 p.m.")]),_v(" "),_c('option',[_v("8:00 p.m.")]),_v(" "),_c('option',[_v("9:00 p.m.")]),_v(" "),_c('option',[_v("10:00 p.m.")]),_v(" "),_c('option',[_v("11:00 p.m.")]),_v(" "),_c('option',[_v("12:00 p.m.")])])]),_v(" "),_c('div',{staticClass:"col-xs-1"},[_v("to")]),_v(" "),_c('div',{staticClass:"col-xs-3"},[_c('select',{directives:[{name:"model",rawName:"v-model",value:(clinic.to_time),expression:"clinic.to_time"}],staticClass:"form-control",on:{"change":function($event){clinic.to_time=Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val})[0]}}},[_c('option',[_v("1:00 a.m.")]),_v(" "),_c('option',[_v("2:00 a.m.")]),_v(" "),_c('option',[_v("3:00 a.m.")]),_v(" "),_c('option',[_v("4:00 a.m.")]),_v(" "),_c('option',[_v("5:00 a.m.")]),_v(" "),_c('option',[_v("6:00 a.m.")]),_v(" "),_c('option',[_v("7:00 a.m.")]),_v(" "),_c('option',[_v("8:00 a.m.")]),_v(" "),_c('option',[_v("9:00 a.m.")]),_v(" "),_c('option',[_v("10:00 a.m.")]),_v(" "),_c('option',[_v("11:00 a.m.")]),_v(" "),_c('option',[_v("12:00 a.m.")]),_v(" "),_c('option',[_v("1:00 p.m.")]),_v(" "),_c('option',[_v("2:00 p.m.")]),_v(" "),_c('option',[_v("3:00 p.m.")]),_v(" "),_c('option',[_v("4:00 p.m.")]),_v(" "),_c('option',[_v("5:00 p.m.")]),_v(" "),_c('option',[_v("6:00 p.m.")]),_v(" "),_c('option',[_v("7:00 p.m.")]),_v(" "),_c('option',[_v("8:00 p.m.")]),_v(" "),_c('option',[_v("9:00 p.m.")]),_v(" "),_c('option',[_v("10:00 p.m.")]),_v(" "),_c('option',[_v("11:00 p.m.")]),_v(" "),_c('option',[_v("12:00 p.m.")])])])]),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{staticClass:"control-label col-xs-3",attrs:{"for":"phoneNumber"}},[_v("Address:")]),_v(" "),_c('div',{staticClass:"col-xs-9"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.address),expression:"clinic.address"}],staticClass:"form-control",attrs:{"id":"phoneNumber","placeholder":"Address","type":"tel"},domProps:{"value":_s(clinic.address)},on:{"input":function($event){if($event.target.composing)return;clinic.address=$event.target.value}}})])]),_v(" "),_c('div',{staticClass:"form-group"},[_c('div',{staticClass:"col-xs-offset-3 col-xs-9"},[_c('label',{staticClass:"checkbox-inline"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.default_address),expression:"clinic.default_address"}],attrs:{"value":"news","type":"checkbox"},domProps:{"checked":Array.isArray(clinic.default_address)?_i(clinic.default_address,"news")>-1:(clinic.default_address)},on:{"click":function($event){var $$a=clinic.default_address,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v="news",$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.default_address=$$a.concat($$v))}else{$$i>-1&&(clinic.default_address=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.default_address=$$c}}}}),_v(" Set as default clinic.\n                ")])])]),_v(" "),_c('div',{staticClass:"form-group"},[_c('div',{staticStyle:{"width":"95%","height":"400px","margin":"auto","margin-bottom":"10px"},attrs:{"id":"google_map2"}}),_v(" "),_c('div',{staticClass:"col-xs-6"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.gmap_lat),expression:"clinic.gmap_lat"}],staticClass:"form-control",attrs:{"id":"gmap_lat2","placeholder":"Latitude","type":"tel"},domProps:{"value":_s(clinic.gmap_lat)},on:{"input":function($event){if($event.target.composing)return;clinic.gmap_lat=$event.target.value}}})]),_v(" "),_c('div',{staticClass:"col-xs-6"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.gmap_lng),expression:"clinic.gmap_lng"}],staticClass:"form-control",attrs:{"id":"gmap_lng2","placeholder":"Longitude","type":"tel"},domProps:{"value":_s(clinic.gmap_lng)},on:{"input":function($event){if($event.target.composing)return;clinic.gmap_lng=$event.target.value}}})])])])]),_v(" "),_c('div',{staticClass:"modal-footer "},[_c('button',{staticClass:"btn btn-warning btn-lg",staticStyle:{"width":"100%"},attrs:{"type":"button"},on:{"click":function($event){createClinic($event)}}},[_c('span',{staticClass:"glyphicon glyphicon-ok-sign"}),_v("Update")])])])])])}}
 __vue__options__.staticRenderFns = [function(){with(this){return _c('div',{staticClass:"modal-header"},[_c('button',{staticClass:"close",attrs:{"type":"button","data-dismiss":"modal","aria-hidden":"true"}},[_c('i',{staticClass:"fa fa-times-circle fa-1",attrs:{"aria-hidden":"true"}})]),_v(" "),_c('h4',{staticClass:"modal-title custom_align",attrs:{"id":"Heading"}},[_v("Edit Clinic")])])}}]
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-1", __vue__options__)
+    hotAPI.createRecord("data-v-3", __vue__options__)
   } else {
-    hotAPI.reload("data-v-1", __vue__options__)
+    hotAPI.reload("data-v-3", __vue__options__)
   }
 })()}
-},{"vue":6,"vue-hot-reload-api":2}],18:[function(require,module,exports){
+},{"babel-runtime/helpers/defineProperty":2,"vue":25,"vue-hot-reload-api":21}],37:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -19668,12 +19905,12 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-3", __vue__options__)
+    hotAPI.createRecord("data-v-7", __vue__options__)
   } else {
-    hotAPI.reload("data-v-3", __vue__options__)
+    hotAPI.reload("data-v-7", __vue__options__)
   }
 })()}
-},{"vue":6,"vue-hot-reload-api":2}],19:[function(require,module,exports){
+},{"vue":25,"vue-hot-reload-api":21}],38:[function(require,module,exports){
 ;(function(){
 "use strict";
 
@@ -19711,12 +19948,12 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-9", __vue__options__)
+    hotAPI.createRecord("data-v-6", __vue__options__)
   } else {
-    hotAPI.reload("data-v-9", __vue__options__)
+    hotAPI.reload("data-v-6", __vue__options__)
   }
 })()}
-},{"vue":6,"vue-hot-reload-api":2}],20:[function(require,module,exports){
+},{"vue":25,"vue-hot-reload-api":21}],39:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -19775,12 +20012,12 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-13", __vue__options__)
+    hotAPI.createRecord("data-v-17", __vue__options__)
   } else {
-    hotAPI.reload("data-v-13", __vue__options__)
+    hotAPI.reload("data-v-17", __vue__options__)
   }
 })()}
-},{"vue":6,"vue-hot-reload-api":2}],21:[function(require,module,exports){
+},{"vue":25,"vue-hot-reload-api":21}],40:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -19864,12 +20101,12 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-4", __vue__options__)
+    hotAPI.createRecord("data-v-2", __vue__options__)
   } else {
-    hotAPI.reload("data-v-4", __vue__options__)
+    hotAPI.reload("data-v-2", __vue__options__)
   }
 })()}
-},{"vue":6,"vue-hot-reload-api":2}],22:[function(require,module,exports){
+},{"vue":25,"vue-hot-reload-api":21}],41:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -19916,12 +20153,12 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-17", __vue__options__)
+    hotAPI.createRecord("data-v-18", __vue__options__)
   } else {
-    hotAPI.reload("data-v-17", __vue__options__)
+    hotAPI.reload("data-v-18", __vue__options__)
   }
 })()}
-},{"vue":6,"vue-hot-reload-api":2}],23:[function(require,module,exports){
+},{"vue":25,"vue-hot-reload-api":21}],42:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -20005,12 +20242,12 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-11", __vue__options__)
+    hotAPI.createRecord("data-v-9", __vue__options__)
   } else {
-    hotAPI.reload("data-v-11", __vue__options__)
+    hotAPI.reload("data-v-9", __vue__options__)
   }
 })()}
-},{"vue":6,"vue-hot-reload-api":2}],24:[function(require,module,exports){
+},{"vue":25,"vue-hot-reload-api":21}],43:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -20094,12 +20331,12 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-14", __vue__options__)
+    hotAPI.createRecord("data-v-12", __vue__options__)
   } else {
-    hotAPI.reload("data-v-14", __vue__options__)
+    hotAPI.reload("data-v-12", __vue__options__)
   }
 })()}
-},{"vue":6,"vue-hot-reload-api":2}],25:[function(require,module,exports){
+},{"vue":25,"vue-hot-reload-api":21}],44:[function(require,module,exports){
 ;(function(){
 "use strict";
 
@@ -20140,12 +20377,12 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-8", __vue__options__)
+    hotAPI.createRecord("data-v-11", __vue__options__)
   } else {
-    hotAPI.reload("data-v-8", __vue__options__)
+    hotAPI.reload("data-v-11", __vue__options__)
   }
 })()}
-},{"vue":6,"vue-hot-reload-api":2}],26:[function(require,module,exports){
+},{"vue":25,"vue-hot-reload-api":21}],45:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -20204,11 +20441,11 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-18", __vue__options__)
+    hotAPI.createRecord("data-v-15", __vue__options__)
   } else {
-    hotAPI.reload("data-v-18", __vue__options__)
+    hotAPI.reload("data-v-15", __vue__options__)
   }
 })()}
-},{"vue":6,"vue-hot-reload-api":2}]},{},[8]);
+},{"vue":25,"vue-hot-reload-api":21}]},{},[27]);
 
 //# sourceMappingURL=app.js.map

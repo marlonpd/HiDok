@@ -75,6 +75,8 @@ class ClinicController extends Controller
             'open_saturday' => $data['open_saturday']  != 1 ? 0 : 1,
             'address' => $data['address'],
             'default_address' => $data['default_address'],
+            'gmap_lat' => $data['gmap_lat'],
+            'gmap_lng' => $data['gmap_lng'],
         ]);
     }
 
@@ -100,19 +102,21 @@ class ClinicController extends Controller
     public function updateSchedute(array $data)
     {
         return Schedule::update([
-            'name'   => $data['name'],
-            'user_id' => Auth::user()->id,
-            'from_time' => $data['from_time'],
-            'to_time' => $data['to_time'],
-            'open_sunday' => $data['open_sunday'],
-            'open_monday' => $data['open_monday'],
-            'open_tuesday' => $data['open_tuesday'],
-            'open_wednesday' => $data['open_wednesday'],
-            'open_thursday' => $data['open_thursday'],
-            'open_friday' => $data['open_friday'],
-            'open_saturday' => $data['open_saturday'],
-            'address' => $data['address'],
+            'name'            => $data['name'],
+            'user_id'         => Auth::user()->id,
+            'from_time'       => $data['from_time'],
+            'to_time'         => $data['to_time'],
+            'open_sunday'     => $data['open_sunday'],
+            'open_monday'     => $data['open_monday'],
+            'open_tuesday'    => $data['open_tuesday'],
+            'open_wednesday'  => $data['open_wednesday'],
+            'open_thursday'   => $data['open_thursday'],
+            'open_friday'     => $data['open_friday'],
+            'open_saturday'   => $data['open_saturday'],
+            'address'         => $data['address'],
             'default_address' => $data['default_address'],
+            'gmap_lat'        => $data['gmap_lat'],
+            'gmap_lng'        => $data['gmap_lng'],
         ]);
     }
 
@@ -154,7 +158,8 @@ class ClinicController extends Controller
         {
             return "success";
         }
-        else{
+        else
+        {
             return "error";
         }
     }

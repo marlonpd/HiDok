@@ -25,7 +25,7 @@ class ProfileController extends Controller
     public function index($account_type,$id)
     {	
     	$user = User::findOrFail($id);
-
+    
         return view($account_type.'/profile', compact('user'));
     }
 }

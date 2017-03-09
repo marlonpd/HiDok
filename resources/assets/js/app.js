@@ -1,3 +1,4 @@
+
 window.Vue = require('vue/dist/vue.js');
 //import * as Vue from 'vue/dist/vue.common.js';
 
@@ -6,6 +7,7 @@ window.VueRouter = require('vue-router');
 
 var VueResource = require('vue-resource-2');
 Vue.use(VueResource);
+
 
 //var VueSelect2 = require('vue2-select2');
 //Vue.use(VueSelect2);

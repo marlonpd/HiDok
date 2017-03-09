@@ -519,3 +519,12 @@
   }
 
 
+.gmap-clinic-pnl{
+    background-color: #ECECFB;
+}
+
+
+.gmap-container{
+    height: 280px;
+    width: 213px;
+}

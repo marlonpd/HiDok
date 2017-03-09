@@ -25,7 +25,7 @@
             <label class="control-label col-xs-3">Day(s) available:</label>
             <div class="col-xs-6">
                 
-                <ul class="no-bullet">
+                <ul class="no-bullet list-inline">
                   <li>
                     <input type="checkbox"  v-model="clinic.open_sunday"  v-bind:true-value="1" v-bind:false-value="0" > Sunday
                   </li>
@@ -136,6 +136,18 @@
                 </label>
             </div>
         </div>
+
+        <div class="form-group">
+          <div id="google_map" style="width: 95%; height: 400px; margin:auto;margin-bottom: 10px"></div>
+
+          <div class="col-xs-6">
+            <input class="form-control" v-model="clinic.gmap_lat" id="gmap_lat" placeholder="Latitude" type="tel">
+          </div>
+          
+          <div class="col-xs-6">
+            <input class="form-control" v-model="clinic.gmap_lng" id="gmap_lng" placeholder="Longitude" type="tel">
+          </div> 
+        </div>
  
 
     </form>
@@ -153,7 +165,7 @@
 </template>
 
 <script>
-
+  
     export default {
         mounted() {
 
@@ -196,8 +208,6 @@
 
             this.$http.get('/api/clinics/get/'+id, function(data){
               this.clinics = data['clinics'];
-
-              alert('com');
             });
           },
 
@@ -215,15 +225,33 @@
               function (dismiss) {
               }
             )
+            this.clinic.gmap_lat = document.getElementById(LATITUDE_ELEMENT_ID).value;
+            this.clinic.gmap_lng = document.getElementById(LONGITUDE_ELEMENT_ID).value;
 
             this.$http.post('/api/clinic/create/post', this.clinic, function(data){
+
+
+
               if(data == 'success'){
                 $('#create-clinic-form').modal('hide');
                 
-
-                this.fetchClinics(0);
-
-
+                this.clinic= {
+                  name : null,
+                  to_time : null,
+                  from_time : null, 
+                  open_sunday : 0,
+                  open_monday : 0,
+                  open_tuesday : 0,
+                  open_wednesday : 0,
+                  open_thursday : 0,
+                  open_friday : 0,
+                  open_saturday : 0,
+                  address : null,
+                  gmap_lat : null,
+                  gmap_lng : null,
+                  default_address : false,
+                }
+              
                 swal({
                   title: 'Success!',
                   text: 'Successfully created new clinic.',

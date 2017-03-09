@@ -68,7 +68,7 @@
 
         },
 
-        props: ['clinics', 'doctor_id'],
+        props: ['clinics', 'doctorId'],
 
         created: function() {
 
@@ -94,7 +94,7 @@
           setClinic: function(id){
 
             this.appointment.clinic_id = id;
-            this.appointment.doctor_id = this.doctor_id;
+            this.appointment.doctor_id = this.doctorId;
 
           },
 

@@ -13,6 +13,7 @@
         <link rel="stylesheet" type="text/css" href="/css/app.css">
         <link rel="stylesheet" type="text/css" href="/css/all.css">
         <link rel="stylesheet" type="text/css" href="/css/theme.css">
+
     </head>
     <body >
       <div id="app">
@@ -44,7 +45,7 @@
 
                            @if (Auth::check())
                              @if(Auth::user()->is_doctor())
-                                <li><a href="/clinics">CLINICS</a></li>
+                                <li><a href="/clinic">CLINICS</a></li>
                                  <li><a href="/feedback">FEEDBACK</a></li>
                              @endif
                           @endif
@@ -176,9 +177,8 @@
             
 
             <script src="/js/all.js"></script>
-   
-
-            
+            <script type="text/javascript" src="http://www.google.com/jsapi?key=AIzaSyANvZAZmHJVMI8lGIyCU4v-aduI1bhVIsg"></script> 
+        
             @yield('javascripts')
 
             <script type="text/javascript">
@@ -211,7 +211,6 @@
 
             </script>
             
-
             <script src="/js/app.js"></script>
     </body>
 </html>

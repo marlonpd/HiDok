@@ -58,7 +58,6 @@
             <option  v-bind:value="specialization" >@{{ specialization }}</option>
           </template>
       </select>
-
     </div>
 
 

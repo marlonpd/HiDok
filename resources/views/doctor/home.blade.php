@@ -29,6 +29,7 @@
 
 
 
+
 </div>
 @endsection
 
@@ -43,19 +44,13 @@
             $( "#accordion" ).accordion();
         });
 
-
         var childMixin = {
 
-            
-
-
             mounted() {
-
             },
 
             created: function() {
                 this.fetchAllAppointments();
-
                  this.fetchPatientITR(0); 
             },
 
@@ -76,7 +71,6 @@
 
                 confirmAppointment : function(appointment, event){
                     event.preventDefault();
-                     
                     this.$http.post('/api/appointment/confirm/post', appointment, function(data){
                         if(data == 'success'){
                           appointment.confirmed = 1;
@@ -84,20 +78,15 @@
                           swal("Error","Please try again!", "error");
                         }
                     });
-
-
                 },
 
                 reschedAppointment : function(appointment, event){
                     event.preventDefault();
                     this.editAppointment = appointment;
-
                 },
 
                 deleteAppointment : function(appointment, event){
                     event.preventDefault();
-
-
                     var self = this; 
                     var thisAppointment = appointment;
 
@@ -147,10 +136,8 @@
 
 
                 fetchPatientITR : function(id){
-
                   this.$http.get('/api/patient/itr/get/'+id, function(data){
                     this.appointmentITR = data['appointment_itr'];
-   
                   });
                 },
       

@@ -28,6 +28,7 @@ class CreateClinicTable extends Migration
             $table->tinyInteger('open_friday')->default(0);
             $table->tinyInteger('open_saturday')->default(0);
             $table->string('address');
+            $table->string('contact_no', 20)->nullable();
             $table->string('gmap_lat')->nullable();
             $table->string('gmap_lng')->nullable();
             $table->integer('default_address')->default(0);

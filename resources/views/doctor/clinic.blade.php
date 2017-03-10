@@ -142,6 +142,10 @@
             },
 
             methods:{
+                globalFunc : function(){
+                      alert('glbal func');
+                },
+
                 newClinic : function(){
                     map = new google.maps.Map2(document.getElementById(MAP_DIV_ELEMENT_ID));
                     map.addControl(new GLargeMapControl());
@@ -177,8 +181,8 @@
                     map.setMapType(G_NORMAL_MAP);
 
                     var latitude = clinic.gmap_lat;// +document.getElementById(LATITUDE_ELEMENT_ID2).value;
-                    var longitude = clinic.gmap_lat;// +document.getElementById(LONGITUDE_ELEMENT_ID2).value;
-
+                    var longitude = clinic.gmap_lng;// +document.getElementById(LONGITUDE_ELEMENT_ID2).value;
+                
                     if(latitude != 0 && longitude != 0) {
                     //We have some sort of starting position, set map center and marker
                     map.setCenter(new google.maps.LatLng(latitude, longitude), DEFAULT_ZOOM_WHEN_COORDINATE_EXISTS);
@@ -191,8 +195,6 @@
                     }
 
                     GEvent.addListener(map, "click", googleMapClickHandler);
-
-
                 },
 
 

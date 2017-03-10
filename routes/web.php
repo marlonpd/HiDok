@@ -79,6 +79,9 @@ Route::group(['middleware' => ['web'  ]], function () {
 	Route::get('/api/doctors/my/get','DoctorPatient@api_doctors_my_get');
 	Route::post('/api/patient/remove/post','DoctorPatient@api_remove_patient_post');
 
+	Route::post('/api/rate/post', 'RatingsController@api_rate_post');
+
+
 
 
 

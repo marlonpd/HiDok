@@ -16,21 +16,7 @@ require('laravel-elixir-vueify');
  | file for our application, as well as publishing vendor resources.
  |
  */
-/*
- elixir(mix => {
-    mix.sass('app.scss')
-        .scripts([
-            'libs/jquery.min.js',
-            'libs/offline/offline.min.js',
-            '../../../node_modules/sweetalert2/dist/sweetalert2.min.js',
-        ])
-        .styles([
-            '../css/font-awesome-4.7.0/css/font-awesome.css',
-            '../css/offline/offline-theme-slide.css' ,
-            '../../../node_modules/sweetalert2/dist/sweetalert2.min.css',
-        ]).browserify('app.js');
-});
- */
+
 elixir(mix => {
     mix.sass('app.scss');
     mix.scripts([
@@ -44,6 +30,7 @@ elixir(mix => {
             'libs/ladda/spin.min.js',
             'libs/ladda/ladda.min.js',
             'libs/bxslider/jquery.bxslider.js',
+            'libs/fr-star/Fr.star.js'
     	]);
     mix.styles([
  //           '../css/bootstrap/bootstrap.min.css', 

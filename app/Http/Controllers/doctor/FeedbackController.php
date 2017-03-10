@@ -26,11 +26,11 @@ class FeedbackController extends Controller
 
         if($feedback)
         {
-            return "success";
+            return json_pretty(['status' => 'success']);
         }
         else
         {
-            return "error";
+            return json_pretty(['status' => 'error']);
         }
     }
 

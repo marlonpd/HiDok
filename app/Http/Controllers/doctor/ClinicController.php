@@ -120,6 +120,13 @@ class ClinicController extends Controller
         ]);
     }
 
+
+    public function setDefaultClinic($clinic)
+    {
+        Clinic::where('doctor_id', '=' , $clinic->doctor_id)
+              ->update(['default_address' => 0]);
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -131,6 +138,12 @@ class ClinicController extends Controller
     {
 
         $clinic = Clinic::find($request->input('id'));
+
+        if($request->input('default_address') == 1 && $clinic->default_address == 0 )
+        {
+            $this->setDefaultClinic($clinic);
+        }
+
         $clinic->update($request->input());
 
         if($clinic)
@@ -174,5 +187,6 @@ class ClinicController extends Controller
 
         return json_pretty(['clinics' => $clinics]);
     }
+
 
 }

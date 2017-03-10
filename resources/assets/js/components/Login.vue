@@ -68,14 +68,7 @@
                           showConfirmButton : false,
                           timer: 1000,
                           type : 'success',
-                        }).then(
-                          function () {},
-                          function (dismiss) {
-                            if (dismiss === 'timer') {
-                              console.log('I was closed by the timer')
-                            }
-                          }
-                        );
+                        }).then(function () {},function (dismiss) {});
 
                         window.location = "/home";    
                         

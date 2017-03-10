@@ -19117,9 +19117,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   module.hot.accept()
   module.hot.dispose(__vueify_style_dispose__)
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-8", __vue__options__)
+    hotAPI.createRecord("data-v-12", __vue__options__)
   } else {
-    hotAPI.reload("data-v-8", __vue__options__)
+    hotAPI.reload("data-v-12", __vue__options__)
   }
 })()}
 },{"vue":25,"vue-hot-reload-api":21,"vueify/lib/insert-css":26}],29:[function(require,module,exports){
@@ -19181,9 +19181,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-10", __vue__options__)
+    hotAPI.createRecord("data-v-15", __vue__options__)
   } else {
-    hotAPI.reload("data-v-10", __vue__options__)
+    hotAPI.reload("data-v-15", __vue__options__)
   }
 })()}
 },{"vue":25,"vue-hot-reload-api":21}],30:[function(require,module,exports){
@@ -19202,7 +19202,7 @@ exports.default = {
   },
 
 
-  props: ['clinics', 'doctorId'],
+  props: ['clinics', 'doctor_id'],
 
   created: function created() {},
 
@@ -19223,56 +19223,55 @@ exports.default = {
 
   methods: {
     setClinic: function setClinic(id) {
-
       this.appointment.clinic_id = id;
-      this.appointment.doctor_id = this.doctorId;
+      this.appointment.doctor_id = this.doctor_id;
     },
 
-    setExactDate: function setExactDate(event) {
-      alert(event.value);
-    },
+    setExactDate: function setExactDate(event) {},
 
     createAppointment: function createAppointment(event) {
       event.preventDefault();
-      this.appointment.appointment_date = $("#appointment_date").val();
+      if ($("#appointment_date").val() != "" && this.appointment.clinic_id != '') {
+        this.appointment.appointment_date = $("#appointment_date").val();
 
-      swal({
-        text: 'Creating....',
-        timer: 1000,
-        showConfirmButton: false,
-        type: 'info'
-      }).then(function () {}, function (dismiss) {});
+        swal({
+          text: 'Submitting....',
+          timer: 1000,
+          showConfirmButton: false,
+          type: 'info'
+        }).then(function () {}, function (dismiss) {});
 
-      this.$http.post('/api/appointment/request/post', this.appointment, function (data) {
-        if (data == 'success') {
-          $('#create-appointment-form').modal('hide');
+        this.$http.post('/api/appointment/request/post', this.appointment, function (data) {
+          if (data == 'success') {
+            $('#create-appointment-form').modal('hide');
 
-          swal({
-            title: 'Success!',
-            text: 'Successfully requested new appointment.',
-            showConfirmButton: false,
-            timer: 1000,
-            type: 'success'
-          }).then(function () {}, function (dismiss) {
-            if (dismiss === 'timer') {
-              console.log('I was closed by the timer');
-            }
-          });
-        } else {
+            swal({
+              title: 'Success!',
+              text: 'Successfully requested new appointment.',
+              showConfirmButton: false,
+              timer: 1000,
+              type: 'success'
+            }).then(function () {}, function (dismiss) {});
+          } else {
 
-          swal({
-            title: 'Error!',
-            text: 'Unable to save please try again!',
-            timer: 1000,
-            type: 'error',
-            showConfirmButton: false
-          }).then(function () {}, function (dismiss) {
-            if (dismiss === 'timer') {
-              console.log('I was closed by the timer');
-            }
-          });
-        }
-      });
+            swal({
+              title: 'Error!',
+              text: 'Unable to submit please try again!',
+              timer: 1000,
+              type: 'error',
+              showConfirmButton: false
+            }).then(function () {}, function (dismiss) {});
+          }
+        });
+      } else {
+        swal({
+          title: 'Error!',
+          text: 'Please fill all the fields!',
+          timer: 1000,
+          type: 'error',
+          showConfirmButton: false
+        }).then(function () {}, function (dismiss) {});
+      }
     }
 
   }
@@ -19282,7 +19281,7 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function(){with(this){return _c('div',{staticClass:"modal",attrs:{"id":"create-appointment-form","tabindex":"-1","role":"dialog","aria-labelledby":"create-appointment-form","aria-hidden":"true"}},[_c('div',{staticClass:"modal-dialog"},[_c('div',{staticClass:"modal-content"},[_m(0),_v(" "),_c('div',{staticClass:"modal-body"},[_c('div',{staticClass:"form-group"},[_v("\n                Select Clinic\n                "),_c('div',{staticClass:"schedule-list"},_l((clinics),function(clinic){return _c('div',{staticClass:"radio"},[_c('label',[_c('input',{attrs:{"type":"radio","value":"0","name":"optradio"},on:{"click":function($event){setClinic(clinic.id)}}}),_v(" Clinic : "+_s(clinic.name)+" , Address : "+_s(clinic.address)+"\n                      "),_c('br'),_v(" "),_c('ul',{staticClass:"no-bullet"},[(clinic.open_sunday == 1)?_c('li',{staticStyle:{"float":"left"}},[_v(" Sunday")]):_e(),_v(" "),(clinic.open_monday == 1)?_c('li',{staticStyle:{"float":"left"}},[_v(", Monday")]):_e(),_v(" "),(clinic.open_tuesday == 1)?_c('li',{staticStyle:{"float":"left"}},[_v(",Tuesday")]):_e(),_v(" "),(clinic.open_wednesday == 1)?_c('li',{staticStyle:{"float":"left"}},[_v(",Wednesday")]):_e(),_v(" "),(clinic.open_thursday == 1)?_c('li',{staticStyle:{"float":"left"}},[_v(",Thursday")]):_e(),_v(" "),(clinic.open_friday == 1)?_c('li',{staticStyle:{"float":"left"}},[_v(",Friday")]):_e(),_v(" "),(clinic.open_saturday == 1)?_c('li',{staticStyle:{"float":"left"}},[_v("Saturday")]):_e(),_v(" "),_c('li',{staticStyle:{"float":"left"}},[_v(" "+_s(clinic.from_day)+"-"+_s(clinic.to_day)+" "+_s(clinic.from_time)+"-"+_s(clinic.to_time)+" ")])])])])}))]),_v(" "),_c('div',{staticClass:"form-group"},[_v("\n                  Set exact date\n                  "),_c('div',{staticClass:"input-group date"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(appointment.appointment_date),expression:"appointment.appointment_date"}],staticClass:"form-control",attrs:{"type":"text","id":"appointment_date"},domProps:{"value":_s(appointment.appointment_date)},on:{"change":function($event){setExactDate($event)},"input":function($event){if($event.target.composing)return;appointment.appointment_date=$event.target.value}}}),_v(" "),_m(1)])])]),_v(" "),_c('div',{staticClass:"modal-footer "},[_c('button',{staticClass:"btn btn-warning btn-lg",staticStyle:{"width":"100%"},attrs:{"type":"button"},on:{"click":function($event){createAppointment($event)}}},[_c('span',{staticClass:"glyphicon glyphicon-ok-sign"}),_v("Request")])])])])])}}
+__vue__options__.render = function(){with(this){return _c('div',{staticClass:"modal",attrs:{"id":"create-appointment-form","tabindex":"-1","role":"dialog","aria-labelledby":"create-appointment-form","aria-hidden":"true"}},[_c('div',{staticClass:"modal-dialog"},[_c('div',{staticClass:"modal-content"},[_m(0),_v(" "),_c('div',{staticClass:"modal-body"},[_c('div',{staticClass:"form-group"},[_v("\n                Select Clinic\n                "),_c('div',{staticClass:"schedule-list"},_l((clinics),function(clinic){return _c('div',{staticClass:"radio"},[_c('label',[_c('input',{attrs:{"type":"radio","value":"0","name":"optradio"},on:{"click":function($event){setClinic(clinic.id)}}}),_v(" Clinic : "+_s(clinic.name)+" , Address : "+_s(clinic.address)+"\n                      "),_c('br'),_v(" "),_c('ul',{staticClass:"no-bullet"},[(clinic.open_sunday == 1)?_c('li',{staticClass:"pull-left"},[_v(" Sunday")]):_e(),_v(" "),(clinic.open_monday == 1)?_c('li',{staticClass:"pull-left"},[_v(", Monday")]):_e(),_v(" "),(clinic.open_tuesday == 1)?_c('li',{staticClass:"pull-left"},[_v(",Tuesday")]):_e(),_v(" "),(clinic.open_wednesday == 1)?_c('li',{staticClass:"pull-left"},[_v(",Wednesday")]):_e(),_v(" "),(clinic.open_thursday == 1)?_c('li',{staticClass:"pull-left"},[_v(",Thursday")]):_e(),_v(" "),(clinic.open_friday == 1)?_c('li',{staticClass:"pull-left"},[_v(",Friday")]):_e(),_v(" "),(clinic.open_saturday == 1)?_c('li',{staticClass:"pull-left"},[_v("Saturday")]):_e(),_v(" "),_c('li',{staticClass:"pull-left"},[_v(" "+_s(clinic.from_day)+"-"+_s(clinic.to_day)+" "+_s(clinic.from_time)+"-"+_s(clinic.to_time)+" ")])])])])}))]),_v(" "),_c('div',{staticClass:"form-group"},[_v("\n                  Set exact date and time\n                  "),_c('div',{staticClass:"input-group date"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(appointment.appointment_date),expression:"appointment.appointment_date"}],staticClass:"form-control",attrs:{"type":"text","id":"appointment_date"},domProps:{"value":_s(appointment.appointment_date)},on:{"change":function($event){setExactDate($event)},"input":function($event){if($event.target.composing)return;appointment.appointment_date=$event.target.value}}}),_v(" "),_m(1)])])]),_v(" "),_c('div',{staticClass:"modal-footer "},[_c('button',{staticClass:"btn btn-warning btn-lg",staticStyle:{"width":"100%"},attrs:{"type":"button"},on:{"click":function($event){createAppointment($event)}}},[_c('span',{staticClass:"glyphicon glyphicon-ok-sign"}),_v("Request")])])])])])}}
 __vue__options__.staticRenderFns = [function(){with(this){return _c('div',{staticClass:"modal-header"},[_c('button',{staticClass:"close",attrs:{"type":"button","data-dismiss":"modal","aria-hidden":"true"}},[_c('i',{staticClass:"fa fa-times-circle fa-1",attrs:{"aria-hidden":"true"}})]),_v(" "),_c('h4',{staticClass:"modal-title custom_align",attrs:{"id":"Heading"}},[_v("Request an appointment")])])}},function(){with(this){return _c('span',{staticClass:"input-group-addon"},[_c('span',{staticClass:"glyphicon glyphicon-calendar"})])}}]
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -19290,9 +19289,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   module.hot.accept()
   module.hot.dispose(__vueify_style_dispose__)
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-5", __vue__options__)
+    hotAPI.createRecord("data-v-7", __vue__options__)
   } else {
-    hotAPI.reload("data-v-5", __vue__options__)
+    hotAPI.reload("data-v-7", __vue__options__)
   }
 })()}
 },{"vue":25,"vue-hot-reload-api":21,"vueify/lib/insert-css":26}],31:[function(require,module,exports){
@@ -19419,9 +19418,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-1", __vue__options__)
+    hotAPI.createRecord("data-v-3", __vue__options__)
   } else {
-    hotAPI.reload("data-v-1", __vue__options__)
+    hotAPI.reload("data-v-3", __vue__options__)
   }
 })()}
 },{"vue":25,"vue-hot-reload-api":21}],32:[function(require,module,exports){
@@ -19456,44 +19455,54 @@ exports.default = {
     submitFeedback: function submitFeedback(event) {
       event.preventDefault();
 
-      swal({
-        text: 'Submitting....',
-        timer: 1000,
-        showConfirmButton: false,
-        type: 'info'
-      }).then(function () {}, function (dismiss) {});
+      if (!this.newFeedback.content) {
+        swal({
+          title: 'Error!',
+          text: 'You need to write something!',
+          timer: 1000,
+          type: 'error',
+          showConfirmButton: false
+        }).then(function () {}, function (dismiss) {});
+      } else {
 
-      self = this;
-      this.$http.post('/api/feedback/post', this.newFeedback, function (data) {
-        if (data == "success") {
-          swal({
-            title: 'Success!',
-            text: 'Successfully sent your feedback.',
-            showConfirmButton: false,
-            timer: 1000,
-            type: 'success'
-          }).then(function () {}, function (dismiss) {
-            if (dismiss === 'timer') {
-              console.log('I was closed by the timer');
-              self.newFeedback.content = '';
-              $('#create-feedback-form').modal('hide');
-            }
-          });
-        } else {
+        swal({
+          text: 'Submitting....',
+          timer: 1000,
+          showConfirmButton: false,
+          type: 'info'
+        }).then(function () {}, function (dismiss) {});
 
-          swal({
-            title: 'Error!',
-            text: 'Unable to submit ur feedback, please try again!',
-            timer: 1000,
-            type: 'error',
-            showConfirmButton: false
-          }).then(function () {}, function (dismiss) {
-            if (dismiss === 'timer') {
-              console.log('I was closed by the timer');
-            }
-          });
-        }
-      });
+        self = this;
+        this.$http.post('/api/feedback/post', this.newFeedback, function (data) {
+          if (data['status'] == "success") {
+            swal({
+              title: 'Success!',
+              text: 'Successfully sent your feedback.',
+              showConfirmButton: false,
+              timer: 1000,
+              type: 'success'
+            }).then(function () {}, function (dismiss) {
+              if (dismiss === 'timer') {
+                self.newFeedback.content = '';
+                $('#create-feedback-form').modal('hide');
+              }
+            });
+          } else {
+
+            swal({
+              title: 'Error!',
+              text: 'Unable to submit ur feedback, please try again!',
+              timer: 1000,
+              type: 'error',
+              showConfirmButton: false
+            }).then(function () {}, function (dismiss) {
+              if (dismiss === 'timer') {
+                console.log('I was closed by the timer');
+              }
+            });
+          }
+        });
+      }
     }
 
   }
@@ -19503,16 +19512,16 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function(){with(this){return _c('div',{staticClass:"modal",attrs:{"id":"create-feedback-form","tabindex":"-1","role":"dialog","aria-labelledby":"create-feedback-form","aria-hidden":"true"}},[_c('div',{staticClass:"modal-dialog"},[_c('div',{staticClass:"modal-content"},[_m(0),_v(" "),_c('div',{staticClass:"modal-body"},[_c('div',{staticClass:"row"},[_c('div',{staticClass:"status-upload"},[_c('form',[_c('textarea',{directives:[{name:"model",rawName:"v-model",value:(newFeedback.content),expression:"newFeedback.content"}],attrs:{"placeholder":"Add some feedback?"},domProps:{"value":_s(newFeedback.content)},on:{"input":function($event){if($event.target.composing)return;newFeedback.content=$event.target.value}}})])])])]),_v(" "),_c('div',{staticClass:"modal-footer "},[_c('button',{staticClass:"btn btn-warning btn-lg",staticStyle:{"width":"100%"},attrs:{"type":"button"},on:{"click":function($event){submitFeedback($event)}}},[_c('span',{staticClass:"glyphicon glyphicon-ok-sign"}),_v("Submit")])])])])])}}
+__vue__options__.render = function(){with(this){return _c('div',{staticClass:"modal",attrs:{"id":"create-feedback-form","tabindex":"-1","role":"dialog","aria-labelledby":"create-feedback-form","aria-hidden":"true"}},[_c('div',{staticClass:"modal-dialog"},[_c('div',{staticClass:"modal-content"},[_m(0),_v(" "),_c('div',{staticClass:"modal-body"},[_c('div',{staticClass:"row"},[_c('div',{staticClass:"status-upload"},[_c('form',[_c('textarea',{directives:[{name:"model",rawName:"v-model",value:(newFeedback.content),expression:"newFeedback.content"}],attrs:{"maxlength":"50","placeholder":"Add some feedback?"},domProps:{"value":_s(newFeedback.content)},on:{"input":function($event){if($event.target.composing)return;newFeedback.content=$event.target.value}}})])])])]),_v(" "),_c('div',{staticClass:"modal-footer "},[_c('button',{staticClass:"btn btn-warning btn-lg",staticStyle:{"width":"100%"},attrs:{"type":"button"},on:{"click":function($event){submitFeedback($event)}}},[_c('span',{staticClass:"glyphicon glyphicon-ok-sign"}),_v("Submit")])])])])])}}
 __vue__options__.staticRenderFns = [function(){with(this){return _c('div',{staticClass:"modal-header"},[_c('button',{staticClass:"close",attrs:{"type":"button","data-dismiss":"modal","aria-hidden":"true"}},[_c('i',{staticClass:"fa fa-times-circle fa-1",attrs:{"aria-hidden":"true"}})]),_v(" "),_c('h4',{staticClass:"modal-title custom_align",attrs:{"id":"Heading"}},[_v("Write Feedback")])])}}]
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-14", __vue__options__)
+    hotAPI.createRecord("data-v-11", __vue__options__)
   } else {
-    hotAPI.reload("data-v-14", __vue__options__)
+    hotAPI.reload("data-v-11", __vue__options__)
   }
 })()}
 },{"vue":25,"vue-hot-reload-api":21}],33:[function(require,module,exports){
@@ -19724,9 +19733,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-16", __vue__options__)
+    hotAPI.createRecord("data-v-17", __vue__options__)
   } else {
-    hotAPI.reload("data-v-16", __vue__options__)
+    hotAPI.reload("data-v-17", __vue__options__)
   }
 })()}
 },{"vue":25,"vue-hot-reload-api":21}],36:[function(require,module,exports){
@@ -19772,7 +19781,7 @@ exports.default = (_mounted$created$prop = {
     this.$http.post('/api/clinic/update/post', this.clinic, function (data) {
       if (data == 'success') {
         $('#edit-clinic-form').modal('hide');
-
+        this.$parent.fetchClinics(0);
         swal({
           title: 'Success!',
           text: 'Successfully updated ' + this.clinic.name,
@@ -19806,16 +19815,16 @@ exports.default = (_mounted$created$prop = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function(){with(this){return _c('div',{staticClass:"modal",attrs:{"id":"edit-clinic-form","tabindex":"-1","role":"dialog","aria-labelledby":"edit-clinic-form","aria-hidden":"true"}},[_c('div',{staticClass:"modal-dialog"},[_c('div',{staticClass:"modal-content"},[_m(0),_v(" "),_c('div',{staticClass:"modal-body"},[_c('form',{staticClass:"form-horizontal"},[_c('div',{staticClass:"form-group"},[_c('label',{staticClass:"control-label col-xs-3",attrs:{"for":"name"}},[_v("Name:")]),_v(" "),_c('div',{staticClass:"col-xs-9"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.name),expression:"clinic.name"}],staticClass:"form-control",attrs:{"id":"name","placeholder":"Name","type":"text"},domProps:{"value":_s(clinic.name)},on:{"input":function($event){if($event.target.composing)return;clinic.name=$event.target.value}}})])]),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{staticClass:"control-label col-xs-3"},[_v("Day(s) available:")]),_v(" "),_c('div',{staticClass:"col-xs-6"},[_c('ul',{staticClass:"no-bullet list-inline"},[_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_sunday),expression:"clinic.open_sunday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_sunday)?_i(clinic.open_sunday,null)>-1:_q(clinic.open_sunday,1)},on:{"click":function($event){var $$a=clinic.open_sunday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_sunday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_sunday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_sunday=$$c}}}}),_v(" Sunday\n                  ")]),_v(" "),_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_monday),expression:"clinic.open_monday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_monday)?_i(clinic.open_monday,null)>-1:_q(clinic.open_monday,1)},on:{"click":function($event){var $$a=clinic.open_monday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_monday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_monday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_monday=$$c}}}}),_v(" Monday\n                  ")]),_v(" "),_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_tuesday),expression:"clinic.open_tuesday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_tuesday)?_i(clinic.open_tuesday,null)>-1:_q(clinic.open_tuesday,1)},on:{"click":function($event){var $$a=clinic.open_tuesday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_tuesday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_tuesday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_tuesday=$$c}}}}),_v(" Tuesday\n                  ")]),_v(" "),_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_wednesday),expression:"clinic.open_wednesday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_wednesday)?_i(clinic.open_wednesday,null)>-1:_q(clinic.open_wednesday,1)},on:{"click":function($event){var $$a=clinic.open_wednesday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_wednesday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_wednesday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_wednesday=$$c}}}}),_v(" Wednesday\n                  ")]),_v(" "),_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_thursday),expression:"clinic.open_thursday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_thursday)?_i(clinic.open_thursday,null)>-1:_q(clinic.open_thursday,1)},on:{"click":function($event){var $$a=clinic.open_thursday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_thursday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_thursday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_thursday=$$c}}}}),_v(" Thursday\n                  ")]),_v(" "),_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_friday),expression:"clinic.open_friday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_friday)?_i(clinic.open_friday,null)>-1:_q(clinic.open_friday,1)},on:{"click":function($event){var $$a=clinic.open_friday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_friday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_friday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_friday=$$c}}}}),_v(" Friday\n                  ")]),_v(" "),_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_saturday),expression:"clinic.open_saturday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_saturday)?_i(clinic.open_saturday,null)>-1:_q(clinic.open_saturday,1)},on:{"click":function($event){var $$a=clinic.open_saturday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_saturday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_saturday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_saturday=$$c}}}}),_v(" Saturday\n                  ")])])])]),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{staticClass:"control-label col-xs-3"},[_v("Time available:")]),_v(" "),_c('div',{staticClass:"col-xs-3"},[_c('select',{directives:[{name:"model",rawName:"v-model",value:(clinic.from_time),expression:"clinic.from_time"}],staticClass:"form-control",on:{"change":function($event){clinic.from_time=Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val})[0]}}},[_c('option',[_v("1:00 a.m.")]),_v(" "),_c('option',[_v("2:00 a.m.")]),_v(" "),_c('option',[_v("3:00 a.m.")]),_v(" "),_c('option',[_v("4:00 a.m.")]),_v(" "),_c('option',[_v("5:00 a.m.")]),_v(" "),_c('option',[_v("6:00 a.m.")]),_v(" "),_c('option',[_v("7:00 a.m.")]),_v(" "),_c('option',[_v("8:00 a.m.")]),_v(" "),_c('option',[_v("9:00 a.m.")]),_v(" "),_c('option',[_v("10:00 a.m.")]),_v(" "),_c('option',[_v("11:00 a.m.")]),_v(" "),_c('option',[_v("12:00 a.m.")]),_v(" "),_c('option',[_v("1:00 p.m.")]),_v(" "),_c('option',[_v("2:00 p.m.")]),_v(" "),_c('option',[_v("3:00 p.m.")]),_v(" "),_c('option',[_v("4:00 p.m.")]),_v(" "),_c('option',[_v("5:00 p.m.")]),_v(" "),_c('option',[_v("6:00 p.m.")]),_v(" "),_c('option',[_v("7:00 p.m.")]),_v(" "),_c('option',[_v("8:00 p.m.")]),_v(" "),_c('option',[_v("9:00 p.m.")]),_v(" "),_c('option',[_v("10:00 p.m.")]),_v(" "),_c('option',[_v("11:00 p.m.")]),_v(" "),_c('option',[_v("12:00 p.m.")])])]),_v(" "),_c('div',{staticClass:"col-xs-1"},[_v("to")]),_v(" "),_c('div',{staticClass:"col-xs-3"},[_c('select',{directives:[{name:"model",rawName:"v-model",value:(clinic.to_time),expression:"clinic.to_time"}],staticClass:"form-control",on:{"change":function($event){clinic.to_time=Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val})[0]}}},[_c('option',[_v("1:00 a.m.")]),_v(" "),_c('option',[_v("2:00 a.m.")]),_v(" "),_c('option',[_v("3:00 a.m.")]),_v(" "),_c('option',[_v("4:00 a.m.")]),_v(" "),_c('option',[_v("5:00 a.m.")]),_v(" "),_c('option',[_v("6:00 a.m.")]),_v(" "),_c('option',[_v("7:00 a.m.")]),_v(" "),_c('option',[_v("8:00 a.m.")]),_v(" "),_c('option',[_v("9:00 a.m.")]),_v(" "),_c('option',[_v("10:00 a.m.")]),_v(" "),_c('option',[_v("11:00 a.m.")]),_v(" "),_c('option',[_v("12:00 a.m.")]),_v(" "),_c('option',[_v("1:00 p.m.")]),_v(" "),_c('option',[_v("2:00 p.m.")]),_v(" "),_c('option',[_v("3:00 p.m.")]),_v(" "),_c('option',[_v("4:00 p.m.")]),_v(" "),_c('option',[_v("5:00 p.m.")]),_v(" "),_c('option',[_v("6:00 p.m.")]),_v(" "),_c('option',[_v("7:00 p.m.")]),_v(" "),_c('option',[_v("8:00 p.m.")]),_v(" "),_c('option',[_v("9:00 p.m.")]),_v(" "),_c('option',[_v("10:00 p.m.")]),_v(" "),_c('option',[_v("11:00 p.m.")]),_v(" "),_c('option',[_v("12:00 p.m.")])])])]),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{staticClass:"control-label col-xs-3",attrs:{"for":"phoneNumber"}},[_v("Address:")]),_v(" "),_c('div',{staticClass:"col-xs-9"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.address),expression:"clinic.address"}],staticClass:"form-control",attrs:{"id":"phoneNumber","placeholder":"Address","type":"tel"},domProps:{"value":_s(clinic.address)},on:{"input":function($event){if($event.target.composing)return;clinic.address=$event.target.value}}})])]),_v(" "),_c('div',{staticClass:"form-group"},[_c('div',{staticClass:"col-xs-offset-3 col-xs-9"},[_c('label',{staticClass:"checkbox-inline"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.default_address),expression:"clinic.default_address"}],attrs:{"value":"news","type":"checkbox"},domProps:{"checked":Array.isArray(clinic.default_address)?_i(clinic.default_address,"news")>-1:(clinic.default_address)},on:{"click":function($event){var $$a=clinic.default_address,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v="news",$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.default_address=$$a.concat($$v))}else{$$i>-1&&(clinic.default_address=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.default_address=$$c}}}}),_v(" Set as default clinic.\n                ")])])]),_v(" "),_c('div',{staticClass:"form-group"},[_c('div',{staticStyle:{"width":"95%","height":"400px","margin":"auto","margin-bottom":"10px"},attrs:{"id":"google_map2"}}),_v(" "),_c('div',{staticClass:"col-xs-6"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.gmap_lat),expression:"clinic.gmap_lat"}],staticClass:"form-control",attrs:{"id":"gmap_lat2","placeholder":"Latitude","type":"tel"},domProps:{"value":_s(clinic.gmap_lat)},on:{"input":function($event){if($event.target.composing)return;clinic.gmap_lat=$event.target.value}}})]),_v(" "),_c('div',{staticClass:"col-xs-6"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.gmap_lng),expression:"clinic.gmap_lng"}],staticClass:"form-control",attrs:{"id":"gmap_lng2","placeholder":"Longitude","type":"tel"},domProps:{"value":_s(clinic.gmap_lng)},on:{"input":function($event){if($event.target.composing)return;clinic.gmap_lng=$event.target.value}}})])])])]),_v(" "),_c('div',{staticClass:"modal-footer "},[_c('button',{staticClass:"btn btn-warning btn-lg",staticStyle:{"width":"100%"},attrs:{"type":"button"},on:{"click":function($event){createClinic($event)}}},[_c('span',{staticClass:"glyphicon glyphicon-ok-sign"}),_v("Update")])])])])])}}
+__vue__options__.render = function(){with(this){return _c('div',{staticClass:"modal",attrs:{"id":"edit-clinic-form","tabindex":"-1","role":"dialog","aria-labelledby":"edit-clinic-form","aria-hidden":"true"}},[_c('div',{staticClass:"modal-dialog"},[_c('div',{staticClass:"modal-content"},[_m(0),_v(" "),_c('div',{staticClass:"modal-body"},[_c('form',{staticClass:"form-horizontal"},[_c('div',{staticClass:"form-group"},[_c('label',{staticClass:"control-label col-xs-3",attrs:{"for":"name"}},[_v("Name:")]),_v(" "),_c('div',{staticClass:"col-xs-9"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.name),expression:"clinic.name"}],staticClass:"form-control",attrs:{"id":"name","placeholder":"Name","type":"text"},domProps:{"value":_s(clinic.name)},on:{"input":function($event){if($event.target.composing)return;clinic.name=$event.target.value}}})])]),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{staticClass:"control-label col-xs-3"},[_v("Day(s) available:")]),_v(" "),_c('div',{staticClass:"col-xs-6"},[_c('ul',{staticClass:"no-bullet list-inline"},[_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_sunday),expression:"clinic.open_sunday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_sunday)?_i(clinic.open_sunday,null)>-1:_q(clinic.open_sunday,1)},on:{"click":function($event){var $$a=clinic.open_sunday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_sunday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_sunday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_sunday=$$c}}}}),_v(" Sunday\n                  ")]),_v(" "),_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_monday),expression:"clinic.open_monday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_monday)?_i(clinic.open_monday,null)>-1:_q(clinic.open_monday,1)},on:{"click":function($event){var $$a=clinic.open_monday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_monday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_monday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_monday=$$c}}}}),_v(" Monday\n                  ")]),_v(" "),_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_tuesday),expression:"clinic.open_tuesday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_tuesday)?_i(clinic.open_tuesday,null)>-1:_q(clinic.open_tuesday,1)},on:{"click":function($event){var $$a=clinic.open_tuesday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_tuesday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_tuesday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_tuesday=$$c}}}}),_v(" Tuesday\n                  ")]),_v(" "),_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_wednesday),expression:"clinic.open_wednesday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_wednesday)?_i(clinic.open_wednesday,null)>-1:_q(clinic.open_wednesday,1)},on:{"click":function($event){var $$a=clinic.open_wednesday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_wednesday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_wednesday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_wednesday=$$c}}}}),_v(" Wednesday\n                  ")]),_v(" "),_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_thursday),expression:"clinic.open_thursday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_thursday)?_i(clinic.open_thursday,null)>-1:_q(clinic.open_thursday,1)},on:{"click":function($event){var $$a=clinic.open_thursday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_thursday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_thursday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_thursday=$$c}}}}),_v(" Thursday\n                  ")]),_v(" "),_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_friday),expression:"clinic.open_friday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_friday)?_i(clinic.open_friday,null)>-1:_q(clinic.open_friday,1)},on:{"click":function($event){var $$a=clinic.open_friday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_friday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_friday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_friday=$$c}}}}),_v(" Friday\n                  ")]),_v(" "),_c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.open_saturday),expression:"clinic.open_saturday"}],attrs:{"type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.open_saturday)?_i(clinic.open_saturday,null)>-1:_q(clinic.open_saturday,1)},on:{"click":function($event){var $$a=clinic.open_saturday,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v=null,$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.open_saturday=$$a.concat($$v))}else{$$i>-1&&(clinic.open_saturday=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.open_saturday=$$c}}}}),_v(" Saturday\n                  ")])])])]),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{staticClass:"control-label col-xs-3"},[_v("Time available:")]),_v(" "),_c('div',{staticClass:"col-xs-3"},[_c('select',{directives:[{name:"model",rawName:"v-model",value:(clinic.from_time),expression:"clinic.from_time"}],staticClass:"form-control",on:{"change":function($event){clinic.from_time=Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val})[0]}}},[_c('option',[_v("1:00 a.m.")]),_v(" "),_c('option',[_v("2:00 a.m.")]),_v(" "),_c('option',[_v("3:00 a.m.")]),_v(" "),_c('option',[_v("4:00 a.m.")]),_v(" "),_c('option',[_v("5:00 a.m.")]),_v(" "),_c('option',[_v("6:00 a.m.")]),_v(" "),_c('option',[_v("7:00 a.m.")]),_v(" "),_c('option',[_v("8:00 a.m.")]),_v(" "),_c('option',[_v("9:00 a.m.")]),_v(" "),_c('option',[_v("10:00 a.m.")]),_v(" "),_c('option',[_v("11:00 a.m.")]),_v(" "),_c('option',[_v("12:00 a.m.")]),_v(" "),_c('option',[_v("1:00 p.m.")]),_v(" "),_c('option',[_v("2:00 p.m.")]),_v(" "),_c('option',[_v("3:00 p.m.")]),_v(" "),_c('option',[_v("4:00 p.m.")]),_v(" "),_c('option',[_v("5:00 p.m.")]),_v(" "),_c('option',[_v("6:00 p.m.")]),_v(" "),_c('option',[_v("7:00 p.m.")]),_v(" "),_c('option',[_v("8:00 p.m.")]),_v(" "),_c('option',[_v("9:00 p.m.")]),_v(" "),_c('option',[_v("10:00 p.m.")]),_v(" "),_c('option',[_v("11:00 p.m.")]),_v(" "),_c('option',[_v("12:00 p.m.")])])]),_v(" "),_c('div',{staticClass:"col-xs-1"},[_v("to")]),_v(" "),_c('div',{staticClass:"col-xs-3"},[_c('select',{directives:[{name:"model",rawName:"v-model",value:(clinic.to_time),expression:"clinic.to_time"}],staticClass:"form-control",on:{"change":function($event){clinic.to_time=Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val})[0]}}},[_c('option',[_v("1:00 a.m.")]),_v(" "),_c('option',[_v("2:00 a.m.")]),_v(" "),_c('option',[_v("3:00 a.m.")]),_v(" "),_c('option',[_v("4:00 a.m.")]),_v(" "),_c('option',[_v("5:00 a.m.")]),_v(" "),_c('option',[_v("6:00 a.m.")]),_v(" "),_c('option',[_v("7:00 a.m.")]),_v(" "),_c('option',[_v("8:00 a.m.")]),_v(" "),_c('option',[_v("9:00 a.m.")]),_v(" "),_c('option',[_v("10:00 a.m.")]),_v(" "),_c('option',[_v("11:00 a.m.")]),_v(" "),_c('option',[_v("12:00 a.m.")]),_v(" "),_c('option',[_v("1:00 p.m.")]),_v(" "),_c('option',[_v("2:00 p.m.")]),_v(" "),_c('option',[_v("3:00 p.m.")]),_v(" "),_c('option',[_v("4:00 p.m.")]),_v(" "),_c('option',[_v("5:00 p.m.")]),_v(" "),_c('option',[_v("6:00 p.m.")]),_v(" "),_c('option',[_v("7:00 p.m.")]),_v(" "),_c('option',[_v("8:00 p.m.")]),_v(" "),_c('option',[_v("9:00 p.m.")]),_v(" "),_c('option',[_v("10:00 p.m.")]),_v(" "),_c('option',[_v("11:00 p.m.")]),_v(" "),_c('option',[_v("12:00 p.m.")])])])]),_v(" "),_c('div',{staticClass:"form-group"},[_c('label',{staticClass:"control-label col-xs-3",attrs:{"for":"phoneNumber"}},[_v("Address:")]),_v(" "),_c('div',{staticClass:"col-xs-9"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.address),expression:"clinic.address"}],staticClass:"form-control",attrs:{"id":"phoneNumber","placeholder":"Address","type":"tel"},domProps:{"value":_s(clinic.address)},on:{"input":function($event){if($event.target.composing)return;clinic.address=$event.target.value}}})])]),_v(" "),_c('div',{staticClass:"form-group"},[_c('div',{staticClass:"col-xs-offset-3 col-xs-9"},[_c('label',{staticClass:"checkbox-inline"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.default_address),expression:"clinic.default_address"}],attrs:{"value":"news","type":"checkbox","true-value":1,"false-value":0},domProps:{"checked":Array.isArray(clinic.default_address)?_i(clinic.default_address,"news")>-1:_q(clinic.default_address,1)},on:{"click":function($event){var $$a=clinic.default_address,$$el=$event.target,$$c=$$el.checked?(1):(0);if(Array.isArray($$a)){var $$v="news",$$i=_i($$a,$$v);if($$c){$$i<0&&(clinic.default_address=$$a.concat($$v))}else{$$i>-1&&(clinic.default_address=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{clinic.default_address=$$c}}}}),_v(" Set as default clinic.\n                ")])])]),_v(" "),_c('div',{staticClass:"form-group"},[_c('div',{staticStyle:{"width":"95%","height":"400px","margin":"auto","margin-bottom":"10px"},attrs:{"id":"google_map2"}}),_v(" "),_c('div',{staticClass:"col-xs-6"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.gmap_lat),expression:"clinic.gmap_lat"}],staticClass:"form-control",attrs:{"id":"gmap_lat2","placeholder":"Latitude","type":"tel"},domProps:{"value":_s(clinic.gmap_lat)},on:{"input":function($event){if($event.target.composing)return;clinic.gmap_lat=$event.target.value}}})]),_v(" "),_c('div',{staticClass:"col-xs-6"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(clinic.gmap_lng),expression:"clinic.gmap_lng"}],staticClass:"form-control",attrs:{"id":"gmap_lng2","placeholder":"Longitude","type":"tel"},domProps:{"value":_s(clinic.gmap_lng)},on:{"input":function($event){if($event.target.composing)return;clinic.gmap_lng=$event.target.value}}})])])])]),_v(" "),_c('div',{staticClass:"modal-footer "},[_c('button',{staticClass:"btn btn-warning btn-lg",staticStyle:{"width":"100%"},attrs:{"type":"button"},on:{"click":function($event){createClinic($event)}}},[_c('span',{staticClass:"glyphicon glyphicon-ok-sign"}),_v("Update")])])])])])}}
 __vue__options__.staticRenderFns = [function(){with(this){return _c('div',{staticClass:"modal-header"},[_c('button',{staticClass:"close",attrs:{"type":"button","data-dismiss":"modal","aria-hidden":"true"}},[_c('i',{staticClass:"fa fa-times-circle fa-1",attrs:{"aria-hidden":"true"}})]),_v(" "),_c('h4',{staticClass:"modal-title custom_align",attrs:{"id":"Heading"}},[_v("Edit Clinic")])])}}]
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-3", __vue__options__)
+    hotAPI.createRecord("data-v-2", __vue__options__)
   } else {
-    hotAPI.reload("data-v-3", __vue__options__)
+    hotAPI.reload("data-v-2", __vue__options__)
   }
 })()}
 },{"babel-runtime/helpers/defineProperty":2,"vue":25,"vue-hot-reload-api":21}],37:[function(require,module,exports){
@@ -19905,9 +19914,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-7", __vue__options__)
+    hotAPI.createRecord("data-v-5", __vue__options__)
   } else {
-    hotAPI.reload("data-v-7", __vue__options__)
+    hotAPI.reload("data-v-5", __vue__options__)
   }
 })()}
 },{"vue":25,"vue-hot-reload-api":21}],38:[function(require,module,exports){
@@ -19948,9 +19957,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-6", __vue__options__)
+    hotAPI.createRecord("data-v-9", __vue__options__)
   } else {
-    hotAPI.reload("data-v-6", __vue__options__)
+    hotAPI.reload("data-v-9", __vue__options__)
   }
 })()}
 },{"vue":25,"vue-hot-reload-api":21}],39:[function(require,module,exports){
@@ -20012,9 +20021,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-17", __vue__options__)
+    hotAPI.createRecord("data-v-16", __vue__options__)
   } else {
-    hotAPI.reload("data-v-17", __vue__options__)
+    hotAPI.reload("data-v-16", __vue__options__)
   }
 })()}
 },{"vue":25,"vue-hot-reload-api":21}],40:[function(require,module,exports){
@@ -20101,9 +20110,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-2", __vue__options__)
+    hotAPI.createRecord("data-v-1", __vue__options__)
   } else {
-    hotAPI.reload("data-v-2", __vue__options__)
+    hotAPI.reload("data-v-1", __vue__options__)
   }
 })()}
 },{"vue":25,"vue-hot-reload-api":21}],41:[function(require,module,exports){
@@ -20153,9 +20162,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-18", __vue__options__)
+    hotAPI.createRecord("data-v-14", __vue__options__)
   } else {
-    hotAPI.reload("data-v-18", __vue__options__)
+    hotAPI.reload("data-v-14", __vue__options__)
   }
 })()}
 },{"vue":25,"vue-hot-reload-api":21}],42:[function(require,module,exports){
@@ -20242,9 +20251,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-9", __vue__options__)
+    hotAPI.createRecord("data-v-10", __vue__options__)
   } else {
-    hotAPI.reload("data-v-9", __vue__options__)
+    hotAPI.reload("data-v-10", __vue__options__)
   }
 })()}
 },{"vue":25,"vue-hot-reload-api":21}],43:[function(require,module,exports){
@@ -20331,9 +20340,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-12", __vue__options__)
+    hotAPI.createRecord("data-v-6", __vue__options__)
   } else {
-    hotAPI.reload("data-v-12", __vue__options__)
+    hotAPI.reload("data-v-6", __vue__options__)
   }
 })()}
 },{"vue":25,"vue-hot-reload-api":21}],44:[function(require,module,exports){
@@ -20377,9 +20386,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-11", __vue__options__)
+    hotAPI.createRecord("data-v-8", __vue__options__)
   } else {
-    hotAPI.reload("data-v-11", __vue__options__)
+    hotAPI.reload("data-v-8", __vue__options__)
   }
 })()}
 },{"vue":25,"vue-hot-reload-api":21}],45:[function(require,module,exports){
@@ -20441,9 +20450,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-15", __vue__options__)
+    hotAPI.createRecord("data-v-18", __vue__options__)
   } else {
-    hotAPI.reload("data-v-15", __vue__options__)
+    hotAPI.reload("data-v-18", __vue__options__)
   }
 })()}
 },{"vue":25,"vue-hot-reload-api":21}]},{},[27]);

@@ -130,7 +130,7 @@
           <div class="form-group">
             <div class="col-xs-offset-3 col-xs-9">
                 <label class="checkbox-inline">
-                    <input value="news" type="checkbox" v-model="clinic.default_address"> Set as default clinic.
+                    <input value="news" type="checkbox" v-bind:true-value="1" v-bind:false-value="0" v-model="clinic.default_address"> Set as default clinic.
                 </label>
             </div>
         </div>
@@ -209,8 +209,7 @@
             this.$http.post('/api/clinic/update/post', this.clinic, function(data){
               if(data == 'success'){
                 $('#edit-clinic-form').modal('hide');
-              
-
+                this.$parent.fetchClinics(0);
                 swal({
                   title: 'Success!',
                   text: 'Successfully updated '+this.clinic.name,

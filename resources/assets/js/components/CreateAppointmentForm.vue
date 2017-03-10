@@ -16,14 +16,14 @@
                       <label><input type="radio" value="0" name="optradio" @click="setClinic(clinic.id)"> Clinic : {{ clinic.name }} , Address : {{ clinic.address }}
                       <br> 
                       <ul class="no-bullet" >
-                        <li style="float:left;" v-if="clinic.open_sunday == 1"> Sunday</li>
-                        <li style="float:left;" v-if="clinic.open_monday == 1">, Monday</li>
-                        <li style="float:left;" v-if="clinic.open_tuesday == 1">,Tuesday</li>
-                        <li style="float:left;" v-if="clinic.open_wednesday == 1">,Wednesday</li>
-                        <li style="float:left;" v-if="clinic.open_thursday == 1">,Thursday</li>
-                        <li style="float:left;" v-if="clinic.open_friday == 1">,Friday</li>
-                        <li style="float:left;" v-if="clinic.open_saturday == 1">Saturday</li>
-                        <li style="float:left;" > {{ clinic.from_day }}-{{ clinic.to_day }} {{ clinic.from_time }}-{{ clinic.to_time }} </li>
+                        <li class="pull-left" v-if="clinic.open_sunday == 1"> Sunday</li>
+                        <li class="pull-left" v-if="clinic.open_monday == 1">, Monday</li>
+                        <li class="pull-left" v-if="clinic.open_tuesday == 1">,Tuesday</li>
+                        <li class="pull-left" v-if="clinic.open_wednesday == 1">,Wednesday</li>
+                        <li class="pull-left" v-if="clinic.open_thursday == 1">,Thursday</li>
+                        <li class="pull-left" v-if="clinic.open_friday == 1">,Friday</li>
+                        <li class="pull-left" v-if="clinic.open_saturday == 1">Saturday</li>
+                        <li class="pull-left" > {{ clinic.from_day }}-{{ clinic.to_day }} {{ clinic.from_time }}-{{ clinic.to_time }} </li>
                       </ul>
 
 
@@ -33,7 +33,7 @@
               </div>
 
               <div class="form-group">
-                  Set exact date
+                  Set exact date and time
                   <div class='input-group date' >
                       <input type='text' id='appointment_date' v-model="appointment.appointment_date" v-on:change="setExactDate($event)" class="form-control" />
                       <span class="input-group-addon">
@@ -68,7 +68,7 @@
 
         },
 
-        props: ['clinics', 'doctorId'],
+        props: ['clinics', 'doctor_id'],
 
         created: function() {
 
@@ -92,71 +92,61 @@
 
         methods: {
           setClinic: function(id){
-
             this.appointment.clinic_id = id;
-            this.appointment.doctor_id = this.doctorId;
-
+            this.appointment.doctor_id = this.doctor_id;
           },
 
           setExactDate: function(event){
-            alert(event.value);
+            //alert(event.value);
           },
 
           createAppointment: function(event){
-            event.preventDefault();
-            this.appointment.appointment_date = $("#appointment_date").val();
-            
-            swal({
-              text: 'Creating....',
-              timer: 1000,
-              showConfirmButton : false,
-              type : 'info',
-            }).then(
-              function () {},
-              function (dismiss) {
-              }
-            )
-
-            this.$http.post('/api/appointment/request/post', this.appointment, function(data){
-              if(data == 'success'){
-                $('#create-appointment-form').modal('hide');
-                
-                swal({
-                  title: 'Success!',
-                  text: 'Successfully requested new appointment.',
-                  showConfirmButton : false,
-                  timer: 1000,
-                  type : 'success',
-                }).then(
-                  function () {},
-                  function (dismiss) {
-                    if (dismiss === 'timer') {
-                      console.log('I was closed by the timer')
-                    }
-                  }
-                );
-
+                event.preventDefault();
+                if($("#appointment_date").val() != "" && this.appointment.clinic_id != ''){
+                        this.appointment.appointment_date = $("#appointment_date").val();
                         
-              }else{
-                  
-                  swal({
-                    title: 'Error!',
-                    text: 'Unable to save please try again!',
-                    timer: 1000,
-                    type : 'error',
-                    showConfirmButton : false,
-                  }).then(
-                    function () {},
-                    function (dismiss) {
-                      if (dismiss === 'timer') {
-                        console.log('I was closed by the timer')
-                      }
-                    }
-                  )
-                  
-              }
+                        swal({
+                          text: 'Submitting....',
+                          timer: 1000,
+                          showConfirmButton : false,
+                          type : 'info',
+                        }).then(function () {},function (dismiss) {});
 
-            });
+                        this.$http.post('/api/appointment/request/post', this.appointment, function(data){
+                              if(data == 'success'){
+                                    $('#create-appointment-form').modal('hide');
+                                  
+                                    swal({
+                                      title: 'Success!',
+                                      text: 'Successfully requested new appointment.',
+                                      showConfirmButton : false,
+                                      timer: 1000,
+                                      type : 'success',
+                                    }).then(function () {},function (dismiss) {});
+                  
+                              }else{
+                                  
+                                  swal({
+                                    title: 'Error!',
+                                    text: 'Unable to submit please try again!',
+                                    timer: 1000,
+                                    type : 'error',
+                                    showConfirmButton : false,
+                                  }).then( function () {},  function (dismiss){ })
+                                  
+                              }
+
+                        });
+                }else{
+                    swal({
+                      title: 'Error!',
+                      text: 'Please fill all the fields!',
+                      timer: 1000,
+                      type : 'error',
+                      showConfirmButton : false,
+                    }).then( function () {},  function (dismiss){ })
+
+              }
 
           }  
   

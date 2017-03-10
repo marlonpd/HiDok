@@ -16,7 +16,7 @@
                   
                    <div class="status-upload">
                       <form>
-                        <textarea v-model="newFeedback.content" placeholder="Add some feedback?" ></textarea>
+                        <textarea maxlength="50" v-model="newFeedback.content" placeholder="Add some feedback?" ></textarea>
                         
                      </form>
                     </div><!-- Status Upload  -->
@@ -72,57 +72,67 @@
              submitFeedback: function(event){
                     event.preventDefault();
 
-                    swal({
-                      text: 'Submitting....',
-                      timer: 1000,
-                      showConfirmButton : false,
-                      type : 'info',
-                    }).then(
-                      function () {},
-                      function (dismiss) {
-                      }
-                    )
+                    if(!this.newFeedback.content){
+                        swal({
+                          title: 'Error!',
+                          text: 'You need to write something!',
+                          timer: 1000,
+                          type : 'error',
+                          showConfirmButton : false,
+                        }).then(
+                          function () {},
+                          function (dismiss) {},
+                        );
+                    }else{
 
-                    self = this;
-                    this.$http.post('/api/feedback/post', this.newFeedback,function(data){
-                        if(data == "success"){
-                            swal({
-                              title: 'Success!',
-                              text: 'Successfully sent your feedback.',
-                              showConfirmButton : false,
-                              timer: 1000,
-                              type : 'success',
-                            }).then(
-                              function () {},
-                              function (dismiss) {
-                                if (dismiss === 'timer') {
-                                  console.log('I was closed by the timer');
-                                  self.newFeedback.content = '';
-                                  $('#create-feedback-form').modal('hide');
+                                swal({
+                                  text: 'Submitting....',
+                                  timer: 1000,
+                                  showConfirmButton : false,
+                                  type : 'info',
+                                }).then(
+                                  function () {},
+                                  function (dismiss) {})
 
-                                }
-                              }
-                            );
-                        }else{
+                                self = this;
+                                this.$http.post('/api/feedback/post', this.newFeedback,function(data){
+                                    if(data['status'] == "success"){
+                                        swal({
+                                          title: 'Success!',
+                                          text: 'Successfully sent your feedback.',
+                                          showConfirmButton : false,
+                                          timer: 1000,
+                                          type : 'success',
+                                        }).then(
+                                          function () {},
+                                          function (dismiss) {
+                                            if (dismiss === 'timer') {
+                                              self.newFeedback.content = '';
+                                              $('#create-feedback-form').modal('hide');
+                                            }
+                                          }
+                                        );
+                                    }else{
 
 
-                             swal({
-                                title: 'Error!',
-                                text: 'Unable to submit ur feedback, please try again!',
-                                timer: 1000,
-                                type : 'error',
-                                showConfirmButton : false,
-                              }).then(
-                                function () {},
-                                function (dismiss) {
-                                  if (dismiss === 'timer') {
-                                    console.log('I was closed by the timer')
-                                  }
-                                }
-                              )
+                                        swal({
+                                            title: 'Error!',
+                                            text: 'Unable to submit ur feedback, please try again!',
+                                            timer: 1000,
+                                            type : 'error',
+                                            showConfirmButton : false,
+                                          }).then(
+                                            function () {},
+                                            function (dismiss) {
+                                              if (dismiss === 'timer') {
+                                                console.log('I was closed by the timer')
+                                              }
+                                            }
+                                          )
 
-                        }
-                    });
+                                    }
+                                });
+                    }
 
                 }
 

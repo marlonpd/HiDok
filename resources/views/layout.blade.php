@@ -87,18 +87,25 @@
                                 </div>
                                 <li class="divider"></li>
                               <div class="notifications-wrapper">
-                                <a class="content" href="#">
-                                  
+
+                                <a class="content" href="#">  
                                   <div class="notification-item">
                                     <h4 class="item-title">Appointment 1 · day ago</h4>
-                                    <p class="item-info">Jose Rizal requested an appointment</p>
-                                  </div>
-                                  
+                                    <p class="item-info">Asyong Salonga requested an appointment</p>
+                                  </div>  
                                 </a>
+
                                 <a class="content" href="#">
                                   <div class="notification-item">
                                     <h4 class="item-title">Feedback · day ago</h4>
                                     <p class="item-info">Nardong Putik gives you a feedback</p>
+                                  </div>
+                                </a>
+
+                                 <a class="content" href="#">
+                                  <div class="notification-item">
+                                    <h4 class="item-title">Rating · day ago</h4>
+                                    <p class="item-info">Baby Ama rated you!</p>
                                   </div>
                                 </a>
                                 

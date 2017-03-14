@@ -73,27 +73,34 @@ const app = new Vue({
       feedbacks : {},
       clinics : {},
       constants : {},
-      authUser : {},
-      
+      authUser : {},   
+      appointmentITR : {},
     }
   },
 
   created: function(){
-
   },
 
   mounted: function(){
-
   },
 
   methods:{
+    reSchedAppointments : function(appointmentId, clinicId){
+        self = this;
+        this.appointments[clinicId].forEach(function(appointment , index){
+          if(appointment['id'] == appointmentId){
+            appointment['confirm'] = 1;
+            appointment['re_schedule_by_id'] = self.authUser.id;
+            return false;
+          }
+        });
+    },
 
     fetchClinics : function(id){
       this.$http.get('/api/clinics/get/'+id, function(data){
         this.clinics = data['clinics'];
       });
     },
-
 
     fetchSchedules : function(id){
       this.$http.get('/api/schedules/get/'+id, function(data){
@@ -121,20 +128,12 @@ const app = new Vue({
         ).then(function (isConfirm,schedule) {
 
           if(isConfirm){
-    
             self.$http.post('/api/schedule/delete/post', sched.id, function(data){
               if(data == "success"){
-                swal(
-                  'Deleted!',
-                  'Your file has been deleted.',
-                  'success'
-                );
-
+                swal('Deleted!','Your file has been deleted.','success');
                 self.fetchSchedules();
               }
             });
- 
-
           }
           else
           {
@@ -186,15 +185,11 @@ const app = new Vue({
         });
     },
 
-
-
-
     fetchAppointment : function(){
       this.$http.get('/api/auth/appointment/get', function(data){
         this.appointments = data['appointments'];
       });
     },
-
 
     deleteAppointment: function(appointment,event){
       event.preventDefault();
@@ -207,14 +202,11 @@ const app = new Vue({
       });
     },
 
-
     fetchConstants: function(){
       var keys= 'account_type=1&account_type_label=1&account_type_rev=1&gender=1&religion=1&specialization=1&appointment_status=1';
-
       this.$http.get('/api/constants/get?'+keys, function(data){
         this.constants = data['constants'];
       });
-
     },
 
   },

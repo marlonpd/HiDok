@@ -17,14 +17,13 @@ class SettingsController extends Controller
 {
     public function __construct()
     {
-    	$this->middleware('auth');
+    	$this->middleware(['auth']);
     }
 
 
     public function index()
     {
         //session()->flash('flash_message', 'test');
-       
         $account_type = config('constants.account_type_rev.'.Auth::user()->account_type);
 
     	return view($account_type.'.settings');

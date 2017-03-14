@@ -21,8 +21,8 @@ class RatingsController extends Controller
         if($rating <= 5.0)
         {
             $current_rating = Ratings::where('doctor_id','=',$doctor_id)
-                                    ->where('patient_id', '=', Auth::user()->id)
-                                    ->first();
+                                     ->where('patient_id', '=', Auth::user()->id)
+                                     ->first();
             
             if($current_rating)
             {

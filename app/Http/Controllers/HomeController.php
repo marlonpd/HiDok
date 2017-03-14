@@ -27,18 +27,19 @@ class HomeController extends Controller
     public function index()
     {
         if(!Auth::check())
+        {
             return view('pages/home');
+        }
         else
         {
             if(Auth::user()->is_patient())
             {
                 $appointments = Appointment::where('patient_id' , '=' ,Auth::user()->id )
-                                       ->where('confirmed' , '=' ,config('constants.appointment_status.consult') )
-                                       ->get();
+                                           ->where('confirmed' , '=' ,config('constants.appointment_status.consult') )
+                                           ->get();
 
                 $user = Auth::user();
-                                       
-
+                                    
                 return view(config('constants.account_type_rev.'.Auth::user()->account_type).'/home',compact('user','appointments'));
             }
             else

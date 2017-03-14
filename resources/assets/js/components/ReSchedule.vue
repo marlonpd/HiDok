@@ -5,15 +5,11 @@
     <div class="modal-content">
           <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times-circle fa-1" aria-hidden="true"></i></button>
-        <h4 class="modal-title custom_align" id="Heading">Re schedule an appointment {{ appointment | json }}s  </h4>
+        <h4 class="modal-title custom_align" id="Heading">Re schedule an appointments  </h4>
       </div>
           <div class="modal-body">
-         
-              
-
 
             <div class="form-group">
-
 
                   Set new schedule date
                   <div class='input-group date' >
@@ -23,16 +19,13 @@
                       </span>
                   </div>
 
-
                   Note
-                <div class="input-group col-md-12">
+                  <div class="input-group col-md-12">
                      <textarea placeholder="Add some note" v-model="appointment.note" width="100%" class="col-md-12" ></textarea>  
                   </div><!-- Widget Area -->
 
               </div>
-
-
-            
+ 
           </div>
           <div class="modal-footer ">
         <button type="button" @click="submitNewSchedule()" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span>Re-Schedule</button>
@@ -85,7 +78,6 @@
   		    reschedAppointment : function(appointment, event){
   		    	event.preventDefault();
   		    	this.appointment.appointment_date = $("#appointment_date").val();
-
   		    },
 
 
@@ -95,7 +87,6 @@
                       
                       if(data['status'] == "success"){
                             this.appointment =data['appointment'];
-
                             swal({
                               title: 'Success!',
                               text: 'Successfully updated your schedule.',
@@ -104,17 +95,13 @@
                               type : 'success',
                             }).then(
                               function () {},
-                              function (dismiss) {
-                                if (dismiss === 'timer') {
-                                  console.log('I was closed by the timer');
-                                 
-                                  $('#reschedule').modal('hide');
-
-                                }
+                              function (dismiss) { 
+                                $('#reschedule').modal('hide');
                               }
                             );
-                        }else{
 
+                            this.$parent.reSchedAppointments(this.appointment.id,this.appointment.clinic_id);
+                        }else{
 
                              swal({
                                 title: 'Error!',
@@ -122,14 +109,7 @@
                                 timer: 1000,
                                 type : 'error',
                                 showConfirmButton : false,
-                              }).then(
-                                function () {},
-                                function (dismiss) {
-                                  if (dismiss === 'timer') {
-                                    console.log('I was closed by the timer')
-                                  }
-                                }
-                              )
+                              }).then( function () {}, function (dismiss) {});
 
                         }
 

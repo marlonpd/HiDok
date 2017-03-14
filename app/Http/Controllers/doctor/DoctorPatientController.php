@@ -14,11 +14,10 @@ class DoctorPatientController extends Controller
         $this->middleware(['auth']);
     }
 
-
     ///api/patient/remove/post
     public function api_patient_remove_post(Request $request)
     {
-    	$patient = Patient::findOrFail($request->input('id'))
+    	$patient = Patient::findOrFail($request->input('id'));
     	
     	if($patient->destroy())
     	{
@@ -27,7 +26,6 @@ class DoctorPatientController extends Controller
         else
         {
  			return json_pretty(['status' => 'error']);
-
         }
     }
 
@@ -42,7 +40,6 @@ class DoctorPatientController extends Controller
   			return json_pretty(['patients' => $patients]);
     	}
     }
-
 
     //api/doctors/my/get
     public function api_doctors_my_get()

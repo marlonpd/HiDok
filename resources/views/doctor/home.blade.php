@@ -19,7 +19,7 @@
               <doctor-profile-form :constants="constants" :authUser="authUser"></doctor-profile-form>
           </div>
           <div class="tab-pane" id="2">
-              appointment
+              @include('doctor.partials.appointment')
           </div>
           <div class="tab-pane" id="3">
             history
@@ -51,7 +51,7 @@
 
             created: function() {
                 this.fetchAllAppointments();
-                 this.fetchPatientITR(0); 
+                // this.fetchPatientITR(0); 
             },
 
             data(){
@@ -69,76 +69,88 @@
 
             methods: {
 
+                setAppointmentMain : function(appointment){
+                    this.editAppointment = appointment;
+                    Vue.nextTick(function () {});
+                },
+
+                viewITR : function(appointment){
+                    window.location = "/patient/itr/"+appointment.patient_id;
+                },
+
+                setAppointmentChild: function(appointment){
+                    this.$data.editAppointment = appointment;
+                },
+
+                fetchScheduleAppointment : function(clinic_id){
+                    this.$http.get('/api/auth/appointment/get/'+clinic_id, function(data){
+                        this.appointments = data['appointments'];
+                    });
+                },
+
                 confirmAppointment : function(appointment, event){
                     event.preventDefault();
+
                     this.$http.post('/api/appointment/confirm/post', appointment, function(data){
                         if(data == 'success'){
-                          appointment.confirmed = 1;
+                        appointment.confirmed = 1;
                         }else{
-                          swal("Error","Please try again!", "error");
+                        swal("Error","Please try again!", "error");
+                        }
+                    });
+                },
+
+                consult : function(appointment){
+                    this.$http.post('/api/appointment/consult/post', appointment, function(data){
+                        if(data == 'success'){
+                        appointment.confirmed = 2;
+                        }else{
+                        swal("Error","Please try again!", "error");
                         }
                     });
                 },
 
                 reschedAppointment : function(appointment, event){
                     event.preventDefault();
-                    this.editAppointment = appointment;
                 },
 
                 deleteAppointment : function(appointment, event){
                     event.preventDefault();
+
                     var self = this; 
                     var thisAppointment = appointment;
 
                     swal({
-                      title: 'Are you sure?',
-                      text: "You won't be able to revert this!",
-                      type: 'warning',
-                      showCancelButton: true,
-                      confirmButtonColor: '#3085d6',
-                      cancelButtonColor: '#d33',
-                      confirmButtonText: 'Yes, delete it!'
-                    }
-                    ).then(function (isConfirm,appointment) {
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        type: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, delete it!'
+                    }).then(function (isConfirm,appointment) {
+                            if(isConfirm){       
+                                self.$http.post('/api/appointment/delete/post', thisAppointment.id, function(data){
+                                    if(data == "success"){
+                                        swal(
+                                            'Deleted!',
+                                            'Your item has been deleted.',
+                                            'success'
+                                        );
 
-                      if(isConfirm){
-                
-                        self.$http.post('/api/appointment/delete/post', thisAppointment.id, function(data){
-                          if(data == "success"){
-                            swal(
-                              'Deleted!',
-                              'Your item has been deleted.',
-                              'success'
-                            );
+                                        this.fetchScheduleAppointment(self.clinic_id);
+                                    }
+                                });
+                    
 
-                            this.fetchScheduleAppointment(thisAppointment.id);
-                          }
-                        });
-             
-
-                      }
-                      else
-                      {
-                          swal("cancelled","Your categories are safe", "error");
-                      }
-
-                      
+                            }
+                            else
+                            {
+                                swal("cancelled","Your categories are safe", "error");
+                            }
                     });
 
                     
-                },
-
-                fetchConsultedAppointment: function(){
-                    this.$http.get('/api/appointment/consult/get', function(data){
-                        this.appointments = data['appointments'];
-                    });
-                },
-
-
-                fetchPatientITR : function(id){
-                  this.$http.get('/api/patient/itr/get/'+id, function(data){
-                    this.appointmentITR = data['appointment_itr'];
-                  });
                 },
       
             },

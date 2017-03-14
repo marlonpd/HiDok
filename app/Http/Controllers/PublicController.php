@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 
 class PublicController extends Controller
 {
-    //
-
 
     public function api_constants_get(Request $request)
     {	

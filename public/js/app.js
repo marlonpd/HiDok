@@ -18883,8 +18883,8 @@ var app = new Vue({
       feedbacks: {},
       clinics: {},
       constants: {},
-      authUser: {}
-
+      authUser: {},
+      appointmentITR: {}
     };
   },
 
@@ -18893,6 +18893,16 @@ var app = new Vue({
   mounted: function mounted() {},
 
   methods: {
+    reSchedAppointments: function reSchedAppointments(appointmentId, clinicId) {
+      self = this;
+      this.appointments[clinicId].forEach(function (appointment, index) {
+        if (appointment['id'] == appointmentId) {
+          appointment['confirm'] = 1;
+          appointment['re_schedule_by_id'] = self.authUser.id;
+          return false;
+        }
+      });
+    },
 
     fetchClinics: function fetchClinics(id) {
       this.$http.get('/api/clinics/get/' + id, function (data) {
@@ -18925,11 +18935,9 @@ var app = new Vue({
       }).then(function (isConfirm, schedule) {
 
         if (isConfirm) {
-
           self.$http.post('/api/schedule/delete/post', sched.id, function (data) {
             if (data == "success") {
               swal('Deleted!', 'Your file has been deleted.', 'success');
-
               self.fetchSchedules();
             }
           });
@@ -18998,7 +19006,6 @@ var app = new Vue({
 
     fetchConstants: function fetchConstants() {
       var keys = 'account_type=1&account_type_label=1&account_type_rev=1&gender=1&religion=1&specialization=1&appointment_status=1';
-
       this.$http.get('/api/constants/get?' + keys, function (data) {
         this.constants = data['constants'];
       });
@@ -19013,103 +19020,100 @@ var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".ui-acco
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-				value: true
+	value: true
 });
 exports.default = {
-				mounted: function mounted() {},
+	mounted: function mounted() {},
 
 
-				created: function created() {},
+	created: function created() {},
 
-				props: ['appointments', 'clinic_id'],
+	props: ['appointments', 'clinic_id'],
 
-				data: function data() {
-								return {};
-				},
+	data: function data() {
+		return {};
+	},
 
 
-				events: {},
+	events: {},
 
-				methods: {
-								viewITR: function viewITR(appointment) {
-												window.location = "/patient/itr/" + appointment.patient_id;
-								},
+	methods: {
+		viewITR: function viewITR(appointment) {
+			window.location = "/patient/itr/" + appointment.patient_id;
+		},
 
-								setAppointmentChild: function setAppointmentChild(appointment) {
-												this.$data.editAppointment = appointment;
-								},
+		setAppointmentChild: function setAppointmentChild(appointment) {
+			this.$data.editAppointment = appointment;
+		},
 
-								fetchScheduleAppointment: function fetchScheduleAppointment(clinic_id) {
-												this.$http.get('/api/auth/appointment/get/' + clinic_id, function (data) {
-																this.appointments = data['appointments'];
-												});
-								},
+		fetchScheduleAppointment: function fetchScheduleAppointment(clinic_id) {
+			this.$http.get('/api/auth/appointment/get/' + clinic_id, function (data) {
+				this.appointments = data['appointments'];
+			});
+		},
 
-								confirmAppointment: function confirmAppointment(appointment, event) {
-												event.preventDefault();
+		confirmAppointment: function confirmAppointment(appointment, event) {
+			event.preventDefault();
 
-												this.$http.post('/api/appointment/confirm/post', appointment, function (data) {
-																if (data == 'success') {
-																				appointment.confirmed = 1;
-																} else {
-																				swal("Error", "Please try again!", "error");
-																}
-												});
-								},
-
-								consult: function consult(appointment) {
-												this.$http.post('/api/appointment/consult/post', appointment, function (data) {
-																if (data == 'success') {
-																				appointment.confirmed = 2;
-																} else {
-																				swal("Error", "Please try again!", "error");
-																}
-												});
-								},
-
-								reschedAppointment: function reschedAppointment(appointment, event) {
-												event.preventDefault();
-								},
-
-								deleteAppointment: function deleteAppointment(appointment, event) {
-												event.preventDefault();
-
-												var self = this;
-												var thisAppointment = appointment;
-
-												swal({
-																title: 'Are you sure?',
-																text: "You won't be able to revert this!",
-																type: 'warning',
-																showCancelButton: true,
-																confirmButtonColor: '#3085d6',
-																cancelButtonColor: '#d33',
-																confirmButtonText: 'Yes, delete it!'
-												}).then(function (isConfirm, appointment) {
-
-																if (isConfirm) {
-
-																				self.$http.post('/api/appointment/delete/post', thisAppointment.id, function (data) {
-																								if (data == "success") {
-																												swal('Deleted!', 'Your item has been deleted.', 'success');
-
-																												this.fetchScheduleAppointment(self.clinic_id);
-																								}
-																				});
-																} else {
-																				swal("cancelled", "Your categories are safe", "error");
-																}
-												});
-								}
-
+			this.$http.post('/api/appointment/confirm/post', appointment, function (data) {
+				if (data == 'success') {
+					appointment.confirmed = 1;
+				} else {
+					swal("Error", "Please try again!", "error");
 				}
+			});
+		},
+
+		consult: function consult(appointment) {
+			this.$http.post('/api/appointment/consult/post', appointment, function (data) {
+				if (data == 'success') {
+					appointment.confirmed = 2;
+				} else {
+					swal("Error", "Please try again!", "error");
+				}
+			});
+		},
+
+		reschedAppointment: function reschedAppointment(appointment, event) {
+			event.preventDefault();
+		},
+
+		deleteAppointment: function deleteAppointment(appointment, event) {
+			event.preventDefault();
+
+			var self = this;
+			var thisAppointment = appointment;
+
+			swal({
+				title: 'Are you sure?',
+				text: "You won't be able to revert this!",
+				type: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Yes, delete it!'
+			}).then(function (isConfirm, appointment) {
+				if (isConfirm) {
+					self.$http.post('/api/appointment/delete/post', thisAppointment.id, function (data) {
+						if (data == "success") {
+							swal('Deleted!', 'Your item has been deleted.', 'success');
+							this.fetchScheduleAppointment(self.clinic_id);
+						}
+					});
+				} else {
+					swal("cancelled", "Your categories are safe", "error");
+				}
+			});
+		}
+
+	}
 
 };
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function(){with(this){return _c('div',_l((appointments),function(appointment){return _c('div',{staticClass:"row"},[_m(0,true),_v(" "),_c('div',{staticClass:"col-sm-4"},[_c('div',{staticClass:"panel panel-default"},[_c('div',{staticClass:"panel-heading"},[_c('strong',[_v(" "+_s(appointment.patient.lastname)+" , "+_s(appointment.patient.firstname))]),_v(" "),_c('span',{staticClass:"text-muted"},[_v("requested 5 days ago")])]),_v(" "),_c('div',{staticClass:"panel-body"},[_v("\n\t\t       \t "+_s(appointment.appointment_date)+"\n\t\t        ")])])]),_v(" "),_c('div',{staticClass:"col-sm-6"},[_c('div',{staticClass:"btn-group vcenter"},[(appointment.confirmed == 0)?_c('button',{staticClass:"btn btn-primary btn-success",attrs:{"type":"button"},on:{"click":function($event){confirmAppointment(appointment, $event)}}},[_v("Confirm")]):_e(),_v(" "),(appointment.confirmed == 1)?_c('button',{staticClass:"btn btn-primary btn-success",attrs:{"type":"button"},on:{"click":function($event){consult(appointment)}}},[_v("Consult")]):_e(),_v(" "),(appointment.confirmed == 2)?_c('button',{staticClass:"btn btn-primary btn-success disabled",attrs:{"type":"button"}},[_v("Consult")]):_e(),_v(" "),_c('button',{staticClass:"btn btn-primary btn-infor",attrs:{"type":"button","data-title":"Re-Schedule","data-toggle":"modal","data-target":"#reschedule"},on:{"click":function($event){setAppointmentChild(appointment)}}},[_v("Re-Schedule")]),_v(" "),_c('button',{staticClass:"btn btn-primary btn-danger",attrs:{"type":"button"},on:{"click":function($event){deleteAppointment(appointment, $event)}}},[_v("Delete")])]),_v(" "),_c('a',{on:{"click":function($event){viewITR(appointment)}}},[_v("(view itr)")])])])}))}}
+__vue__options__.render = function(){with(this){return _c('div',_l((appointments),function(appointment){return _c('div',{staticClass:"row"},[_m(0,true),_v(" "),_c('div',{staticClass:"col-sm-4"},[_c('div',{staticClass:"panel panel-default"},[_c('div',{staticClass:"panel-heading"},[_c('strong',[_v(" "+_s(appointment.patient.lastname)+" , "+_s(appointment.patient.firstname))]),_v(" "),_c('span',{staticClass:"text-muted"},[_v("requested 5 days ago")])]),_v(" "),_c('div',{staticClass:"panel-body"},[_v("\n\t\t       \t "+_s(appointment.appointment_date)+"\n\t\t        ")])])]),_v(" "),_c('div',{staticClass:"col-sm-6"},[_c('div',{staticClass:"btn-group vcenter"},[(appointment.confirmed == 0)?_c('button',{staticClass:"btn btn-primary btn-success",attrs:{"type":"button"},on:{"click":function($event){confirmAppointment(appointment, $event)}}},[_v("Confirm")]):_e(),_v(" "),(appointment.confirmed == 1)?_c('button',{staticClass:"btn btn-primary btn-success",attrs:{"type":"button"},on:{"click":function($event){consult(appointment)}}},[_v("Consult")]):_e(),_v(" "),(appointment.confirmed == 2)?_c('button',{staticClass:"btn btn-primary btn-success disabled",attrs:{"type":"button"}},[_v("Consult")]):_e(),_v(" "),_c('button',{staticClass:"btn btn-primary btn-infor",attrs:{"type":"button","data-title":"Re-Schedule","data-toggle":"modal","data-target":"#reschedule"},on:{"click":function($event){setAppointmentChild(appointment)}}},[_v("Re-Schedule")]),_v(" "),_c('button',{staticClass:"btn btn-primary btn-danger",attrs:{"type":"button"},on:{"click":function($event){deleteAppointment(appointment, $event)}}},[_v("Delete")]),_v("\n\t\t\t\t  |"+_s(appointment.confirmed)+"|\n\t\t\t\t")]),_v(" "),_c('a',{on:{"click":function($event){viewITR(appointment)}}},[_v("(view itr)")])])])}))}}
 __vue__options__.staticRenderFns = [function(){with(this){return _c('div',{staticClass:"col-sm-2"},[_c('div',{staticClass:"thumbnail"},[_c('img',{staticClass:"img-responsive user-photo",attrs:{"src":"https://ssl.gstatic.com/accounts/ui/avatar_2x.png"}})])])}}]
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -19181,9 +19185,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-15", __vue__options__)
+    hotAPI.createRecord("data-v-10", __vue__options__)
   } else {
-    hotAPI.reload("data-v-15", __vue__options__)
+    hotAPI.reload("data-v-10", __vue__options__)
   }
 })()}
 },{"vue":25,"vue-hot-reload-api":21}],30:[function(require,module,exports){
@@ -19289,9 +19293,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   module.hot.accept()
   module.hot.dispose(__vueify_style_dispose__)
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-7", __vue__options__)
+    hotAPI.createRecord("data-v-3", __vue__options__)
   } else {
-    hotAPI.reload("data-v-7", __vue__options__)
+    hotAPI.reload("data-v-3", __vue__options__)
   }
 })()}
 },{"vue":25,"vue-hot-reload-api":21,"vueify/lib/insert-css":26}],31:[function(require,module,exports){
@@ -19418,9 +19422,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-3", __vue__options__)
+    hotAPI.createRecord("data-v-1", __vue__options__)
   } else {
-    hotAPI.reload("data-v-3", __vue__options__)
+    hotAPI.reload("data-v-1", __vue__options__)
   }
 })()}
 },{"vue":25,"vue-hot-reload-api":21}],32:[function(require,module,exports){
@@ -19519,9 +19523,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-11", __vue__options__)
+    hotAPI.createRecord("data-v-16", __vue__options__)
   } else {
-    hotAPI.reload("data-v-11", __vue__options__)
+    hotAPI.reload("data-v-16", __vue__options__)
   }
 })()}
 },{"vue":25,"vue-hot-reload-api":21}],33:[function(require,module,exports){
@@ -19613,9 +19617,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-4", __vue__options__)
+    hotAPI.createRecord("data-v-2", __vue__options__)
   } else {
-    hotAPI.reload("data-v-4", __vue__options__)
+    hotAPI.reload("data-v-2", __vue__options__)
   }
 })()}
 },{"vue":25,"vue-hot-reload-api":21}],34:[function(require,module,exports){
@@ -19681,9 +19685,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-13", __vue__options__)
+    hotAPI.createRecord("data-v-15", __vue__options__)
   } else {
-    hotAPI.reload("data-v-13", __vue__options__)
+    hotAPI.reload("data-v-15", __vue__options__)
   }
 })()}
 },{"vue":25,"vue-hot-reload-api":21}],35:[function(require,module,exports){
@@ -19733,9 +19737,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-17", __vue__options__)
+    hotAPI.createRecord("data-v-18", __vue__options__)
   } else {
-    hotAPI.reload("data-v-17", __vue__options__)
+    hotAPI.reload("data-v-18", __vue__options__)
   }
 })()}
 },{"vue":25,"vue-hot-reload-api":21}],36:[function(require,module,exports){
@@ -19822,9 +19826,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-2", __vue__options__)
+    hotAPI.createRecord("data-v-8", __vue__options__)
   } else {
-    hotAPI.reload("data-v-2", __vue__options__)
+    hotAPI.reload("data-v-8", __vue__options__)
   }
 })()}
 },{"babel-runtime/helpers/defineProperty":2,"vue":25,"vue-hot-reload-api":21}],37:[function(require,module,exports){
@@ -19914,9 +19918,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-5", __vue__options__)
+    hotAPI.createRecord("data-v-4", __vue__options__)
   } else {
-    hotAPI.reload("data-v-5", __vue__options__)
+    hotAPI.reload("data-v-4", __vue__options__)
   }
 })()}
 },{"vue":25,"vue-hot-reload-api":21}],38:[function(require,module,exports){
@@ -19957,9 +19961,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-9", __vue__options__)
+    hotAPI.createRecord("data-v-7", __vue__options__)
   } else {
-    hotAPI.reload("data-v-9", __vue__options__)
+    hotAPI.reload("data-v-7", __vue__options__)
   }
 })()}
 },{"vue":25,"vue-hot-reload-api":21}],39:[function(require,module,exports){
@@ -20021,9 +20025,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-16", __vue__options__)
+    hotAPI.createRecord("data-v-14", __vue__options__)
   } else {
-    hotAPI.reload("data-v-16", __vue__options__)
+    hotAPI.reload("data-v-14", __vue__options__)
   }
 })()}
 },{"vue":25,"vue-hot-reload-api":21}],40:[function(require,module,exports){
@@ -20072,11 +20076,7 @@ exports.default = {
                         showConfirmButton: false,
                         timer: 1000,
                         type: 'success'
-                    }).then(function () {}, function (dismiss) {
-                        if (dismiss === 'timer') {
-                            console.log('I was closed by the timer');
-                        }
-                    });
+                    }).then(function () {}, function (dismiss) {});
 
                     window.location = "/home";
                 } else {
@@ -20110,9 +20110,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-1", __vue__options__)
+    hotAPI.createRecord("data-v-5", __vue__options__)
   } else {
-    hotAPI.reload("data-v-1", __vue__options__)
+    hotAPI.reload("data-v-5", __vue__options__)
   }
 })()}
 },{"vue":25,"vue-hot-reload-api":21}],41:[function(require,module,exports){
@@ -20162,9 +20162,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-14", __vue__options__)
+    hotAPI.createRecord("data-v-17", __vue__options__)
   } else {
-    hotAPI.reload("data-v-14", __vue__options__)
+    hotAPI.reload("data-v-17", __vue__options__)
   }
 })()}
 },{"vue":25,"vue-hot-reload-api":21}],42:[function(require,module,exports){
@@ -20251,9 +20251,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-10", __vue__options__)
+    hotAPI.createRecord("data-v-11", __vue__options__)
   } else {
-    hotAPI.reload("data-v-10", __vue__options__)
+    hotAPI.reload("data-v-11", __vue__options__)
   }
 })()}
 },{"vue":25,"vue-hot-reload-api":21}],43:[function(require,module,exports){
@@ -20295,7 +20295,6 @@ exports.default = {
 
         if (data['status'] == "success") {
           this.appointment = data['appointment'];
-
           swal({
             title: 'Success!',
             text: 'Successfully updated your schedule.',
@@ -20303,12 +20302,10 @@ exports.default = {
             timer: 1000,
             type: 'success'
           }).then(function () {}, function (dismiss) {
-            if (dismiss === 'timer') {
-              console.log('I was closed by the timer');
-
-              $('#reschedule').modal('hide');
-            }
+            $('#reschedule').modal('hide');
           });
+
+          this.$parent.reSchedAppointments(this.appointment.id, this.appointment.clinic_id);
         } else {
 
           swal({
@@ -20317,11 +20314,7 @@ exports.default = {
             timer: 1000,
             type: 'error',
             showConfirmButton: false
-          }).then(function () {}, function (dismiss) {
-            if (dismiss === 'timer') {
-              console.log('I was closed by the timer');
-            }
-          });
+          }).then(function () {}, function (dismiss) {});
         }
       });
     }
@@ -20333,16 +20326,16 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function(){with(this){return _c('div',{staticClass:"modal",attrs:{"id":"reschedule","tabindex":"-1","role":"dialog","aria-labelledby":"reschedule","aria-hidden":"true"}},[_c('div',{staticClass:"modal-dialog"},[_c('div',{staticClass:"modal-content"},[_c('div',{staticClass:"modal-header"},[_m(0),_v(" "),_c('h4',{staticClass:"modal-title custom_align",attrs:{"id":"Heading"}},[_v("Re schedule an appointment "+_s(_f("json")(appointment))+"s  ")])]),_v(" "),_c('div',{staticClass:"modal-body"},[_c('div',{staticClass:"form-group"},[_v("\n\n\n                  Set new schedule date\n                  "),_c('div',{staticClass:"input-group date"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(appointment.appointment_date),expression:"appointment.appointment_date"}],staticClass:"form-control",attrs:{"type":"text","id":"appointment_date"},domProps:{"value":_s(appointment.appointment_date)},on:{"input":function($event){if($event.target.composing)return;appointment.appointment_date=$event.target.value}}}),_v(" "),_m(1)]),_v("\n\n\n                  Note\n                "),_c('div',{staticClass:"input-group col-md-12"},[_c('textarea',{directives:[{name:"model",rawName:"v-model",value:(appointment.note),expression:"appointment.note"}],staticClass:"col-md-12",attrs:{"placeholder":"Add some note","width":"100%"},domProps:{"value":_s(appointment.note)},on:{"input":function($event){if($event.target.composing)return;appointment.note=$event.target.value}}})])])]),_v(" "),_c('div',{staticClass:"modal-footer "},[_c('button',{staticClass:"btn btn-warning btn-lg",staticStyle:{"width":"100%"},attrs:{"type":"button"},on:{"click":function($event){submitNewSchedule()}}},[_c('span',{staticClass:"glyphicon glyphicon-ok-sign"}),_v("Re-Schedule")])])])])])}}
-__vue__options__.staticRenderFns = [function(){with(this){return _c('button',{staticClass:"close",attrs:{"type":"button","data-dismiss":"modal","aria-hidden":"true"}},[_c('i',{staticClass:"fa fa-times-circle fa-1",attrs:{"aria-hidden":"true"}})])}},function(){with(this){return _c('span',{staticClass:"input-group-addon"},[_c('span',{staticClass:"glyphicon glyphicon-calendar"})])}}]
+__vue__options__.render = function(){with(this){return _c('div',{staticClass:"modal",attrs:{"id":"reschedule","tabindex":"-1","role":"dialog","aria-labelledby":"reschedule","aria-hidden":"true"}},[_c('div',{staticClass:"modal-dialog"},[_c('div',{staticClass:"modal-content"},[_m(0),_v(" "),_c('div',{staticClass:"modal-body"},[_c('div',{staticClass:"form-group"},[_v("\n\n                  Set new schedule date\n                  "),_c('div',{staticClass:"input-group date"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(appointment.appointment_date),expression:"appointment.appointment_date"}],staticClass:"form-control",attrs:{"type":"text","id":"appointment_date"},domProps:{"value":_s(appointment.appointment_date)},on:{"input":function($event){if($event.target.composing)return;appointment.appointment_date=$event.target.value}}}),_v(" "),_m(1)]),_v("\n\n                  Note\n                  "),_c('div',{staticClass:"input-group col-md-12"},[_c('textarea',{directives:[{name:"model",rawName:"v-model",value:(appointment.note),expression:"appointment.note"}],staticClass:"col-md-12",attrs:{"placeholder":"Add some note","width":"100%"},domProps:{"value":_s(appointment.note)},on:{"input":function($event){if($event.target.composing)return;appointment.note=$event.target.value}}})])])]),_v(" "),_c('div',{staticClass:"modal-footer "},[_c('button',{staticClass:"btn btn-warning btn-lg",staticStyle:{"width":"100%"},attrs:{"type":"button"},on:{"click":function($event){submitNewSchedule()}}},[_c('span',{staticClass:"glyphicon glyphicon-ok-sign"}),_v("Re-Schedule")])])])])])}}
+__vue__options__.staticRenderFns = [function(){with(this){return _c('div',{staticClass:"modal-header"},[_c('button',{staticClass:"close",attrs:{"type":"button","data-dismiss":"modal","aria-hidden":"true"}},[_c('i',{staticClass:"fa fa-times-circle fa-1",attrs:{"aria-hidden":"true"}})]),_v(" "),_c('h4',{staticClass:"modal-title custom_align",attrs:{"id":"Heading"}},[_v("Re schedule an appointments  ")])])}},function(){with(this){return _c('span',{staticClass:"input-group-addon"},[_c('span',{staticClass:"glyphicon glyphicon-calendar"})])}}]
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-6", __vue__options__)
+    hotAPI.createRecord("data-v-9", __vue__options__)
   } else {
-    hotAPI.reload("data-v-6", __vue__options__)
+    hotAPI.reload("data-v-9", __vue__options__)
   }
 })()}
 },{"vue":25,"vue-hot-reload-api":21}],44:[function(require,module,exports){
@@ -20386,9 +20379,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-8", __vue__options__)
+    hotAPI.createRecord("data-v-6", __vue__options__)
   } else {
-    hotAPI.reload("data-v-8", __vue__options__)
+    hotAPI.reload("data-v-6", __vue__options__)
   }
 })()}
 },{"vue":25,"vue-hot-reload-api":21}],45:[function(require,module,exports){
@@ -20450,9 +20443,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-18", __vue__options__)
+    hotAPI.createRecord("data-v-13", __vue__options__)
   } else {
-    hotAPI.reload("data-v-18", __vue__options__)
+    hotAPI.reload("data-v-13", __vue__options__)
   }
 })()}
 },{"vue":25,"vue-hot-reload-api":21}]},{},[27]);

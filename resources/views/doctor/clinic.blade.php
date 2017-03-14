@@ -142,9 +142,6 @@
             },
 
             methods:{
-                globalFunc : function(){
-                      alert('glbal func');
-                },
 
                 newClinic : function(){
                     map = new google.maps.Map2(document.getElementById(MAP_DIV_ELEMENT_ID));

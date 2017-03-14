@@ -9,12 +9,11 @@ use App\Clinic;
 use App\ITR;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
-
+use App\DoctorPatient;
 
 class AppointmentController extends Controller
 {
    	
-
    	public function __construct()
     {
         $this->middleware(['auth']);
@@ -24,7 +23,6 @@ class AppointmentController extends Controller
     {   
     	if(Auth::user()->is_doctor())
         {
-
             $clinics = Clinic::where('doctor_id' , '=' ,Auth::user()->id)
                                  ->get();
 
@@ -71,13 +69,12 @@ class AppointmentController extends Controller
         if(Auth::user()->is_doctor())
         {
             $appointments = Appointment::with('patient')
-                                    ->where('clinic_id' , '=' ,$clinic_id )
-                                    ->get();
+                                       ->where('clinic_id' , '=' ,$clinic_id )
+                                       ->get();
 
         }
         else
-        {            
-                    
+        {                          
             $appointments = Appointment::with('doctor')
                                        ->where('clinic_id' , '=' ,$clinic_id )
                                        ->get();
@@ -89,7 +86,6 @@ class AppointmentController extends Controller
 
     public function api_auth_appointment_patient_get()
     {
-
         if(Auth::user()->is_patient())
         {    
             $appointments = Appointment::with('doctor')
@@ -97,8 +93,6 @@ class AppointmentController extends Controller
 
              return json_pretty(['appointments' => $appointments]);
         }                
-
-       
     }
 
   /*  public function api_auth_appointment_get()
@@ -127,7 +121,6 @@ class AppointmentController extends Controller
     public function api_auth_appointment_all_get()
     {
         $user_id = Auth::user()->id;
-
         $appointments = array();
 
         if(Auth::user()->is_doctor())
@@ -137,15 +130,10 @@ class AppointmentController extends Controller
 
             foreach ($clinics as $clinic) 
             {
-
                 $appointments[$clinic->id] = Appointment::with('patient')
                                                         ->where('clinic_id' , '=' ,$clinic->id )
                                                         ->get();
-            
-
-            }    
-
-
+            }
         }
         else
         {
@@ -155,41 +143,15 @@ class AppointmentController extends Controller
         }
 
 
-        return json_pretty(['appointments' => $appointments]);                    
- 
+        return json_pretty(['appointments' => $appointments]);                     
     }
-
-    //api/appointment/update/post
-    /*public function api_appointment_update_post(Request $request)
-    {
-    	$id = $request->input('id');
-
-        $appointment = Appointment::findOrFail($id);
-
-    	$appointment->update(['note' => $request->input('note'),
-    						  'appointment_date' => $request->input('note'),	
-    						]);
-
-    	if($appointment)
-        {
-            return "success";
-        }
-        else
-        {
-            return "error";
-        }
-    }*/
 
     //api/appointment/confirm/post
     public function api_appointment_confirm_post(Request $request)
     {
     	$id = $request->input('id');
-
         $appointment = Appointment::findOrFail($id);
-
     	$appointment->update(['confirmed' => config('constants.appointment_status.confirm')]);
-
-
 
     	if($appointment)
         {
@@ -202,37 +164,31 @@ class AppointmentController extends Controller
     }
 
 
-
     public function add_patient( $patient_id)
     {
-
         $patient = new DoctorPatient();
         $patient->patient_id = $patient_id;
         $patient->doctor_id = Auth::user()->id;
         $patient->save();
-
     }
 
     //api/appointment/consult/post
     public function api_appointment_consult_post(Request $request)
     {
         $id = $request->input('id');
-
         $appointment = Appointment::findOrFail($id);
-
         $appointment->update(['confirmed' => config('constants.appointment_status.consult')]);
-        
         $timestamp = Carbon::now();
 
-        ITR::create(['doctor_id' => Auth::user()->id, 
+        ITR::create(['doctor_id'      => Auth::user()->id, 
                      'appointment_id' => $id,  
-                     'patient_id' => $appointment->patient_id , 
-                     'assessment' => 'test-asses' ,
-                     'laboratory' => 'test-lab' ,
-                     'diagnosis' => 'test-diagnosis' ,
-                     'treatment'=> 'test-treatment',
-                     'created_at' => $timestamp,
-                     'updated_at' => $timestamp,
+                     'patient_id'     => $appointment->patient_id , 
+                     'assessment'     => '' ,
+                     'laboratory'     => '' ,
+                     'diagnosis'      => '' ,
+                     'treatment'      => '',
+                     'created_at'     => $timestamp,
+                     'updated_at'     => $timestamp,
                     ]);
 
 
@@ -251,19 +207,16 @@ class AppointmentController extends Controller
     public function api_appointment_reschedule_post(Request $request)
     {
         $id = $request->input('id');
-
         $appointment = Appointment::findOrFail($id);
 
-        $appointment->update(['appointment_date' => date("Y-m-d H:i:s", strtotime($request->input('appointment_date'))),
-                              'note' =>  $request->input('note'),
+        $appointment->update(['appointment_date'  => date("Y-m-d H:i:s", strtotime($request->input('appointment_date'))),
+                              'note'              =>  $request->input('note'),
                               're_schedule_by_id' => Auth::user()->id,
                       ]);
 
         if($appointment)
         {
-           
-
-             return json_pretty(['status' => 'success',
+             return json_pretty(['status'      => 'success',
                                  'appointment' => $appointment]);
         }
         else
@@ -276,7 +229,6 @@ class AppointmentController extends Controller
     //api/appointment/delete/post
     public function api_appointment_delete_post(Request $request)
     {
-
     	$appointment = Appointment::destroy($request->input());
 
         if($appointment)
@@ -289,10 +241,4 @@ class AppointmentController extends Controller
     }
 
 
-  /*  public function json_pretty($str)
-    {
-        return \Response::make(json_encode($str, JSON_PRETTY_PRINT))
-                        ->header('Content-Type', "application/json");
-    }
-*/
 }

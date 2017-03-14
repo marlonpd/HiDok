@@ -216,12 +216,9 @@
                     });
                 },
 
-
                 fetchPatientITR : function(id){
-
                   this.$http.get('/api/patient/itr/get/'+id, function(data){
                     this.appointmentITR = data['appointment_itr'];
-   
                   });
                 },
 

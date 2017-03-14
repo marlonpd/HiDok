@@ -13,7 +13,7 @@
                          <div class="row" v-for="appointment in appointments">
                                 <div class="col-sm-2">
                                     <div class="thumbnail">
-                                        <img class="img-responsive user-photo" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png">
+                                        <img class="img-responsive user-photo" src="@{{ appointment.doctor.thumbnail }} ">
                                     </div><!-- /thumbnail -->
                                 </div><!-- /col-sm-1 -->
 
@@ -70,19 +70,11 @@
     <script>
         var childMixin = {
 
-            
-
-
-            mounted() {
-
-            },
+            mounted() {},
 
             created: function() {
                 this.fetchAllAppointments();
             },
-
-
-  
 
             data(){
                 return {

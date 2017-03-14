@@ -43,20 +43,12 @@
             $( "#accordion" ).accordion();
         });
 
-
         var childMixin = {
-
-            
-
-
-            mounted() {
-
-            },
+            mounted() {},
 
             created: function() {
                 this.fetchAllAppointments();
-
-                 this.fetchPatientITR(0); 
+                this.fetchPatientITR(0); 
             },
 
             data(){
@@ -68,9 +60,7 @@
                 }
             },
 
-            events: {
-
-            },
+            events: {},
 
             methods: {
 
@@ -84,20 +74,15 @@
                           swal("Error","Please try again!", "error");
                         }
                     });
-
-
                 },
 
                 reschedAppointment : function(appointment, event){
                     event.preventDefault();
                     this.editAppointment = appointment;
-
                 },
 
                 deleteAppointment : function(appointment, event){
                     event.preventDefault();
-
-
                     var self = this; 
                     var thisAppointment = appointment;
 
@@ -109,34 +94,20 @@
                       confirmButtonColor: '#3085d6',
                       cancelButtonColor: '#d33',
                       confirmButtonText: 'Yes, delete it!'
-                    }
-                    ).then(function (isConfirm,appointment) {
-
+                    }).then(function (isConfirm,appointment) {
                       if(isConfirm){
-                
                         self.$http.post('/api/appointment/delete/post', thisAppointment.id, function(data){
                           if(data == "success"){
-                            swal(
-                              'Deleted!',
-                              'Your item has been deleted.',
-                              'success'
-                            );
-
+                            swal('Deleted!','Your item has been deleted.','success');
                             this.fetchScheduleAppointment(thisAppointment.id);
                           }
                         });
-             
-
                       }
                       else
                       {
                           swal("cancelled","Your categories are safe", "error");
                       }
-
-                      
                     });
-
-                    
                 },
 
                 fetchConsultedAppointment: function(){
@@ -145,12 +116,9 @@
                     });
                 },
 
-
                 fetchPatientITR : function(id){
-
                   this.$http.get('/api/patient/itr/get/'+id, function(data){
                     this.appointmentITR = data['appointment_itr'];
-   
                   });
                 },
       

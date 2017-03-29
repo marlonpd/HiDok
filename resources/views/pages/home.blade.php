@@ -5,9 +5,9 @@
     <div class="row slider-search-pnl">
         <div class="col-md-9 slider-pnl nopadding">
             <ul class="bxslider">
-              <li><img width="100%" height="100%" src="/images/slider/tree_root.jpg" title="Funky roots" /></li>
-              <li><img width="100%" height="100%" src="/images/slider/hill_road.jpg" title="The long and winding road" /></li>
-              <li><img width="100%" height="100%" src="/images/slider/trees.jpg" title="Happy trees" /></li>
+              <li><img width="100%" height="100%" src="{{url('/images/slider/tree_root.jpg')}}" title="Funky roots" /></li>
+              <li><img width="100%" height="100%" src="{{url('/images/slider/hill_road.jpg')}}" title="The long and winding road" /></li>
+              <li><img width="100%" height="100%" src="{{url('/images/slider/trees.jpg')}}" title="Happy trees" /></li>
             </ul>
         </div>
 

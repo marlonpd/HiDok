@@ -32,16 +32,15 @@ class SettingsController extends Controller
     public function update(Request $request)
     {
         $user = User::findOrFail(Auth::user()->id);
-
         if ($request->hasFile('photo')) {
-
+            $current_dir = getcwd();
             $photo_dir = 'images/photo';
             $fileName = str_random(30);
             $extension = $request->file('photo')->getClientOriginalExtension();
             $safename = $fileName.'.'.$extension;
 
             $request->file('photo')->move($photo_dir, $safename);
-            Image::make('/vagrant/hidok/public/'.$photo_dir.'/'.$safename)->resize(200, 200)->save('/vagrant/hidok/public/'.$photo_dir.'/thumb/'.$safename);
+            Image::make($current_dir.'/'.$photo_dir.'/'.$safename)->resize(200, 200)->save($current_dir.'/'.$photo_dir.'/thumb/'.$safename);
             $user->update(['photo' => $photo_dir.'/'.$safename,
                            'thumbnail' => $photo_dir.'/thumb/'.$safename]);
 
@@ -54,12 +53,10 @@ class SettingsController extends Controller
     }
 
     public function update_photo(){
-        if($request->hasFile('photo')) {
-            
+        if($request->hasFile('photo')) 
+        {            
         }
     }
-
-
 
     protected function makePhoto(UploadedFile $file)
     {

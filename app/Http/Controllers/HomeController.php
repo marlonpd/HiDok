@@ -56,6 +56,7 @@ class HomeController extends Controller
 
     public function header()
     {
-        return view('header');
+        $current_dir = getcwd();
+        return view('header', compact('current_dir'));
     }
 }

@@ -33,14 +33,14 @@ class SettingsController extends Controller
     {
         $user = User::findOrFail(Auth::user()->id);
         if ($request->hasFile('photo')) {
-            $current_dir = getcwd();
-            $photo_dir = 'images/photo';
+            $public_path = public_path();
+            $public_path = 'images/photo';
             $fileName = str_random(30);
             $extension = $request->file('photo')->getClientOriginalExtension();
             $safename = $fileName.'.'.$extension;
 
             $request->file('photo')->move($photo_dir, $safename);
-            Image::make($current_dir.'/'.$photo_dir.'/'.$safename)->resize(200, 200)->save($current_dir.'/'.$photo_dir.'/thumb/'.$safename);
+            Image::make($public_path.'/'.$photo_dir.'/'.$safename)->resize(200, 200)->save($public_path.'/'.$photo_dir.'/thumb/'.$safename);
             $user->update(['photo' => $photo_dir.'/'.$safename,
                            'thumbnail' => $photo_dir.'/thumb/'.$safename]);
 

@@ -6,4 +6,5 @@ function json_pretty($str)
                     ->header('Content-Type', "application/json");
 }
 
+
 ?>

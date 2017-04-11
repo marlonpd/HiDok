@@ -27,7 +27,8 @@
             "App\\": "app/"
         },
         "files": [
-            "app/Helpers/JSONHelper.php"
+            "app/Helpers/JSONHelper.php",
+            "mypatient/index.php"
         ]
     },
     "autoload-dev": {

@@ -17,7 +17,7 @@ if($_POST)
    
     try
     {
-        if($userType== 'nurse' || $userType== 'pharmacy' || $userType== 'doctor')
+        if($usertype== 'nurse' || $usertype== 'pharmacy' || $usertype== 'doctor')
         {
             $stmt = $db_con->prepare("SELECT * FROM User WHERE email=:email");
             $stmt->execute(array(":email"=>$user_email));

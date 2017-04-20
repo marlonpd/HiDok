@@ -19,6 +19,8 @@ Route::get('settings', 'SettingsController@index');
 Route::post('settings/update', 'SettingsController@update');
 Route::get('search', 'SearchController@index');
 Route::get('{account_type}/profile/{id}', 'ProfileController@index');
+Route::get('about', 'AboutController@index');
+Route::get('contact', 'ContactController@index');
 
 Route::post('hospital/register', 'Auth\RegisterController@post_register');
 Route::post('laboratory/register', 'Auth\RegisterController@post_register');

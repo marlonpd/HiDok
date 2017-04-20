@@ -103,4 +103,121 @@ $('document').ready(function()
     }
     /* form submit */
 
+
+
+
+     /* validation */
+    $("#register-hospital-form").validate({
+        rules:
+        {
+            name: {
+                required: true,
+                minlength: 3
+            },
+            username: {
+                required: true,
+                minlength: 3,
+                loginRegex: true,
+            },
+            contactnumber: {
+                required: true,
+                minlength: 3,
+                
+            },
+            address: {
+                required: true,
+                minlength: 3,      
+            },
+            password: {
+                required: true,
+                minlength: 8,
+                maxlength: 15
+            },
+            cpassword: {
+                required: true,
+                equalTo: '#password'
+            },
+            email: {
+                required: true,
+                email: true
+            },
+        },
+        messages:
+        {
+            name: "Enter a Valid Name",
+            username: "Enter a Valid Username",
+            password:{
+                required: "Provide a Password",
+                minlength: "Password Needs To Be Minimum of 8 Characters"
+            },
+            email: "Enter a Valid Email",
+            address: {
+                required: "This is a required field!",
+            },
+            contactnumber: {
+                required: "This is a required field!",
+            },
+            cpassword:{
+                required: "Retype Your Password",
+                equalTo: "Password Mismatch! Retype"
+            }
+        },
+        submitHandler: submitFacilityForm
+    });
+    /* validation */
+
+    /* form submit */
+    function submitFacilityForm()
+    {
+        var data = $("#register-hospital-form").serialize();
+
+        $.ajax({
+
+            type : 'POST',
+            url  : '/mypatient/register/register.php',
+            data : data,
+            beforeSend: function()
+            {
+                $("#error").fadeOut();
+                $("#btn-submit").html('<span class="glyphicon glyphicon-transfer"></span> &nbsp; sending ...');
+            },
+            success :  function(data)
+            {
+                if(data==1){
+
+                    $("#error").fadeIn(1000, function(){
+
+
+                        $("#error").html('<div class="alert alert-danger"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp; Sorry email already taken !</div>');
+
+                        $("#btn-submit").html('<span class="glyphicon glyphicon-log-in"></span> &nbsp; Create Account');
+
+                    });
+
+                }
+                else if(data=="registered")
+                {
+                    alert('Successfully registered!!!');
+                    $("#error").html('<div class="alert alert-success"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp; Successfully registered!</div>'); 
+                    $("#btn-submit").html('Signing Up');
+                    setTimeout('$(".form-signin").fadeOut(500, function(){ $(".signin-form").load("successreg.php"); }); ',5000);
+
+                }
+                else{
+
+                    $("#error").fadeIn(1000, function(){
+
+                        $("#error").html('<div class="alert alert-danger"><span class="glyphicon glyphicon-info-sign"></span> &nbsp; '+data+' !</div>');
+
+                        $("#btn-submit").html('<span class="glyphicon glyphicon-log-in"></span> &nbsp; Create Account');
+
+                    });
+
+                }
+            }
+        });
+        return false;
+    }
+    /* form submit */
+
 });

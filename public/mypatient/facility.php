@@ -12,7 +12,7 @@
 		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
         <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
 
-		<title>Admin</title>
+		<title>Create Account</title>
 			<style type="text/css">
     /*
 /* Created by Filipe Pina
@@ -140,31 +140,17 @@ span.input-group-addon i {
 		<div class="container">
 			<div class="row main">
 				<div class="main-login main-center">
-				<h5>Sign up once and watch any of our free demos.</h5>
+				<h5>Sign up</h5>
 					<form id="register-form" class="" method="post" action="#">
 						<div id="error"></div>
-						<div class="form-group">
-							<label for="name" class="cols-sm-2 control-label">Hospital/Clinic</label>
-							<div class="cols-sm-10">
-								<div class="row">
-									<select class="form-control " name="hospital" id="hospital"  placeholder="Enter your hospital">
-                                        <option value="1">Southern Phlippines Medical Center</option>
-                                        <option value="2">Brokenshire</option>
-                                        <option value="3">San Pedro College</option>
-                                        <option value="4">Davao Doctor's Hospital</option>
-                                    </select>  
-                                </div>
-							</div>
-						</div>
 
 						<div class="form-group">
-							<label for="name" class="cols-sm-2 control-label">User type</label>
+							<label for="name" class="cols-sm-2 control-label">Account type</label>
 							<div class="cols-sm-10">
 								<div class="row">
 									<select class="form-control " name="usertype" id="usertype"  placeholder="Enter your hospital">
-                                        <option value="nurse">Nurse</option>
-                                        <option value="pharmacy">Pharmacy</option>
-                                        <option value="doctor">Doctor</option>
+                                        <option value="clinic">Clinic</option>
+                                        <option value="hospital">Hospital</option>
                                     </select>  
                                 </div>
 							</div>
@@ -172,7 +158,7 @@ span.input-group-addon i {
 
 
                         <div class="form-group">
-							<label for="name" class="cols-sm-2 control-label">Your Name</label>
+							<label for="name" class="cols-sm-2 control-label">Name</label>
 							<div class="cols-sm-10">
 								<div class="row">
 									<input type="text" class="form-control btn-block" name="name" id="name"  placeholder="Enter your Name"/>
@@ -180,6 +166,23 @@ span.input-group-addon i {
 							</div>
 						</div>
 
+                        <div class="form-group">
+							<label for="name" class="cols-sm-2 control-label">Contact no.</label>
+							<div class="cols-sm-10">
+								<div class="row">
+									<input type="text" class="form-control btn-block" name="contactnumber" id="contactnumber"  placeholder="Enter your Contact no."/>
+								</div>
+							</div>
+						</div>
+
+                        <div class="form-group">
+							<label for="name" class="cols-sm-2 control-label">Address</label>
+							<div class="cols-sm-10">
+								<div class="row">
+									<input type="text" class="form-control btn-block" name="address" id="address"  placeholder="Enter your Address"/>
+								</div>
+							</div>
+						</div>
 
 						<div class="form-group">
 							<label for="email" class="cols-sm-2 control-label">Your Email</label>
@@ -189,15 +192,6 @@ span.input-group-addon i {
 									
 								</div>
 								<span id="check-e"></span>
-							</div>
-						</div>
-
-						<div class="form-group">
-							<label for="username" class="cols-sm-2 control-label">Username</label>
-							<div class="cols-sm-10">
-								<div class="row">
-									<input type="text" class="form-control btn-block" name="username" id="username"  placeholder="Enter your Username"/>
-								</div>
 							</div>
 						</div>
 

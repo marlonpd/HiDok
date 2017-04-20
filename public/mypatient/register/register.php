@@ -10,42 +10,79 @@ if($_POST)
     $hospital_id     = $_REQUEST['hospital']; //mysql_real_escape_string($_REQUEST['hospital']);
     $password  = $_REQUEST['password']; // mysql_real_escape_string($_REQUEST['password']);
     $joining_date   = date('Y-m-d H:i:s');
-   
+    $contactnumber = $_REQUEST['contactnumber'];
+
     //password_hash see : http://www.php.net/manual/en/function.password-hash.php
     $password   = password_hash( $user_password, PASSWORD_BCRYPT, array('cost' => 11));
    
     try
     {
-        $stmt = $db_con->prepare("SELECT * FROM User WHERE email=:email");
-        $stmt->execute(array(":email"=>$user_email));
-        $count = $stmt->rowCount();
-       
-        if($count==0){
-            $stmt = $db_con->prepare("INSERT INTO User(UserID, Name, Username,HospitalId, UserType , Email, Password) VALUES(:userid,:name,:username,:hospital_id, :usertype, :email, :password)");
-            
-            $stmt->bindParam(":userid",gen_uuid());
-            $stmt->bindParam(":name",$name);
-            $stmt->bindParam(":username",$username);
-            $stmt->bindParam(":usertype",$usertype);
-            $stmt->bindParam(":email",$email);
-            $stmt->bindParam(":password",$password);
-            $stmt->bindParam(":hospital_id",$hospital_id);
-            
+        if($userType== 'nurse' || $userType== 'pharmacy' || $userType== 'doctor')
+        {
+            $stmt = $db_con->prepare("SELECT * FROM User WHERE email=:email");
+            $stmt->execute(array(":email"=>$user_email));
+            $count = $stmt->rowCount();
+        
+            if($count==0){
+                $stmt = $db_con->prepare("INSERT INTO User(UserID, Name, Username,HospitalId, UserType , Email, Password) VALUES(:userid,:name,:username,:hospital_id, :usertype, :email, :password)");
+                
+                $stmt->bindParam(":userid",gen_uuid());
+                $stmt->bindParam(":name",$name);
+                $stmt->bindParam(":username",$username);
+                $stmt->bindParam(":usertype",$usertype);
+                $stmt->bindParam(":email",$email);
+                $stmt->bindParam(":password",$password);
+                $stmt->bindParam(":hospital_id",$hospital_id);
+                
+                if($stmt->execute())
+                {
+                    echo "registered";
+                }
+                else
+                {
+                    echo "Query could not execute !";
+                }
 
-            if($stmt->execute())
-            {
-                echo "registered";
             }
-            else
-            {
-                echo "Query could not execute !";
+            else{
+                echo "1"; //  not available
             }
+
+        }else{
+
+            $stmt = $db_con->prepare("SELECT * FROM Hospitals WHERE email=:email");
+            $stmt->execute(array(":email"=>$user_email));
+            $count = $stmt->rowCount();
+        
+            if($count==0){
+                $stmt = $db_con->prepare("INSERT INTO Hospitals(AccountID, AccountName, ContactNumber,Email,  AccountType,Password,Address) VALUES(:userid, :name,:contactnumber,:email, :usertype,  :password,  :address)");
+                
+                $stmt->bindParam(":userid",gen_uuid());
+                $stmt->bindParam(":name",$name);
+                $stmt->bindParam(":contactnumber",$contactnumber);
+                $stmt->bindParam(":usertype",$usertype);
+                $stmt->bindParam(":email",$email);
+                $stmt->bindParam(":password",$password);
+                $stmt->bindParam(":address",$address);
+                
+                if($stmt->execute())
+                {
+                    echo "registered";
+                }
+                else
+                {
+                    echo "Query could not execute !";
+                }
+
+            }
+            else{
+                echo "1"; //  not available
+            }
+
 
         }
-        else{
 
-            echo "1"; //  not available
-        }
+        
 
     }
     catch(PDOException $e){

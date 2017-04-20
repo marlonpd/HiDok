@@ -159,7 +159,7 @@ span.input-group-addon i {
 											   echo "<option value=" . $row['AccountID']. ">" . $row['AccountName'] . "</option>";
 											}
 
-											mysql_free_result($result);
+											
 										?>
 										
                                     </select>  

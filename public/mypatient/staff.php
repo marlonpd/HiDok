@@ -158,8 +158,7 @@ span.input-group-addon i {
 											foreach ($db_con->query($sql) as $row) {
 											   echo "<option value=" . $row['AccountID']. ">" . $row['AccountName'] . "</option>";
 											}
-
-											
+										
 										?>
 										
                                     </select>  

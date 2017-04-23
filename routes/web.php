@@ -83,10 +83,6 @@ Route::group(['middleware' => ['web'  ]], function () {
 
 	Route::post('/api/rate/post', 'RatingsController@api_rate_post');
 
-
-
-
-
 });
 
 

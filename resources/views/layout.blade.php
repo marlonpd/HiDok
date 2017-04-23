@@ -18,156 +18,16 @@
     <body >
       <div id="app">
      
-               <nav class="navbar navbar-inverse navbar-top">
-                  <div class="container">
-                    <div class="navbar-header">
-                      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                      </button>
-                      <a class="navbar-brand" href="/home"><img src="/images/logo.png" alt="" width="60px;" class="img-rounded img-responsive"><h4>HiDok</h4></a>
-                    </div>
-                    <div id="navbar" class="collapse navbar-collapse">
-                      <ul class="nav navbar-nav">
-                        <li>
-                          <a href="/home">HOME</a>
-                        </li>
-
-                        <li>
-                          <a href="/about">ABOUT</a>
-                        </li>
-
-                        <li>
-                          <a href="/contact">CONTACT</a>
-                        </li>
-
-                           @if (Auth::check())
-                             @if(Auth::user()->is_doctor())
-                                <li><a href="/clinic">CLINICS</a></li>
-                                 <li><a href="/feedback">FEEDBACK</a></li>
-                             @endif
-                          @endif
-
-                        
-
-                      </ul>
-
-                      <ul class="nav navbar-nav pull-right">
-                          @if (Auth::check())
-
-                            <li class="dropdown">
-                              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-search"></i></a>
-                              <ul class="dropdown-menu search-menu" style="padding:12px;">
-                                  <form class="form-inline" action="/search" method="get">
-                                  <select class="form-control pull-left" name="account">
-                                    <option value="doctor">Doctor</option>
-                                    <option value="hospital">Hospital</option>
-                                    <option value="laboratory">Laboratory</option>
-                                    <option value="pharmacy">Pharmacy</option>
-                                  </select>
-                              <button type="submit" class="btn btn-default pull-right"><i class="glyphicon glyphicon-search"></i></button><input class="form-control pull-left" placeholder="Search" type="text" name="name">
-                                  </form>
-                                </ul>
-                            </li>
-                          @endif
-                  
-                        @if (!Auth::check())
-           
-                          <li><a  href="#" data-title="Login" data-toggle="modal" data-target="#login"><i class="fa fa-user" aria-hidden="true"></i>Login</a></li>
-                        @else
-                          <li class="dropdown">
-                              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                  <i class="glyphicon glyphicon-bell"></i>
-                              </a>
-                              <ul class="dropdown-menu notifications notification-menu" role="menu" aria-labelledby="dLabel">
-                                
-                                <div class="notification-heading"><h4 class="menu-title">Notifications</h4><h4 class="menu-title pull-right">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4>
-                                </div>
-                                <li class="divider"></li>
-                              <div class="notifications-wrapper">
-
-                                <a class="content" href="#">  
-                                  <div class="notification-item">
-                                    <h4 class="item-title">Appointment 1 · day ago</h4>
-                                    <p class="item-info">Asyong Salonga requested an appointment</p>
-                                  </div>  
-                                </a>
-
-                                <a class="content" href="#">
-                                  <div class="notification-item">
-                                    <h4 class="item-title">Feedback · day ago</h4>
-                                    <p class="item-info">Nardong Putik gives you a feedback</p>
-                                  </div>
-                                </a>
-
-                                 <a class="content" href="#">
-                                  <div class="notification-item">
-                                    <h4 class="item-title">Rating · day ago</h4>
-                                    <p class="item-info">Baby Ama rated you!</p>
-                                  </div>
-                                </a>
-                                
-
-                              </div>
-                                <li class="divider"></li>
-                                <div class="notification-footer"><h4 class="menu-title">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4></div>
-                              </ul>
-                          </li>
-
-
-
-                          <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <span class="glyphicon glyphicon-user"></span> 
-                                <strong>{{ Auth::user()->firstname }}</strong>
-                                <span class="glyphicon glyphicon-chevron-down"></span>
-                            </a>
-                            <ul class="dropdown-menu account-menu">
-                                <li>
-                                    <div class="navbar-login">
-                                        <div class="row">
-                                            <div class="col-lg-4">
-                                                <p class="text-center">
-                                                    <span class="glyphicon glyphicon-user icon-size"></span>
-                                                </p>
-                                            </div>
-                                            <div class="col-lg-8">
-                                                <p class="text-left"><strong>{{ Auth::user()->fullname() }}</strong></p>
-                                                <p class="text-left small">{{ Auth::user()->email }}</p>
-                                                <p class="text-left">
-                                                    <a href="/settings" class="btn btn-primary btn-block btn-sm">Profile</a>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="divider"></li>
-                                <li>
-                                    <div class="navbar-login navbar-login-session">
-                                        <div class="row">
-                                            <div class="col-lg-12">
-                                                <p>
-                                                    <a href="/logout" class="btn default-btn btn-block">Logout</a>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </li>
-                        @endif
-                       
-           
-                      </ul>
-
-                    </div><!--/.nav-collapse -->
-                  </div>
-                </nav>
-                
+             @include('partials.nav')
               <div class="main-container" >
-                  @yield('content')
+                  <div id="wrapper" class="toggled-2">
+                      @if (Auth::check())
+                        @include('partials.sidebar')
+                      @endif
+                      <div id="page-content-wrapper">
+                        @yield('content')
+                      </div>
+                  </div>
               </div>
    
               @if (!Auth::check())
@@ -185,10 +45,46 @@
 
             <script src="/js/all.js"></script>
             <script type="text/javascript" src="http://www.google.com/jsapi?key=AIzaSyANvZAZmHJVMI8lGIyCU4v-aduI1bhVIsg"></script> 
-        
+       
             @yield('javascripts')
 
             <script type="text/javascript">
+    
+              function initMenu() {
+                $('#menu ul').hide();
+                $('#menu ul').children('.current').parent().show();
+                //$('#menu ul:first').show();
+                $('#menu li a').click(
+                  function() {
+                    var checkElement = $(this).next();
+                    if((checkElement.is('ul')) && (checkElement.is(':visible'))) {
+                      return false;
+                      }
+                    if((checkElement.is('ul')) && (!checkElement.is(':visible'))) {
+                      $('#menu ul:visible').slideUp('normal');
+                      checkElement.slideDown('normal');
+                      return false;
+                      }
+                    }
+                  );
+                }
+              $(document).ready(function() {initMenu();
+                 $("#menu-toggle").click(function(e) {
+                  e.preventDefault();
+
+                  $("#wrapper").toggleClass("toggled");
+              });
+              $("#menu-toggle-2").click(function(e) {
+                  e.preventDefault();
+             
+                  $("#wrapper").toggleClass("toggled-2");
+                  $('#menu ul').hide();
+              });
+          
+              
+              }); 
+               
+
               var main = {
 
                 mounted(){    

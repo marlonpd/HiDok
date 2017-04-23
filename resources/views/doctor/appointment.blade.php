@@ -19,7 +19,7 @@
 
 
 
-                                 <div class="row" v-for="appointment in appointments[{!! $clinic->id !!}]">
+                                 <div class="row" v-for="appointment in appointments['{!! $clinic->id !!}']">
                                         <div class="col-sm-2">
                                             <div class="thumbnail">
                                                 <img class="img-responsive user-photo" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png">

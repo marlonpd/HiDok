@@ -11,6 +11,7 @@ if($_POST)
     $password  = $_REQUEST['password']; // mysql_real_escape_string($_REQUEST['password']);
     $joining_date   = date('Y-m-d H:i:s');
     $contactnumber = $_REQUEST['contactnumber'];
+    $ownner = $_REQUEST['ownner'];
 
     //password_hash see : http://www.php.net/manual/en/function.password-hash.php
     $password   = password_hash( $user_password, PASSWORD_BCRYPT, array('cost' => 11));
@@ -55,7 +56,7 @@ if($_POST)
             $count = $stmt->rowCount();
         
             if($count==0){
-                $stmt = $db_con->prepare("INSERT INTO Hospitals(AccountID, AccountName, ContactNumber,Email,  AccountType,Password,Address) VALUES(:userid, :name,:contactnumber,:email, :usertype,  :password,  :address)");
+                $stmt = $db_con->prepare("INSERT INTO Hospitals(AccountID, AccountName, ContactNumber,Email,  AccountType,Password,Address, Owner) VALUES(:userid, :name,:contactnumber,:email, :usertype,  :password,  :address , :owner)");
                 
                 $stmt->bindParam(":userid",gen_uuid());
                 $stmt->bindParam(":name",$name);

@@ -174,6 +174,7 @@ span.input-group-addon i {
                                         <option value="nurse">Nurse</option>
                                         <option value="pharmacy">Pharmacy</option>
                                         <option value="doctor">Doctor</option>
+										<option value="midwife">Midwife</option>
                                     </select>  
                                 </div>
 							</div>

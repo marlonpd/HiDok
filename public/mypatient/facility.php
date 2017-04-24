@@ -140,7 +140,7 @@ span.input-group-addon i {
 		<div class="container">
 			<div class="row main">
 				<div class="main-login main-center">
-				<h5>Sign up</h5>
+				<h5>Register your hospital/clinic here!</h5>
 					<form id="register-form" class="" method="post" action="#">
 						<div id="error"></div>
 
@@ -158,10 +158,19 @@ span.input-group-addon i {
 
 
                         <div class="form-group">
-							<label for="name" class="cols-sm-2 control-label">Name</label>
+							<label for="name" class="cols-sm-2 control-label">Name of Hospital</label>
 							<div class="cols-sm-10">
 								<div class="row">
-									<input type="text" class="form-control btn-block" name="name" id="name"  placeholder="Enter your Name"/>
+									<input type="text" class="form-control btn-block" name="name" id="name"  placeholder="Enter the name of hospital"/>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="name" class="cols-sm-2 control-label">Owner's name</label>
+							<div class="cols-sm-10">
+								<div class="row">
+									<input type="text" class="form-control btn-block" name="owner" id="owner"  placeholder="Enter owner's name"/>
 								</div>
 							</div>
 						</div>

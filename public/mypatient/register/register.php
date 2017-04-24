@@ -11,7 +11,7 @@ if($_POST)
     $password  = $_REQUEST['password']; // mysql_real_escape_string($_REQUEST['password']);
     $joining_date   = date('Y-m-d H:i:s');
     $contactnumber = $_REQUEST['contactnumber'];
-    $ownner = $_REQUEST['ownner'];
+    $owner = $_REQUEST['owner'];
 
     //password_hash see : http://www.php.net/manual/en/function.password-hash.php
     $password   = password_hash( $user_password, PASSWORD_BCRYPT, array('cost' => 11));
@@ -65,6 +65,7 @@ if($_POST)
                 $stmt->bindParam(":email",$email);
                 $stmt->bindParam(":password",$password);
                 $stmt->bindParam(":address",$address);
+                $stmt->bindParam(":owner", $owner);
                 
                 if($stmt->execute())
                 {

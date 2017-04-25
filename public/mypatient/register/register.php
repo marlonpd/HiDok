@@ -14,7 +14,7 @@ if($_POST)
     $owner = $_REQUEST['owner'];
 
     //password_hash see : http://www.php.net/manual/en/function.password-hash.php
-    $password   = password_hash( $user_password, PASSWORD_BCRYPT, array('cost' => 11));
+    $password   = password_hash( $password, PASSWORD_BCRYPT, array('cost' => 11));
    
     try
     {
@@ -65,7 +65,7 @@ if($_POST)
                 $stmt->bindParam(":email",$email);
                 $stmt->bindParam(":password",$password);
                 $stmt->bindParam(":address",$address);
-                $stmt->bindParam(":owner", $owner);
+                $stmt->bindParam(":owner", $owner); 
                 
                 if($stmt->execute())
                 {

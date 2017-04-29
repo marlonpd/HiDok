@@ -65,14 +65,11 @@ class ProfileController extends Controller
                                           ->where('doctor_id', '=', $doctor_id)
                                           ->first();
 
+            $doctor_rate['current_user_rating'] = 0;
 
             if($current_user_rating)    
             {                          
                 $doctor_rate['current_user_rating'] = $current_user_rating->rate;
-            }
-            else
-            {
-                $doctor_rate['current_user_rating'] = 0;
             }
         	
         }

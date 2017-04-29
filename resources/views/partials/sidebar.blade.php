@@ -19,7 +19,7 @@
                 <a href="/healthistory"><span class="fa-stack fa-lg pull-left"><i class="fa fa-heartbeat fa-stack-1x "></i></span>My Health History</a>
             </li>
             <li>
-                <a href="/connection"><span class="fa-stack fa-lg pull-left"><i class="fa fa-user-md fa-stack-1x "></i></span>Connections</a>
+                <a href="/doctors"><span class="fa-stack fa-lg pull-left"><i class="fa fa-user-md fa-stack-1x "></i></span>Connections</a>
             </li>
             <li>
                 <a href="/appointment"><span class="fa-stack fa-lg pull-left"><i class="fa fa-address-book fa-stack-1x "></i></span>Appointment</a>
@@ -31,7 +31,7 @@
                 <a href="/appointment"> <span class="fa-stack fa-lg pull-left"><i class="fa fa-address-book fa-stack-1x "></i></span>Appointment</a>
             </li>
             <li>
-                <a href="/clinics"><span class="fa-stack fa-lg pull-left"><i class="fa fa-hospital-o fa-stack-1x "></i></span>Clinics</a>
+                <a href="/clinic"><span class="fa-stack fa-lg pull-left"><i class="fa fa-hospital-o fa-stack-1x "></i></span>Clinics</a>
             </li>
             <li>
                 <a href="/patients"><span class="fa-stack fa-lg pull-left"><i class="fa fa-users fa-stack-1x "></i></span>Patients</a>

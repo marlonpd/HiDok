@@ -1,17 +1,30 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\doctor;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\DoctorPatient;
 use Illuminate\Support\Facades\Auth;
+use App\DoctorPatient;
+
 
 class DoctorPatientController extends Controller
 {
     public function __construct()
     {
         $this->middleware(['auth']);
+    }
+
+    public function index(Request $request)
+    {
+        if(Auth::user()->is_patient())
+    	{
+            return view('patient/doctors');
+        }
+        else if(Auth::user()->is_doctor())
+        {
+            return view('doctor/patients');
+        }
     }
 
     ///api/patient/remove/post
@@ -29,27 +42,109 @@ class DoctorPatientController extends Controller
         }
     }
 
-    //api/patients/my/get 
-    public function api_patients_my_get()
+    //api/user/patients/get 
+    public function api_user_patients_get(Request $request)
     {
     	if(Auth::user()->is_doctor())
     	{
-    		$patients = Patient::where('doctor_id','=' , Auth::user()->id)
-    						   ->get();
+            $lastdate= $request->input('lastdate');
 
-  			return json_pretty(['patients' => $patients]);
+            if($lastdate == '')
+            {
+                $patients = DoctorPatient::with('patient')
+                                         ->where('doctor_id','=' , Auth::user()->id)
+                                         ->take(10)
+                                         ->orderBy('created_at', 'ASC')
+                                         ->get();
+                
+                
+            }
+            else
+            {
+                $patients = DoctorPatient::with('patient')
+                                         ->where('doctor_id','=' , Auth::user()->id)
+                                         ->where('created_at', '>' , $lastdate)
+                                         ->take(10)
+                                         ->orderBy('created_at', 'ASC')
+                                         ->get();
+            }
+            $remaining = 0;
+            $lastitem = $patients->last();
+            
+            if($lastitem)
+            {
+                $remaining = DoctorPatient::where('doctor_id','=' , Auth::user()->id)
+                                          ->where('created_at', '>' , $lastitem->created_at)
+                                          ->count();
+            }                      
+
+  			return json_pretty(['patients'  => $patients ,
+                                'remaining' => $remaining,
+                            ]);
     	}
     }
 
-    //api/doctors/my/get
-    public function api_doctors_my_get()
+    //api/user/doctors/get
+    public function api_user_doctors_get(Request $request)
     {
     	if(Auth::user()->is_patient())
     	{
-    		$doctors = Patient::where('patient_id','=' , Auth::user()->id)
-    						   ->get();
+            $lastdate= $request->input('lastdate');
 
-  			return json_pretty(['doctors' => $doctors]);
+            if($lastdate == '')
+            {
+                $doctors = DoctorPatient::with('doctor')
+                                         ->where('patient_id','=' , Auth::user()->id)
+                                         ->take(10)
+                                         ->orderBy('created_at', 'ASC')
+                                         ->get();
+                
+                
+            }
+            else
+            {
+                $doctors = DoctorPatient::with('doctor')
+                                         ->where('patient_id','=' , Auth::user()->id)
+                                         ->where('created_at', '>' , $lastdate)
+                                         ->take(10)
+                                         ->orderBy('created_at', 'ASC')
+                                         ->get();
+            }
+            $remaining = 0;
+            $lastitem = $doctors->last();
+            
+            if($lastitem)
+            {
+                $remaining = DoctorPatient::where('patient_id','=' , Auth::user()->id)
+                                          ->where('created_at', '>' , $lastitem->created_at)
+                                          ->count();
+            }                      
+
+  			return json_pretty(['doctors'  => $doctors ,
+                                'remaining' => $remaining,
+                            ]);
+    	}
+    }
+
+    public function api_request_connect()
+    {
+        if(Auth::user()->is_patient())
+    	{
+    		$doctors = DoctorPatient::where('patient_id','=' , Auth::user()->id)
+    						        ->get();
+            
+            if($doctors)
+            {
+                return json_pretty(['status' => 'error']);
+            }
+            else
+            {
+                //$patient = New 
+
+                //return json_pretty(['status' => 'success']);
+            }
+
+  			
     	}
     }
 }

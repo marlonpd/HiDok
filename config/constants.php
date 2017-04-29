@@ -8,19 +8,23 @@ return ['constants' =>
          'religion',
          'specialization',
          'appointment_status',
+		 'images',
         ],
+		'images' => [
+				'default_photo' => '/images/default_avatar_male.jpg',
+		],
 		'account_type' => [
-				'patient' => 0,
-				'doctor'  => 1,
-				'hospital' => 2,
+				'patient'    => 0,
+				'doctor'     => 1,
+				'hospital'   => 2,
 				'laboratory' => 3,
-				'pharmacy' => 4,
+				'pharmacy'   => 4,
 		],
 		'account_type_label' => [
-				'patient' => 'Patient',
-				'doctor'  => 'Doctor',
-				'hospital' => 'Hospital',
-				'pharmacy' => 'Pharmacy',
+				'patient'    => 'Patient',
+				'doctor'     => 'Doctor',
+				'hospital'   => 'Hospital',
+				'pharmacy'   => 'Pharmacy',
 				'laboratory' => 'Laboratory',
 		],
 		'account_type_rev' => [
@@ -128,9 +132,9 @@ return ['constants' =>
 			'Vascular surgery',
 		],
 		'appointment_status' => [
-			'waiting'   => 0,
-			'confirm' => 1,
-			'consult' => 2,
+			'waiting'        => 0,
+			'confirm'        => 1,
+			'consult'        => 2,
 		],
 ];
 

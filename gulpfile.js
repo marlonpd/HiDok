@@ -30,7 +30,8 @@ elixir(mix => {
             'libs/ladda/spin.min.js',
             'libs/ladda/ladda.min.js',
             'libs/bxslider/jquery.bxslider.js',
-            'libs/fr-star/Fr.star.js'
+            'libs/fr-star/Fr.star.js',
+            '../../../node_modules/vue-infinite-scroll/vue-infinite-scroll.js',
     	]);
     mix.styles([
  //           '../css/bootstrap/bootstrap.min.css', 

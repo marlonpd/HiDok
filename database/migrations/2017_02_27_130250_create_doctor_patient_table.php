@@ -18,6 +18,7 @@ class CreateDoctorPatientTable extends Migration
             $table->primary('id');
             $table->char('patient_id',36);
             $table->char('doctor_id',36);
+            $table->tinyInteger('status')->default(0); // 0- sent not yet approved , 1- accepted
             $table->timestamps();
         });
     }

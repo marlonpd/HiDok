@@ -30,6 +30,10 @@
                  <span class="row">
                    <a type="button" class="btn default-btn btn-block " href="#" data-title="Feedback" data-toggle="modal" data-target="#create-feedback-form">Write a feedback</a>
                  </span>
+                 
+                 <span class="row">
+                   <a type="button" class="btn default-btn btn-block " href="#" data-title="Feedback" data-toggle="modal" data-target="#ask-connect-form" @click="askConnect();">Connect+</a>
+                 </span>
 
                  <div class="row">
                    <h2 class="header-title">Feedback</h2>
@@ -175,6 +179,34 @@
             },
 
             methods:{
+                askConnect: function(){
+                  swal({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                  }).then(function () {
+                    swal(
+                      'Deleted!',
+                      'Your file has been deleted.',
+                      'success'
+                    )
+                  })
+                },
+
+                requestConnect: function(){
+                    var data = {doctor_id : '{!! $user->id !!}' }
+                    this.$http.post('/api/request/connect/post', data, function(data){
+                      if(data['status'] == 'success'){
+                        
+                      }else{
+                        swal("Error","Please try again!", "error");
+                      }
+                    });
+                }
                 
 
             }

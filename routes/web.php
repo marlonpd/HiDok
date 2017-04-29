@@ -63,6 +63,9 @@ Route::group(['middleware' => ['web'  ]], function () {
 	Route::post('/api/clinic/update/post','doctor\ClinicController@update');
 	Route::get('/api/clinics/get/{id}','doctor\ClinicController@api_clinics_get');
 	Route::post('/api/clinic/delete/post','doctor\ClinicController@destroy');
+	Route::get('/patients', 'doctor\DoctorPatientController@index');
+	Route::post('/api/request/connect/post' , 'doctor\DoctorPatientController@api_request_connect');
+	Route::get('/doctors', 'doctor\DoctorPatientController@index');
 
 	//doctor
 	Route::get('/patient/itr/{id}','ITRController@patient_itr');
@@ -73,13 +76,13 @@ Route::group(['middleware' => ['web'  ]], function () {
 	Route::post('/api/itr/dx/post', 'ITRController@api_itr_dx_post');
 	Route::post('/api/itr/treatment/post', 'ITRController@api_itr_treatment_post');
 	Route::get('/print/dx/{id}','ITRController@print_dx');
-
+	
 	//patient 
 	Route::get('/itr/{id}','ITRController@patient_itr');
 
-	Route::get('/api/patient/my/get','DoctorPatient@api_patients_my_get');
-	Route::get('/api/doctors/my/get','DoctorPatient@api_doctors_my_get');
-	Route::post('/api/patient/remove/post','DoctorPatient@api_remove_patient_post');
+	Route::get('/api/user/patients/get','doctor\DoctorPatientController@api_user_patients_get');
+	Route::get('/api/user/doctors/get','doctor\DoctorPatientController@api_user_doctors_get');
+	Route::post('/api/patient/remove/post','doctor\DoctorPatientController@api_remove_patient_post');
 
 	Route::post('/api/rate/post', 'RatingsController@api_rate_post');
 

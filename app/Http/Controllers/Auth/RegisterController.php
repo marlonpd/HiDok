@@ -78,12 +78,13 @@ class RegisterController extends Controller
     {
         return User::create([
          //   'id'    => Uuid::generate(),
-            'lastname' => $data['lastname'],
-            'firstname' => $data['firstname'],
-            'middlename' => $data['middlename'],
-            'email' => $data['email'],
+            'lastname'     => $data['lastname'],
+            'firstname'    => $data['firstname'],
+            'middlename'   => $data['middlename'],
+            'email'        => $data['email'],
             'account_type' => $data['account_type'],
-            'password' => bcrypt($data['password']),
+            'password'     => bcrypt($data['password']),
+            'photo'        => config('constants.default_photo'),
         ]);
     }
 

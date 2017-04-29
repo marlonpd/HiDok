@@ -75,6 +75,9 @@ const app = new Vue({
       constants : {},
       authUser : {},   
       appointmentITR : {},
+      userPatients : {},
+      userDoctors : {},
+      defaultPhoto : '',
     }
   },
 
@@ -203,11 +206,17 @@ const app = new Vue({
     },
 
     fetchConstants: function(){
-      var keys= 'account_type=1&account_type_label=1&account_type_rev=1&gender=1&religion=1&specialization=1&appointment_status=1';
+      var keys= 'images=1&account_type=1&account_type_label=1&account_type_rev=1&gender=1&religion=1&specialization=1&appointment_status=1';
       this.$http.get('/api/constants/get?'+keys, function(data){
         this.constants = data['constants'];
+        this.defaultPhoto = this.constants['images']['default_photo'];
       });
     },
+
+
+
+
+
 
   },
 });

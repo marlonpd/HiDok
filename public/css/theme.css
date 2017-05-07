@@ -807,3 +807,8 @@ h4.name-title{
 .loadmore-container{
     text-align: center;
 }
+
+.btn-submit-primary{
+   margin: auto;
+   width: 30%;
+}

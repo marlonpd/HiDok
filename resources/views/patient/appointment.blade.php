@@ -2,7 +2,14 @@
 
 @section('content')
 <div class="container">
-    <div class="content-header">Appointment</div>
+    
+    <div class="panel panel-default">
+    <div class="panel-heading">Appointment</div>
+    <div class="panel-body">
+
+
+
+
      <div class="row" v-for="appointment in appointments">
         <div class="col-sm-2">
             <div class="thumbnail">
@@ -18,10 +25,11 @@
             </div>
             <div class="panel-body">
                 @{{ appointment.appointment_date }}
-            </div><!-- /panel-body -->
-            <div class="panel-footer">
+                <br>
                 Doctor's note : @{{ appointment.note }}
-            </div><!-- /panel panel-footer -->
+
+            </div><!-- /panel-body -->
+
 
             </div><!-- /panel panel-default -->
         </div><!-- /col-sm-5 -->
@@ -44,6 +52,9 @@
         <!-- /col-sm-5 -->
     </div>   
 
+
+</div>
+</div>
 </div>
 
 <patient-re-schedule :appointment="editAppointment" ></patient-re-schedule>

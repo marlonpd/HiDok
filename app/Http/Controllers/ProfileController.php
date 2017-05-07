@@ -7,6 +7,7 @@ use App\User;
 use App\Clinic;
 use App\Ratings;
 use Illuminate\Support\Facades\Auth;
+use Image;
 
 class ProfileController extends Controller
 {
@@ -17,7 +18,7 @@ class ProfileController extends Controller
 	 */
     public function __construct()
     {
-      // $this->middleware('auth');
+       $this->middleware('auth');
     }
 
     /**
@@ -76,4 +77,68 @@ class ProfileController extends Controller
 
         return $doctor_rate;
     }
+
+
+    //'/api/update/profile/post'
+    public function api_update_profile_post(Request $request)
+    {
+        $user = User::findOrFail(Auth::user()->id);
+        if ($request->hasFile('photo')) {
+            $public_path = public_path();
+            $photo_dir = 'images/photo';
+            $fileName = str_random(30);
+            $extension = $request->file('photo')->getClientOriginalExtension();
+            $safename = $fileName.'.'.$extension;
+
+            $request->file('photo')->move($photo_dir, $safename);
+            Image::make($public_path.'/'.$photo_dir.'/'.$safename)->resize(200, 200)->save($public_path.'/'.$photo_dir.'/thumb/'.$safename);
+            $user->update(['photo' => $photo_dir.'/'.$safename,
+                           'thumbnail' => $photo_dir.'/thumb/'.$safename]);
+        }
+
+       
+        $user->update($request->all());       
+
+        if($user)
+        {
+            return json_pretty(['status' => 'success',
+                                'user'   => $user,
+                              ]);
+        }
+        else
+        {
+            return json_pretty(['status' => 'error']);
+        }
+    }
+
+    public function api_upload_user_photo(Request $request)
+    {
+        $user = User::findOrFail(Auth::user()->id);
+        if ($request->hasFile('photo')) 
+        {
+            $public_path = public_path();
+            $photo_dir = 'images/photo';
+            $fileName = str_random(30);
+            $extension = $request->file('photo')->getClientOriginalExtension();
+            $safename = $fileName.'.'.$extension;
+
+            $request->file('photo')->move($photo_dir, $safename);
+            Image::make($public_path.'/'.$photo_dir.'/'.$safename)->resize(200, 200)->save($public_path.'/'.$photo_dir.'/thumb/'.$safename);
+            $user->update(['photo' => $photo_dir.'/'.$safename,
+                           'thumbnail' => $photo_dir.'/thumb/'.$safename]);
+
+            if($user)
+            {
+                return json_pretty(['status' => 'success',
+                                    'user'   => $user,
+                                ]);
+            }
+            else
+            {
+                return json_pretty(['status' => 'error']);
+            }
+        }
+    }
+
+
 }

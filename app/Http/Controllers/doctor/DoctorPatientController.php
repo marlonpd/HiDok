@@ -48,6 +48,7 @@ class DoctorPatientController extends Controller
     	if(Auth::user()->is_doctor())
     	{
             $lastdate= $request->input('lastdate');
+            
 
             if($lastdate == '')
             {
@@ -90,6 +91,7 @@ class DoctorPatientController extends Controller
     	if(Auth::user()->is_patient())
     	{
             $lastdate= $request->input('lastdate');
+            $searchkey = $request->input('searchkey');
 
             if($lastdate == '')
             {
@@ -99,6 +101,8 @@ class DoctorPatientController extends Controller
                                          ->orderBy('created_at', 'ASC')
                                          ->get();
                 
+                /*Person::join('phoneboookentry', 'person.id', '=', 'phoneboookentry.person_id')
+                        `                    ->get('person.*');*/
                 
             }
             else

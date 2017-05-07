@@ -4,7 +4,15 @@
 
 <div class="container">
 
-        <h4>Clinics</h4>
+
+        <div class="row">
+
+        <div class="panel panel-default">
+        <div class="panel-heading">Clinics</div>
+
+        <div class="panel-body">
+
+
 
         <button class="btn btn-primary btn-default" @click="newClinic()" data-title="Create" data-toggle="modal" data-target="#create-clinic-form" ><i class="fa fa-pencil-square-o fa-1" aria-hidden="true"></i>Create</button>
 
@@ -52,6 +60,9 @@
                 
             </div> <!-- end table-responsive --> 
 
+    </div>
+    </div>
+    </div>
 </div>
 
 <create-clinic-form :clinics="clinics"></create-clinic-form>

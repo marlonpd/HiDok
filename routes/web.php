@@ -66,6 +66,7 @@ Route::group(['middleware' => ['web'  ]], function () {
 	Route::get('/patients', 'doctor\DoctorPatientController@index');
 	Route::post('/api/request/connect/post' , 'doctor\DoctorPatientController@api_request_connect');
 	Route::get('/doctors', 'doctor\DoctorPatientController@index');
+	Route::post('/api/upload/user/photo', 'ProfileController@api_upload_user_photo');
 
 	//doctor
 	Route::get('/patient/itr/{id}','ITRController@patient_itr');
@@ -76,6 +77,7 @@ Route::group(['middleware' => ['web'  ]], function () {
 	Route::post('/api/itr/dx/post', 'ITRController@api_itr_dx_post');
 	Route::post('/api/itr/treatment/post', 'ITRController@api_itr_treatment_post');
 	Route::get('/print/dx/{id}','ITRController@print_dx');
+	Route::post('/api/update/profile/post' , 'ProfileController@api_update_profile_post');
 	
 	//patient 
 	Route::get('/itr/{id}','ITRController@patient_itr');

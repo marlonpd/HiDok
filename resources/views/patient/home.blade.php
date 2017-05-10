@@ -2,44 +2,33 @@
 
 @section('content')
 <div class="container">
-    <div id="exTab2" class="col-md-12 col-md-offset-0 home-tabs"> 
-        <ul class="nav nav-tabs">
-          <li class="active">
-            <a href="#1" data-toggle="tab">PROFILE</a>
-          </li>
-          <li class=""><a href="#2" data-toggle="tab">APPOINTMENTS</a>
-          </li>
-          <li class=""><a href="#3" data-toggle="tab">MY HEALTH HISTORY</a>
-          </li>
-        </ul>
-        <div class="tab-content ">
-          <div class="tab-pane active" id="1">  
-              <patient-profile-form :constants="constants" :authUser="authUser"></patient-profile-form>
-          </div>
-          <div class="tab-pane" id="2">
-               @include('patient.partials.appointment')
-          </div>
-          <div class="tab-pane" id="3">
-               @include('patient.partials.itr')
-          </div>
-        </div>
-  </di>
+    <div class="row">
+           <div class="panel panel-default">
+                <div class="panel-heading">Home</div>
+                <div class="panel-body">
+                    test
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                </div>
+           </div>     
+    </div>
 </div>
 @endsection
 
 @section('javascripts')
     <script>
 
-        $( function() {
-            $( "#accordion" ).accordion();
-        });
 
         var childMixin = {
             mounted() {},
 
             created: function() {
-                this.fetchAllAppointments();
-                this.fetchPatientITR(0); 
             },
 
             data(){

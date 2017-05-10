@@ -7,7 +7,7 @@
               <div class="col-md-3 pull-left">
                 
                 <div class="row" align="center"> 
-                  <img alt="User Pic" src="{{$user->thumbnail}}" class="img-circle img-responsive"> 
+                  <img alt="User Pic" src="/{{$user->thumbnail}}" class="img-circle img-responsive"> 
                 </div>
                  <span  class="row"> <h4 class="name-title">{{ $user->fullname() }} </h4>
                   <span > {{$user->specialization}}</span>

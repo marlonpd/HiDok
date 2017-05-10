@@ -16,13 +16,10 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-4">
-                            <img v-if="patient.patient.thumbnail != ''" :src="patient.patient.thumbnail" class="img-responsive user-photo">
-                            <div v-else>
-                                <img :src="defaultPhoto"  class="img-responsive user-photo">
-                            </div>
+                            <img  :src="patient.patient.thumbnail" class="img-responsive user-photo thumb">
                         </div>
                         <div class="col-md-8">
-                            <h6><a :href="'/profile/'+patient.id"> @{{ patient.patient.firstname }} @{{ patient.patient.lastname }}</a></h6>
+                            <h6><a :href="'/patient/profile/'+patient.patient.id"> @{{ patient.patient.firstname }} @{{ patient.patient.lastname }}</a></h6>
                             <p>@{{ patient.created_at}}
                             <p style="font-size: 12px;">Web Dev</p>
                             <button class="btn btn-primary btn-xs">

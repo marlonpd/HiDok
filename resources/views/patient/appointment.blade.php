@@ -104,13 +104,10 @@
                 reschedAppointment : function(appointment, event){
                     event.preventDefault();
                     this.editAppointment = appointment;
-
                 },
 
                 deleteAppointment : function(appointment, event){
                     event.preventDefault();
-
-
                     var self = this; 
                     var thisAppointment = appointment;
 
@@ -138,8 +135,6 @@
                             this.fetchScheduleAppointment(thisAppointment.id);
                           }
                         });
-             
-
                       }
                       else
                       {

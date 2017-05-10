@@ -28,14 +28,26 @@ class ProfileController extends Controller
      */
     public function index($account_type,$id)
     {	
-    	$user = User::findOrFail($id);
-        $user['clinic'] = Clinic::where('doctor_id', '=', $id)
-                                ->where('default_address', '=', 1)
-                                ->first();   
+        if($account_type == config('constants.account_type_rev.1'))
+        {
+            $user = User::findOrFail($id);
+            $user['clinic'] = Clinic::where('doctor_id', '=', $id)
+                                    ->where('default_address', '=', 1)
+                                    ->first();   
 
-        $doctor_rate = $this->get_doctor_ratings($id);
-    
-        return view($account_type.'/profile', compact('user', 'doctor_rate'));
+            $doctor_rate = $this->get_doctor_ratings($id);
+        
+            return view($account_type.'/profile', compact('user', 'doctor_rate'));
+        }
+        elseif($account_type == config('constants.account_type_rev.0'))
+        {
+            $user = User::findOrFail($id);        
+            return view($account_type.'/profile', compact('user'));
+        }
+        else
+        { 
+            return "ongoing!!".config('constants.account_type_rev.0');
+        }
     }
 
     public function get_doctor_ratings($doctor_id)
@@ -85,7 +97,7 @@ class ProfileController extends Controller
         $user = User::findOrFail(Auth::user()->id);
         if ($request->hasFile('photo')) {
             $public_path = public_path();
-            $photo_dir = 'images/photo';
+            $photo_dir = '/images/photo';
             $fileName = str_random(30);
             $extension = $request->file('photo')->getClientOriginalExtension();
             $safename = $fileName.'.'.$extension;

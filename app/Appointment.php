@@ -13,7 +13,7 @@ class Appointment extends Model
     public $incrementing = false;
     private static $uuidOptimization = true;
 
-    protected $table = "appointment";
+    protected $table = "appointments";
 
     protected $fillable = ['clinic_id','doctor_id', 'patient_id' , 'appointment_date' ,'re_schedule_by_id' ,'note' ,'confirmed'];
 

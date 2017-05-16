@@ -1,5 +1,5 @@
 
-        <div class="col-md-12 col-md-offset-0">
+
             <div class="panel panel-default">
                 <div class="panel-heading">Individual Treatment Record</div>
 
@@ -47,7 +47,6 @@
                     </div>
                 </div>
             </div>
-        </div>
    
 @section('javascripts')
     <script>

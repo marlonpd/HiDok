@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+
             <div class="panel panel-default">
                 <div class="panel-heading">Individual Treatment Record</div>
 
@@ -174,7 +174,7 @@
 
                 </div>
             </div>
-        </div>
+        
     </div>
 </div>
 
@@ -192,11 +192,22 @@
             $( "#accordion" ).accordion();
         });
 
+        var inputOptions = new Promise(function (resolve) {
+            setTimeout(function () {
+                resolve({
+                '#ff0000': 'Red',
+                '#00ff00': 'Green',
+                '#0000ff': 'Blue'
+                })
+            }, 2000)
+        });
+
         var childMixin = {
 
             mounted(){
                     
             },
+            
             created: function() {    
                 this.fetchPatientITR(0); 
             },

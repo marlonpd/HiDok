@@ -812,3 +812,11 @@ h4.name-title{
    margin: auto;
    width: 30%;
 }
+
+.entry:not(:first-of-type){
+    margin-top: 10px;
+}
+
+.btn-side{
+    font-size: 14px!important;
+}

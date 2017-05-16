@@ -8,6 +8,9 @@ window.VueRouter = require('vue-router');
 var VueResource = require('vue-resource-2');
 Vue.use(VueResource);
 
+import Vue2Filters from 'vue2-filters'
+ 
+Vue.use(Vue2Filters)
 
 //var VueSelect2 = require('vue2-select2');
 //Vue.use(VueSelect2);
@@ -58,6 +61,12 @@ Vue.component('diagnosis-form', require('./components/DiagnosisForm.vue'));
 Vue.component('treatment-form', require('./components/TreatmentForm.vue'));
 Vue.component('patient-profile-form', require('./components/PatientProfileForm.vue'));
 Vue.component('doctor-profile-form', require('./components/DoctorProfileForm.vue'));
+Vue.component('chief-complaint-set', require('./components/itr/ChiefComplaintSet.vue'));
+Vue.component('vital-signs-set', require('./components/itr/VitalSignsSet.vue'));
+Vue.component('diagnosis-set', require('./components/itr/DiagnosisSet.vue'));
+Vue.component('treatment-set', require('./components/itr/TreatmentSet.vue'));
+Vue.component('add-symptoms-form', require('./components/itr/AddSymptomsForm.vue'));
+
 
 
 const app = new Vue({
@@ -206,7 +215,7 @@ const app = new Vue({
     },
 
     fetchConstants: function(){
-      var keys= 'images=1&account_type=1&account_type_label=1&account_type_rev=1&gender=1&religion=1&specialization=1&appointment_status=1';
+      var keys= 'path=1&images=1&account_type=1&account_type_label=1&account_type_rev=1&gender=1&religion=1&specialization=1&appointment_status=1';
       this.$http.get('/api/constants/get?'+keys, function(data){
         this.constants = data['constants'];
         this.defaultPhoto = this.constants['images']['default_photo'];

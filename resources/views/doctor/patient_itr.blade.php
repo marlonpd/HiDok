@@ -3,11 +3,12 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
                 <div class="panel-heading">Individual Treatment Record</div>
 
                 <div class="panel-body">
+
+                    <a class="btn btn-primary btn-default" @click="newConsultaion()" href="#" ><i class="fa fa-pencil-square-o fa-1" aria-hidden="true"></i>Create</a>
 
                     <div id="accordion">
                       
@@ -201,7 +202,7 @@
 
                 </div>
             </div>
-        </div>
+        
     </div>
 </div>
 
@@ -215,17 +216,15 @@
 
 @section('javascripts')
     <script>
-        $( function() {
-            $( "#accordion" ).accordion();
-        });
+
 
         var childMixin = {
 
             mounted(){
-                    
             },
+
             created: function() {    
-                this.fetchPatientITR({!! $user->id !!}); 
+                this.fetchPatientITR('{!! $user->id !!}'); 
             },
 
 
@@ -248,9 +247,38 @@
 
                   this.$http.get('/api/patient/itr/get/'+id, function(data){
                     this.appointmentITR = data['appointment_itr'];
-        // /            alert(JSON.stringify(data['appointment_itr']['1']));
                   });
                 },
+
+                newConsultaion: function(patientId){
+                    var inputOptions = new Promise(function (resolve) {
+                    setTimeout(function () {
+                        resolve({
+                        '0': 'Checkup',
+                        '1': 'Admit',
+                        })
+                    }, 1000)
+                    })
+
+                    swal({
+                    title: 'Select consultaion type',
+                    input: 'radio',
+                    inputOptions: inputOptions,
+                    confirmButtonText: 'Create',
+                    inputValidator: function (result) {
+                        return new Promise(function (resolve, reject) {
+                        if (result) {
+                            resolve()
+                        } else {
+                            reject('You need to select something!')
+                        }
+                        })
+                    }
+                    }).then(function (result) {
+                        window.location = '/itr/create/'+result+'/'+'{!! $user->id !!}';
+                    })
+                   
+                }
 
             }
 

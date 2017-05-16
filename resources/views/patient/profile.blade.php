@@ -18,6 +18,10 @@
                     <a type="button" class="btn default-btn btn-block" href="/itr/{{ $user->id }}">Individual Treatment Record</a>
                  </span>
 
+                 <span class="row">
+                    <a type="button" class="btn default-btn btn-block" @click="newConsultaion()" href="#">New Consultation</a>
+                 </span>
+
                  
 
                  
@@ -129,6 +133,36 @@
                         swal("Error","Please try again!", "error");
                       }
                     });
+                },
+
+                newConsultaion: function(){
+                    var inputOptions = new Promise(function (resolve) {
+                    setTimeout(function () {
+                        resolve({
+                        '0': 'Checkup',
+                        '1': 'Admit',
+                        })
+                    }, 1000)
+                    })
+
+                    swal({
+                    title: 'Select consultaion type',
+                    input: 'radio',
+                    confirmButtonText: 'Create',
+                    inputOptions: inputOptions,
+                    inputValidator: function (result) {
+                        return new Promise(function (resolve, reject) {
+                        if (result) {
+                            resolve()
+                        } else {
+                            reject('You need to select something!')
+                        }
+                        })
+                    }
+                    }).then(function (result) {
+                        window.location = '/itr/create/'+result+'/'+'{!! $user->id !!}';
+                    })
+                   
                 }
                 
 

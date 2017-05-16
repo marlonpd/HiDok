@@ -9,7 +9,13 @@ return ['constants' =>
          'specialization',
          'appointment_status',
 		 'images',
+		 'individual_treatment_record_set',
+		 'path',
         ],
+		'path' => [
+			'user_photo' => '/images/photo',
+			'user_photo_thumb' => '/images/photo/thumb',
+		],
 		'images' => [
 				'default_photo' => '/images/default_avatar_male.jpg',
 		],
@@ -19,6 +25,16 @@ return ['constants' =>
 				'hospital'   => 2,
 				'laboratory' => 3,
 				'pharmacy'   => 4,
+		],
+		'individual_treatment_record_set' =>[
+				0 => 'Chief Complaint',
+				1 => 'Vital Signs',
+				2 => 'Brief History of Present Illness',
+				3 => 'Past Medical History',
+				4 => 'PhysicalExam',
+				5 => 'Laboratory',
+				6 => 'Diagnosis',
+				7 => 'Treatment',
 		],
 		'account_type_label' => [
 				'patient'    => 'Patient',

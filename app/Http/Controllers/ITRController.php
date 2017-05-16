@@ -19,6 +19,12 @@ class ITRController extends Controller
         $this->middleware(['auth']);
     }
 
+    public function create_itr($consultation_type , $patient_id)
+    {
+        
+        return view('patient/create_itr');
+    }
+
 
     public function patient_itr($id)
     {
@@ -31,8 +37,7 @@ class ITRController extends Controller
             						   ->where('confirmed' , '=' ,config('constants.appointment_status.consult') )
                                        ->get();
 
-
-
+                           
         	return view('doctor/patient_itr', compact('user','appointments'));
         }
         else

@@ -56,6 +56,9 @@ Route::group(['middleware' => ['web'  ]], function () {
 	Route::post('/api/appointment/delete/post', 'AppointmentController@api_appointment_delete_post');
 	Route::post('/api/appointment/reschedule/post', 'AppointmentController@api_appointment_reschedule_post');
 
+	Route::get('/api/symptoms/get', 'SymptomController@api_symptoms_get');
+	Route::post('/api/symptoms/selected/post', 'SymptomController@api_symptoms_selected_post');
+
 	//Route::get('/schedule', 'doctor\ScheduleController@index');
 
 	Route::get('/clinic', 'doctor\ClinicController@index');
@@ -80,7 +83,9 @@ Route::group(['middleware' => ['web'  ]], function () {
 	Route::post('/api/update/profile/post' , 'ProfileController@api_update_profile_post');
 	
 	//patient 
+	Route::get('/itr/create/{consultation_type}/{patient_id}','ConsultationController@index');
 	Route::get('/itr/{id}','ITRController@patient_itr');
+	
 
 	Route::get('/api/user/patients/get','doctor\DoctorPatientController@api_user_patients_get');
 	Route::get('/api/user/doctors/get','doctor\DoctorPatientController@api_user_doctors_get');

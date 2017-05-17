@@ -820,3 +820,11 @@ h4.name-title{
 .btn-side{
     font-size: 14px!important;
 }
+
+.color-red{
+    color:#ff0000;
+}
+
+.hand-pointer{
+    cursor: pointer;
+}

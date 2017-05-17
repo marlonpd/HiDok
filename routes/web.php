@@ -57,7 +57,9 @@ Route::group(['middleware' => ['web'  ]], function () {
 	Route::post('/api/appointment/reschedule/post', 'AppointmentController@api_appointment_reschedule_post');
 
 	Route::get('/api/symptoms/get', 'SymptomController@api_symptoms_get');
-	Route::post('/api/symptoms/selected/post', 'SymptomController@api_symptoms_selected_post');
+	Route::post('/api/chief/complaint/post', 'ChiefComplaintController@api_chief_complaint_post');
+	Route::get('/api/chief/complaint/get/{consultation_id}','ChiefComplaintController@api_chief_complaint_get');
+	Route::post('/api/symptom/delete/post' ,'ChiefComplaintController@api_symptom_delete_post');
 
 	//Route::get('/schedule', 'doctor\ScheduleController@index');
 

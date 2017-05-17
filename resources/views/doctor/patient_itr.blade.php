@@ -231,7 +231,8 @@
 
             data: function(){
                 return {
-                    appointmentITR : {}
+                    appointmentITR : {},
+                    selectedSymptoms: {}
                 }
             },
 
@@ -241,6 +242,7 @@
                         this.appointments = data['appointments'];
                     });
                 },
+
 
 
                 fetchPatientITR : function(id){

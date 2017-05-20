@@ -66,6 +66,9 @@ Vue.component('vital-signs-set', require('./components/itr/VitalSignsSet.vue'));
 Vue.component('diagnosis-set', require('./components/itr/DiagnosisSet.vue'));
 Vue.component('treatment-set', require('./components/itr/TreatmentSet.vue'));
 Vue.component('add-symptoms-form', require('./components/itr/AddSymptomsForm.vue'));
+Vue.component('add-vitalsigns-form', require('./components/itr/AddVitalSignsForm.vue'));
+Vue.component('add-diagnosis-form', require('./components/itr/AddDiagnosisForm.vue'));
+Vue.component('add-treatment-form', require('./components/itr/AddTreatmentForm.vue'));
 
 
 

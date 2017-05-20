@@ -61,6 +61,12 @@ Route::group(['middleware' => ['web'  ]], function () {
 	Route::get('/api/chief/complaint/get/{consultation_id}','ChiefComplaintController@api_chief_complaint_get');
 	Route::post('/api/symptom/delete/post' ,'ChiefComplaintController@api_symptom_delete_post');
 
+	Route::post('/api/vitalsign/post', 'VitalSignController@api_vital_sign_post');
+	Route::get('/api/vitalsign/get/{consultation_id}','VitalSignController@api_vital_sign_get');
+	Route::post('/api/vital/sign/delete/post' ,'VitalSignController@api_vital_sign_delete_post');
+
+	Route::get('/api/terms/get' ,'TermController@api_terms_get');
+
 	//Route::get('/schedule', 'doctor\ScheduleController@index');
 
 	Route::get('/clinic', 'doctor\ClinicController@index');
@@ -74,14 +80,19 @@ Route::group(['middleware' => ['web'  ]], function () {
 	Route::post('/api/upload/user/photo', 'ProfileController@api_upload_user_photo');
 
 	//doctor
-	Route::get('/patient/itr/{id}','ITRController@patient_itr');
+	/*Route::get('/patient/itr/{id}','ITRController@patient_itr');
 	Route::get('/api/patient/itr/get/{id}', 'ITRController@api_patient_itr_get');
 	Route::post('/api/itr/assessment/post', 'ITRController@api_itr_assessment_post');
 
 	Route::post('/api/itr/laboratory/post', 'ITRController@api_itr_laboratory_post');
 	Route::post('/api/itr/dx/post', 'ITRController@api_itr_dx_post');
 	Route::post('/api/itr/treatment/post', 'ITRController@api_itr_treatment_post');
-	Route::get('/print/dx/{id}','ITRController@print_dx');
+	Route::get('/print/dx/{id}','ITRController@print_dx');*/
+
+	Route::post('/api/itr/post','IndividualTreatmentRecordController@api_itr_post');
+	Route::post('/api/itr/delete/post','IndividualTreatmentRecordController@api_itr_delete_post');
+	Route::get('/api/itr/get/{consultation_id}/{type}','IndividualTreatmentRecordController@api_itr_get');
+
 	Route::post('/api/update/profile/post' , 'ProfileController@api_update_profile_post');
 	
 	//patient 

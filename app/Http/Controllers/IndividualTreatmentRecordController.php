@@ -27,12 +27,12 @@ class IndividualTreatmentRecordController extends Controller
         $consultation_id = $request->input('consultation_id');
         $itr = IndividualTreatmentRecord::where('consultation_id','=',$consultation_id)->first();
         
-        if($itr != null)
+        /*if($itr != null)
         {
             $itr = IndividualTreatmentRecord::where('consultation_id','=',$consultation_id)
                                             ->where('type', '=' , $type)
                                             ->delete();
-        }
+        }*/
         if(is_array($value))
         {
             foreach ($value as $item) 
@@ -77,7 +77,7 @@ class IndividualTreatmentRecordController extends Controller
     {
         $id = $request->input('id');
         $itr = IndividualTreatmentRecord::where('id','=',$id)
-                                          ->delete();
+                                        ->delete();
         
         return json_pretty(['status'   => 'success']);
     }

@@ -18,17 +18,28 @@ class TermController extends Controller
     }
 
     // '/api/terms/get/{type}'
-    public function api_terms_get()
+    public function api_terms_get(Request $request)
     {
+
         $term_type = config('constants.term_type');
         $terms = array();
 
         foreach($term_type as $type)
         {
             $terms[$type] = Term::where('type', '=' , $type)
-                               ->get();
+                                ->pluck('name')->toArray();
+                               //->get(['name']);
         }
 
         return json_pretty($terms);
+    }
+
+    public function api_terms_vitalsign_get()
+    {
+        $vital_sign = ["BR","BP", "TEMP"];
+
+        $vital_sign =array('id' => 'asdfasdf', 'label'=> 'labels', 'value' => 'vals');
+
+        return json_pretty($vital_sign);
     }
 }

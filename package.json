@@ -23,6 +23,7 @@
   "dependencies": {
     "element-ui": "^1.1.6",
     "sweetalert2": "^6.3.2",
-    "vue-infinite-scroll": "^2.0.1"
+    "vue-infinite-scroll": "^2.0.1",
+    "vuejs-autocomplete": "^0.1.1"
   }
 }

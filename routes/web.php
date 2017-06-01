@@ -66,7 +66,7 @@ Route::group(['middleware' => ['web'  ]], function () {
 	Route::post('/api/vital/sign/delete/post' ,'VitalSignController@api_vital_sign_delete_post');
 
 	Route::get('/api/terms/get' ,'TermController@api_terms_get');
-
+	Route::get('/api/terms/vitalsign/get' ,'TermController@api_terms_vitalsign_get');
 	//Route::get('/schedule', 'doctor\ScheduleController@index');
 
 	Route::get('/clinic', 'doctor\ClinicController@index');
@@ -99,7 +99,6 @@ Route::group(['middleware' => ['web'  ]], function () {
 	Route::get('/itr/create/{consultation_type}/{patient_id}','ConsultationController@index');
 	Route::get('/itr/{id}','ITRController@patient_itr');
 	
-
 	Route::get('/api/user/patients/get','doctor\DoctorPatientController@api_user_patients_get');
 	Route::get('/api/user/doctors/get','doctor\DoctorPatientController@api_user_doctors_get');
 	Route::post('/api/patient/remove/post','doctor\DoctorPatientController@api_remove_patient_post');

@@ -17,6 +17,7 @@ require('laravel-elixir-vueify');
  |
  */
 
+
 elixir(mix => {
     mix.sass('app.scss');
     mix.scripts([
@@ -25,13 +26,14 @@ elixir(mix => {
             'libs/offline/offline.min.js',
             'libs/bootstrap/bootstrap.min.js',
             'libs/moment.min.js',
+            'libs/jquery.auto-complete.min.js',
             'libs/bootstrap/bootstrap-datetimepicker.min.js',
     		'../../../node_modules/sweetalert2/dist/sweetalert2.min.js',
             'libs/ladda/spin.min.js',
             'libs/ladda/ladda.min.js',
             'libs/bxslider/jquery.bxslider.js',
             'libs/fr-star/Fr.star.js',
-            '../../../node_modules/vue-infinite-scroll/vue-infinite-scroll.js',
+//            '../../../node_modules/vue-infinite-scroll/vue-infinite-scroll.js',
     	]);
     mix.styles([
  //           '../css/bootstrap/bootstrap.min.css', 
@@ -42,6 +44,7 @@ elixir(mix => {
     		'../../../node_modules/sweetalert2/dist/sweetalert2.min.css',
             '../css/ladda/ladda.min.css',
             '../css/bxslider/jquery.bxslider.css',
+            '../css/autocomplete/jquery.auto-complete.css',
     	]);
     mix.browserify('app.js');
     mix.browserSync({

@@ -9,11 +9,10 @@ var VueResource = require('vue-resource-2');
 Vue.use(VueResource);
 
 import Vue2Filters from 'vue2-filters'
- 
-Vue.use(Vue2Filters)
+Vue.use(Vue2Filters);
 
-//var VueSelect2 = require('vue2-select2');
-//Vue.use(VueSelect2);
+
+
 
 Vue.config.debug = true; 
 Vue.http.options.root = '/api';
@@ -42,6 +41,7 @@ const router = new VueRouter({
   routes // short for routes: routes
 })
 
+
 var components = {};
 Vue.component('create-clinic-form', require('./components/CreateClinicForm.vue'));
 Vue.component('edit-clinic-form', require('./components/EditClinicForm.vue'));
@@ -69,7 +69,17 @@ Vue.component('add-symptoms-form', require('./components/itr/AddSymptomsForm.vue
 Vue.component('add-vitalsigns-form', require('./components/itr/AddVitalSignsForm.vue'));
 Vue.component('add-diagnosis-form', require('./components/itr/AddDiagnosisForm.vue'));
 Vue.component('add-treatment-form', require('./components/itr/AddTreatmentForm.vue'));
+Vue.component('add-laboratory-form', require('./components/itr/AddLaboratoryForm.vue'));
+Vue.component('add-general-appearances-form', require('./components/itr/AddGeneralAppearanceForm.vue'));
+Vue.component('add-skins-form', require('./components/itr/AddSkinForm.vue'));
+Vue.component('add-heent-form', require('./components/itr/AddHeentForm.vue'));
+Vue.component('add-neck-form', require('./components/itr/AddNeckForm.vue'));
+Vue.component('add-chest-and-lungs-form', require('./components/itr/AddChestAndLungsForm.vue'));
 
+Vue.component('add-cardiovascular-system-form', require('./components/itr/AddCardiovascularSystemForm.vue'));
+Vue.component('add-abdomen-form', require('./components/itr/AddAbdomenForm.vue'));
+Vue.component('add-genito-urinary-system-form', require('./components/itr/AddGenitoUrinarySystemForm.vue'));
+Vue.component('add-extremity-form', require('./components/itr/AddExtremityForm.vue'));
 
 
 const app = new Vue({

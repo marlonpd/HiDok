@@ -828,3 +828,8 @@ h4.name-title{
 .hand-pointer{
     cursor: pointer;
 }
+
+#ui-id-10 h4 {
+    background: rgb(237, 237, 237) none repeat scroll 0 0;
+    padding: 10px;
+}

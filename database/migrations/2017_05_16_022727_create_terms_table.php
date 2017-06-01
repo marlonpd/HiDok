@@ -18,6 +18,7 @@ class CreateTermsTable extends Migration
             $table->string('name');
             $table->string('description')->nullable();
             $table->string('type')->default(0);
+            $table->uuid('category');
         });
     }
 

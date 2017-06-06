@@ -1,8 +1,6 @@
 @extends('layout')
 
 @section('content')
-{{ print_r($doctor_rate) }}
-
 
 <div class="container">
       <div class="row">
@@ -24,6 +22,7 @@
                     @else  
                       <div class="Fr-star userChoose size-1" data-title="0 / 5 by {{ $doctor_rate['rate_times'] }} ratings" data-rating="0">
                     @endif
+
                       <div class="Fr-star-value" style="width: {{$doctor_rate['rate_bg']}}%"></div>
                       <div class="Fr-star-bg"></div>';
 
@@ -74,13 +73,17 @@
               <div class="col-md-9 pull-left">
                   <div class="row gmap-clinic-pnl">
                       <div class="clinic-pnl col-md-4 pull-left">
+                        @if(isset($user['clinic']))
                          <h4 class='header-title'> {{ $user['clinic']->name }}</h4>
                          <p><span>Schedule</span> : {{ $user['clinic']->available_day() }}</p>
                          <p> <span>Time : </span> {{ $user['clinic']->from_time }} - {{ $user['clinic']->to_time }} </p>
                          <p> <span>Address : </span>{{ $user['clinic']->address }}</p>
                          <p> <span>Contact no : </span> {{ $user->contact_no }}</p>
                          <p><span> Email : </span> {{ $user->email }}</p>
-                                            
+                        @else
+                         <h4 class='header-title'> Default clinic not set</h4>
+                        @endif
+
                       </div>
 
                       <div class="gmap-pnl col-md-8 pull-right">
@@ -153,16 +156,31 @@
             },
 
             mounted(){
-              var myOptions = {center: new google.maps.LatLng('{!! $user["clinic"]->gmap_lat !!}','{!! $user["clinic"]->gmap_lng !!}'),
+              
+
+            @if(isset($user["clinic"]->gmap_lng) && isset($user["clinic"]->gmap_lat) )
+                var myOptions = {center: new google.maps.LatLng('{!! $user["clinic"]->gmap_lat !!}','{!! $user["clinic"]->gmap_lng !!}'),
                                zoom: 18,
                                mapTypeId: google.maps.MapTypeId.ROADMAP
-              };
+               };
+             @else
+                var myOptions = {center: new google.maps.LatLng(0,0),
+                               zoom: 18,
+                               mapTypeId: google.maps.MapTypeId.ROADMAP
+               };
+             @endif   
+
 
               var map = new google.maps.Map(document.getElementById("map_canvas"),myOptions);
               
-              var lat = '{!! $user["clinic"]->gmap_lat !!}';		
-              var lng = '{!! $user["clinic"]->gmap_lng !!}';
-
+              @if(isset($user["clinic"]->gmap_lng) && isset($user["clinic"]->gmap_lat) )
+                var lat = '{!! $user["clinic"]->gmap_lat !!}';		
+                var lng = '{!! $user["clinic"]->gmap_lng !!}';
+             @else
+                var lat = 0;		
+                var lng = 0;
+             @endif   
+              
               marker = new google.maps.Marker({
                   position: new google.maps.LatLng(lat, lng),
                   map: map

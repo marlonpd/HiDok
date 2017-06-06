@@ -133,7 +133,7 @@
             },
 
             created: function() {
-                this.fetchClinics(0);
+                this.fetchClinics('{!! Auth::user()->id !!}');
             },
 
             data: function(){
@@ -230,7 +230,7 @@
                                   }
                                 );
 
-                            self.fetchClinics(0);
+                            self.fetchClinics('{!! Auth::user()->id !!}');
                           }
                         });
              

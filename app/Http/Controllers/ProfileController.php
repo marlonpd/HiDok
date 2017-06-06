@@ -28,6 +28,7 @@ class ProfileController extends Controller
      */
     public function index($account_type,$id)
     {	
+        
         if($account_type == config('constants.account_type_rev.1'))
         {
             $user = User::findOrFail($id);
@@ -36,7 +37,7 @@ class ProfileController extends Controller
                                     ->first();   
 
             $doctor_rate = $this->get_doctor_ratings($id);
-        
+
             return view($account_type.'/profile', compact('user', 'doctor_rate'));
         }
         elseif($account_type == config('constants.account_type_rev.0'))
@@ -52,12 +53,13 @@ class ProfileController extends Controller
 
     public function get_doctor_ratings($doctor_id)
     {
+        $doctor_rate = array();
         $doctor_rate['rate_times'] = 0;
         $doctor_rate['rate_value'] = 0;
         $doctor_rate['rate_bg'] = 0;
         $doctor_rate['rate_value'] = 0;
         $doctor_rate['current_user_rating'] = 0;
-        $doctor_rate = array();
+        
 
         $ratings= Ratings::where('doctor_id','=', $doctor_id)
                          ->get();
@@ -72,7 +74,16 @@ class ProfileController extends Controller
 
             $doctor_rate['rate_times'] = count($rate_db);
             $doctor_rate['sum_rates'] = array_sum($sum_rates);
-            $doctor_rate['rate_value'] =$doctor_rate['sum_rates']/$doctor_rate['rate_times'];
+            
+            if($doctor_rate['sum_rates'] > 0 && $doctor_rate['rate_times'] > 0)
+            {
+                $doctor_rate['rate_value'] =$doctor_rate['sum_rates']/$doctor_rate['rate_times'];
+            }
+            else
+            {
+                $doctor_rate['rate_value'] = 0;
+            }
+
             $doctor_rate['rate_bg'] = (($doctor_rate['rate_value'])/5)*100;
 
             $current_user_rating = Ratings::where('patient_id','=', Auth::user()->id)

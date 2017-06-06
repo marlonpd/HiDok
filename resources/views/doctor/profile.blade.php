@@ -1,6 +1,9 @@
 @extends('layout')
 
 @section('content')
+{{ print_r($doctor_rate) }}
+
+
 <div class="container">
       <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xs-offset-0 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 toppad" >
@@ -15,7 +18,12 @@
                  
 
                  <span  class="row">
-                    <div class="Fr-star userChoose size-1" data-title="{{ round($doctor_rate['rate_value'], 2) }} / 5 by {{ $doctor_rate['rate_times'] }} ratings" data-rating=" {{ $doctor_rate['rate_value'] }}">
+
+                    @if(isset($doctor_rate['rate_value']))
+                      <div class="Fr-star userChoose size-1" data-title="{{ round($doctor_rate['rate_value'] , 2) }} / 5 by {{ $doctor_rate['rate_times'] }} ratings" data-rating=" {{ $doctor_rate['rate_value'] }}">
+                    @else  
+                      <div class="Fr-star userChoose size-1" data-title="0 / 5 by {{ $doctor_rate['rate_times'] }} ratings" data-rating="0">
+                    @endif
                       <div class="Fr-star-value" style="width: {{$doctor_rate['rate_bg']}}%"></div>
                       <div class="Fr-star-bg"></div>';
 
@@ -91,15 +99,6 @@
                            <div class="col-sm-9"> email@yahoo.com</div>
                       </div>
                     
-                       <div class="form-group">
-                       <label class="col-sm-3" for="inputEmail1">Email</label>
-                           <div class="col-sm-9"> email@yahoo.com</div>
-                      </div>
-
-                      <div class="form-group">
-                       <label class="col-sm-3" for="inputEmail1">Email</label>
-                           <div class="col-sm-9"> email@yahoo.com</div>
-                      </div>
 
                     </div>
 

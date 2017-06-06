@@ -7,7 +7,7 @@ use Alsofronie\Uuid\UuidModelTrait;
 
 class Feedback extends Model
 {
-    protected $table = 'feedback';
+    protected $table = 'feedbacks';
     public $timestamps = true;
     use UuidModelTrait;
     protected $primaryKey = 'id';

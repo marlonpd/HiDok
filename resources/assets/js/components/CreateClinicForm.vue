@@ -175,7 +175,7 @@
         },
 
 
-        props : ['clinics'],
+        props : ['clinics', 'doctor_id'],
 
         data(){
             return {
@@ -234,7 +234,7 @@
 
               if(data == 'success'){
                 $('#create-clinic-form').modal('hide');
-                
+                this.$parent.fetchClinics(this.doctor_id);
                 this.clinic= {
                   name : null,
                   to_time : null,

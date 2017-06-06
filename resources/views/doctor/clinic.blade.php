@@ -65,8 +65,8 @@
     </div>
 </div>
 
-<create-clinic-form :clinics="clinics"></create-clinic-form>
-<edit-clinic-form :clinic="editableClinic"></edit-clinic-form>
+<create-clinic-form :clinics="clinics" :doctor_id="'{{ Auth::user()->id }}'" ></create-clinic-form>
+<edit-clinic-form :clinic="editableClinic"  :doctor_id="'{{ Auth::user()->id }}'"></edit-clinic-form>
 
 
 @endsection

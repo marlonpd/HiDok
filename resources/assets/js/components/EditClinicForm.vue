@@ -173,7 +173,7 @@
 
         },
 
-        props: ['clinic'],
+        props: ['clinic','doctor_id'],
 
         data(){
             return {
@@ -209,7 +209,7 @@
             this.$http.post('/api/clinic/update/post', this.clinic, function(data){
               if(data == 'success'){
                 $('#edit-clinic-form').modal('hide');
-                this.$parent.fetchClinics(0);
+                this.$parent.fetchClinics(this.doctor_id);
                 swal({
                   title: 'Success!',
                   text: 'Successfully updated '+this.clinic.name,

@@ -595,8 +595,8 @@
                              this.diagnoses = data['diagnosis'];
                         }else if(type== 'vital_sign'){
                             this.selectedVitalSigns = data['vital_sign'];
-                        }else if(type== 'symptom'){
-                            this.selectedSymptoms = data['symptom'];
+                        }else if(type== 'chief_complaint'){
+                            this.selectedSymptoms = data['chief_complaint'];
                         }else if(type== 'skin'){
                             this.selectedSkins = data['skin'];
                         }else if(type== 'laboratory'){

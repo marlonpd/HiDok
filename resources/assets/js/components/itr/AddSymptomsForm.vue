@@ -101,7 +101,7 @@
 
                 this.$http.post('/api/itr/post',data, function(data){
                     if(data['status'] == 'success'){
-                        this.$parent.fetchITR('symptom');
+                        this.$parent.fetchITR('chief_complaint');
                         this.other = '';
                         this.selectedSymptoms = [];
                          l.stop();

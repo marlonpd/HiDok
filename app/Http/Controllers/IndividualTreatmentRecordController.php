@@ -81,4 +81,11 @@ class IndividualTreatmentRecordController extends Controller
         
         return json_pretty(['status'   => 'success']);
     }
+
+
+    public function show_print( $type , $id)
+    {
+        return view("print/$type");
+    }
+
 }

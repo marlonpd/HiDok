@@ -55,6 +55,7 @@ class ProfileController extends Controller
         $doctor_rate['rate_times'] = 0;
         $doctor_rate['rate_value'] = 0;
         $doctor_rate['rate_bg'] = 0;
+        $doctor_rate['rate_value'] = 0;
         $doctor_rate['current_user_rating'] = 0;
         $doctor_rate = array();
 

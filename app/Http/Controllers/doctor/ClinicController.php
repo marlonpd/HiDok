@@ -180,7 +180,8 @@ class ClinicController extends Controller
 
     public function api_clinics_get($id)
     {
-        $id = $id > 0 ? $id : Auth::user()->id;
+        
+        $id = isset($id) ? $id : Auth::user()->id;
 
         $clinics = Clinic::where('doctor_id' , '=' ,$id)
                          ->get();

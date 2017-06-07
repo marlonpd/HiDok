@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\IndividualTreatmentRecord;
 use Illuminate\Support\Facades\Auth;
+use App\Clinic;
 
 class IndividualTreatmentRecordController extends Controller
 {
@@ -85,7 +86,15 @@ class IndividualTreatmentRecordController extends Controller
 
     public function show_print( $type , $id)
     {
-        return view("print/$type");
+        $itr = IndividualTreatmentRecord::where('consultation_id','=',$id)
+                                        ->where('type','=' , $type)
+                                        ->first();
+
+        $clinic = Clinic::where('doctor_id', '=',''+Auth::user()->id+'')
+                        ->where('default_address', '=', '1')
+                        ->first();
+
+        return view("print/$type", compact('itr','type', 'clinic'));
     }
 
 }

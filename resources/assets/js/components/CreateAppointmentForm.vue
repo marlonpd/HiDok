@@ -113,7 +113,7 @@
                         }).then(function () {},function (dismiss) {});
 
                         this.$http.post('/api/appointment/request/post', this.appointment, function(data){
-                              if(data == 'success'){
+                              if(data['status'] == 'success'){
                                     $('#create-appointment-form').modal('hide');
                                   
                                     swal({

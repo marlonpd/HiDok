@@ -41,11 +41,11 @@ class AppointmentController extends Controller
 
         if($appointment)
         {
-            return "success";
+            return json_pretty(['status' => 'success','appointments' => $appointment]);
         }
         else
         {
-            return "error";
+            return json_pretty(['status' => 'error','appointments' => $appointment]);
         }
     }
 

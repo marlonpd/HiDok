@@ -75,7 +75,6 @@ Vue.component('add-skins-form', require('./components/itr/AddSkinForm.vue'));
 Vue.component('add-heent-form', require('./components/itr/AddHeentForm.vue'));
 Vue.component('add-neck-form', require('./components/itr/AddNeckForm.vue'));
 Vue.component('add-chest-and-lungs-form', require('./components/itr/AddChestAndLungsForm.vue'));
-
 Vue.component('add-cardiovascular-system-form', require('./components/itr/AddCardiovascularSystemForm.vue'));
 Vue.component('add-abdomen-form', require('./components/itr/AddAbdomenForm.vue'));
 Vue.component('add-genito-urinary-system-form', require('./components/itr/AddGenitoUrinarySystemForm.vue'));

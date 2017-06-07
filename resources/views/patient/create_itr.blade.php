@@ -226,6 +226,12 @@
                             <h3>Laboratory</h3>
                             <div>
                                 <p>
+
+                                    <div class="col-md-4"> 
+                                        <button class="btn btn-primary btn-default" data-title="Create" data-toggle="modal" data-target="#add-laboratory-form" ><i class="fa fa-plus fa-1" aria-hidden="true"></i>Add</button>
+                                        <a class="btn btn-info" target="_blank" @click="print('laboratory')" ><i class="fa fa-print" aria-hidden="true"></i>Print</a>
+                                    </div>
+
                                      <div class="row">
                                         <template v-for='laboratory in selectedLaboratory'>
                                             <div class="col-md-4">
@@ -236,9 +242,7 @@
                                         </template>   
                                     </div>   
 
-                                    <div class="col-md-4"> 
-                                        <button class="btn btn-primary btn-default" data-title="Create" data-toggle="modal" data-target="#add-laboratory-form" ><i class="fa fa-plus fa-1" aria-hidden="true"></i>Add</button>
-                                    </div>
+
                                 </p>
                             </div>
 
@@ -269,6 +273,11 @@
                             <h3>Treatment</h3>
                             <div>
                                 <p>
+                                    <div class="col-md-4"> 
+                                        <button class="btn btn-primary btn-default" data-title="Create" data-toggle="modal" data-target="#add-treatment-form" ><i class="fa fa-plus fa-1" aria-hidden="true"></i>Add</button>
+                                        <a class="btn btn-info" target="_blank" @click="print('treatment')" ><i class="fa fa-print" aria-hidden="true"></i>Print</a>
+                                    </div>
+
                                     <div class="row">
                                         <template v-for='treatment in itr["treatment"]'>
                                             <div class="col-md-4">
@@ -279,9 +288,7 @@
                                         </template>   
                                     </div>   
 
-                                    <div class="col-md-4"> 
-                                        <button class="btn btn-primary btn-default" data-title="Create" data-toggle="modal" data-target="#add-treatment-form" ><i class="fa fa-plus fa-1" aria-hidden="true"></i>Add</button>
-                                    </div>
+                                    
                                 </p>
                             </div>
 
@@ -434,8 +441,8 @@
             },
 
             methods: {
-                getFiles: function(obj){
-                    console.log(obj);
+                print: function(type){
+                    window.open('/print/'+type+'/{!! $consultation->id !!}', '_blank', 'location=yes,height=370,width=450,scrollbars=yes,status=yes');
                 },
                 
                 saveITR: function(type){

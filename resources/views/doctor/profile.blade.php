@@ -80,8 +80,7 @@
                          <p> <span>Address : </span>{{ $user['clinic']->address }}</p>
                          <p> <span>Contact no : </span> {{ $user->contact_no }}</p>
                          <p><span> Email : </span> {{ $user->email }}</p>
-                        @else
-                         
+                        @else  
                          <h4 class='header-title'> Default clinic not set</h4>
                         @endif
 

@@ -174,7 +174,6 @@
                     }).then(function (isConfirm) {
 
                             if(isConfirm){
-                                alert(JSON.stringify(appointment));
                                 self.$http.post('/api/appointment/confirm/post', appointment, function(data){
                                     if(data == 'success'){
                                         appointment.confirmed = 1;

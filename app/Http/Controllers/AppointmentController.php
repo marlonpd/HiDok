@@ -36,29 +36,31 @@ class AppointmentController extends Controller
 
     public function api_appointment_request_post(Request $request)
     {
-
+      
     	$appointment = $this->createAppointment($request->input());
+
 
         if($appointment)
         {
-            return json_pretty(['status' => 'success','appointments' => $appointment]);
+            return json_pretty(['status'      => 'success',
+                                'appointment' => $appointment]);
         }
         else
         {
-            return json_pretty(['status' => 'error','appointments' => $appointment]);
+            return json_pretty(['status'      => 'error',
+                                'appointment' => $appointment]);
         }
     }
 
     protected function createAppointment(array $data)
     {
-        return Appointment::create([
-        	 			    'clinic_id' => $data['clinic_id'],			
-				            'doctor_id'   => $data['doctor_id'],
-				            'patient_id'  => Auth::user()->id,
-                            'creator_id'  => 0,
-                            're_schedule_by_id' => 0, 
-				            'appointment_date' =>  date("Y-m-d H:i:s", strtotime($data['appointment_date'])),
-				            'note'     => '',
+        return Appointment::create(['clinic_id'         => $data['clinic_id'],			
+                                    'doctor_id'         => $data['doctor_id'],
+                                    'patient_id'        => Auth::user()->id,
+                                    'creator_id'        => 0,
+                                    're_schedule_by_id' => 0, 
+                                    'appointment_date'  =>  date("Y-m-d H:i:s", strtotime($data['appointment_date'])),
+                                    'note'              => '',
 				   			]);
     }
 
@@ -207,7 +209,9 @@ class AppointmentController extends Controller
     public function api_appointment_reschedule_post(Request $request)
     {
         $id = $request->input('id');
+        
         $appointment = Appointment::findOrFail($id);
+
 
         $appointment->update(['appointment_date'  => date("Y-m-d H:i:s", strtotime($request->input('appointment_date'))),
                               'note'              =>  $request->input('note'),

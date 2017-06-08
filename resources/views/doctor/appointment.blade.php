@@ -48,16 +48,16 @@
 
                                               <button  v-if="appointment.confirmed == 0 && appointment.re_schedule_by_id == authUser.id" type="button" class="btn btn-primary btn-success disabled" @click="confirmAppointment(appointment, $event)">Confirm</button>
                                                                   
-                                              <button  v-if="appointment.confirmed == 1 && appointment.re_schedule_by_id != authUser.id" type="button" class="btn btn-primary btn-success" @click="consult(appointment)">Consult</button>
+                                              <button  v-if="appointment.confirmed == 1 && appointment.re_schedule_by_id != authUser.id" type="button" class="btn btn-primary btn-success" @click="newConsultation(appointment)">Consult</button>
 
-                                               <button  v-if="appointment.confirmed == 1 && appointment.re_schedule_by_id == authUser.id" type="button" class="btn btn-primary btn-success disabled" @click="consult(appointment)">Consult</button>
+                                               <button  v-if="appointment.confirmed == 1 && appointment.re_schedule_by_id == authUser.id" type="button" class="btn btn-primary btn-success disabled" @click="newConsultation(appointment)">Consult</button>
 
                                               <button  v-if="appointment.confirmed == 2" type="button" class="btn btn-primary btn-success disabled" >Consult</button>
                                               <button type="button" class="btn btn-primary btn-infor"  data-title="Re-Schedule" data-toggle="modal" data-target="#reschedule" @click="setAppointmentChild(appointment)">Re-Schedule</button>
                                               <button type="button" class="btn btn-primary btn-danger" @click="deleteAppointment(appointment, $event)">Delete</button>
                                             </div>   
 
-                                            <a @click="viewITR(appointment)">(view itr)</a>   
+                                             
                                         </div><!-- /col-sm-1 -->
 
                                         <!-- /col-sm-5 -->
@@ -160,23 +160,80 @@
                 confirmAppointment : function(appointment, event){
                     event.preventDefault();
 
-                    this.$http.post('/api/appointment/confirm/post', appointment, function(data){
-                        if(data == 'success'){
-                        appointment.confirmed = 1;
-                        }else{
-                        swal("Error","Please try again!", "error");
-                        }
+                    self = this;
+
+                    
+                    swal({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        type: 'info',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, continue!'
+                    }).then(function (isConfirm) {
+
+                            if(isConfirm){
+                                alert(JSON.stringify(appointment));
+                                self.$http.post('/api/appointment/confirm/post', appointment, function(data){
+                                    if(data == 'success'){
+                                        appointment.confirmed = 1;
+                                    }else{
+                                        swal("Error","Please try again!", "error");
+                                    }
+                                });
+                    
+
+                            }
+                            else
+                            {
+                                swal("cancelled","Your categories are safe", "error");
+                            }
+
+                    
                     });
                 },
 
                 consult : function(appointment){
-                    this.$http.post('/api/appointment/consult/post', appointment, function(data){
+                  /*  this.$http.post('/api/appointment/consult/post', appointment, function(data){
                         if(data == 'success'){
                         appointment.confirmed = 2;
                         }else{
                         swal("Error","Please try again!", "error");
                         }
-                    });
+                    });*/
+                },
+
+                newConsultation: function(appointment){
+                    var inputOptions = new Promise(function (resolve) {
+                    setTimeout(function () {
+                        resolve({
+                        '0': 'Checkup',
+                        '1': 'Admit',
+                        })
+                    }, 1000)
+                    })
+
+                    
+
+                    swal({
+                        title: 'Select consultaion type',
+                        input: 'radio',
+                        confirmButtonText: 'Create',
+                        inputOptions: inputOptions,
+                        inputValidator: function (result) {
+                            return new Promise(function (resolve, reject) {
+                            if (result) {
+                                resolve()
+                            } else {
+                                reject('You need to select something!')
+                            }
+                            })
+                        }
+                    }).then(function (result) {
+                        window.location = '/itr/create/'+result+'/'+appointment.patient_id;
+                    })
+                   
                 },
 
                 reschedAppointment : function(appointment, event){
@@ -192,36 +249,35 @@
                     var thisAppointment = appointment;
 
                     swal({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
-                    }
-                    ).then(function (isConfirm,appointment) {
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        type: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, delete it!'
+                    }).then(function (isConfirm,appointment) {
 
-                    if(isConfirm){
-                
-                        self.$http.post('/api/appointment/delete/post', thisAppointment.id, function(data){
-                        if(data == "success"){
-                            swal(
-                            'Deleted!',
-                            'Your item has been deleted.',
-                            'success'
-                            );
+                            if(isConfirm){
+                        
+                                self.$http.post('/api/appointment/delete/post', thisAppointment.id, function(data){
+                                if(data == "success"){
+                                    swal(
+                                    'Deleted!',
+                                    'Your item has been deleted.',
+                                    'success'
+                                    );
 
-                            this.fetchScheduleAppointment(self.clinic_id);
-                        }
-                        });
-            
+                                    this.fetchScheduleAppointment(self.clinic_id);
+                                }
+                                });
+                    
 
-                    }
-                    else
-                    {
-                        swal("cancelled","Your categories are safe", "error");
-                    }
+                            }
+                            else
+                            {
+                                swal("cancelled","Your categories are safe", "error");
+                            }
 
                     
                     });

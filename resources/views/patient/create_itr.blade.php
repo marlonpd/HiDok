@@ -61,11 +61,11 @@
                             <div>
                                 <p>
                                     <div class="form-group">
-                                        <textarea class="form-control" rows="5" id="comment" v-model="itrTxt['bhpi']"></textarea>
+                                        <textarea class="form-control" rows="5" id="comment" v-model="itrTxt['present_illness_history']"></textarea>
                                     </div>     
 
                                     <div class="span6 pull-right">
-                                        <button class="btn btn-primary btn-default bhpi-loading"  @click="saveITR('bhpi')"><i class="fa fa-pencil-square-o fa-1" aria-hidden="true"></i>Save</button>
+                                        <button class="btn btn-primary btn-default bpresent_illness_historyhpi-loading"  @click="saveITR('bpresent_illness_historyhpi')"><i class="fa fa-pencil-square-o fa-1" aria-hidden="true"></i>Save</button>
                                     </div>  
                                 </p>
                             </div>
@@ -74,11 +74,11 @@
                             <div>
                                 <p>
                                     <div class="form-group">
-                                        <textarea class="form-control" rows="5" id="comment" v-model="itrTxt['pmh']"></textarea>
+                                        <textarea class="form-control" rows="5" id="comment" v-model="itrTxt['past_medical_history']"></textarea>
                                     </div>     
 
                                     <div class="span6 pull-right">
-                                        <button class="btn btn-primary btn-default pmh-loading"  @click="saveITR('pmh')"><i class="fa fa-pencil-square-o fa-1" aria-hidden="true"></i>Save</button>
+                                        <button class="btn btn-primary btn-default past_medical_history-loading"  @click="saveITR('past_medical_history')"><i class="fa fa-pencil-square-o fa-1" aria-hidden="true"></i>Save</button>
                                     </div>  
                             </div>
 
@@ -301,11 +301,11 @@
                             <div>
                                 <p>
                                     <div class="form-group">
-                                        <textarea class="form-control" rows="5" id="comment" v-model="itrTxt['omi']"></textarea>
+                                        <textarea class="form-control" rows="5" id="comment" v-model="itrTxt['other_medical_intervention']"></textarea>
                                     </div>     
 
                                     <div class="span6 pull-right">
-                                        <button class="btn btn-primary btn-default omi-loading"  @click="saveITR('omi')"><i class="fa fa-pencil-square-o fa-1" aria-hidden="true"></i>Save</button>
+                                        <button class="btn btn-primary btn-default other_medical_intervention-loading"  @click="saveITR('other_medical_intervention')"><i class="fa fa-pencil-square-o fa-1" aria-hidden="true"></i>Save</button>
                                     </div>  
                             </div>
 

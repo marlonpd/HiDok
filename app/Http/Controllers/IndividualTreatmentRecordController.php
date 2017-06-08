@@ -87,10 +87,31 @@ class IndividualTreatmentRecordController extends Controller
 
     public function show_print( $type, $id , $patient_id)
     {
-        $itr = IndividualTreatmentRecord::with('patient')
-                                        ->where('consultation_id','=',$id)
-                                        ->where('type','=' , $type)
-                                        ->get();
+        if($type == "consultation")
+        {
+            $itr = array();
+
+            $itr_type = config('constants.individual_treatment_record_type');
+
+            
+            foreach($itr_type as $key=>$value)
+            {
+                $itr[$key] = IndividualTreatmentRecord::with('patient')
+                                                       ->where('type', '=', $key)
+                                                       ->where('consultation_id','=',$id)
+                                                       ->get();
+            }
+            
+
+            
+        }
+        else
+        {
+            $itr = IndividualTreatmentRecord::with('patient')
+                                            ->where('consultation_id','=',$id)
+                                            ->where('type','=' , $type)
+                                            ->get();
+        }
 
         $patient = User::where('id', '=', $patient_id)
                        ->first();
@@ -98,8 +119,16 @@ class IndividualTreatmentRecordController extends Controller
         $clinic = Clinic::where('doctor_id', '=',''+Auth::user()->id+'')
                         ->where('default_address', '=', '1')
                         ->first();
-
-        return view("print/$type", compact('itr','type', 'clinic', 'patient'));
+        
+        
+        if($type == "consultation")
+        {                
+            return view("print/$type", compact('itr','type', 'itr_type' ,'clinic', 'patient'));
+        }
+        else
+        {
+            return view("print/$type", compact('itr','type', 'clinic', 'patient'));
+        }
     }
 
 }

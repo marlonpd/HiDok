@@ -442,7 +442,7 @@
 
             methods: {
                 print: function(type){
-                    window.open('/print/'+type+'/{!! $consultation->id !!}', '_blank', 'location=yes,height=370,width=450,scrollbars=yes,status=yes');
+                    window.open('/print/'+type+'/{!! $consultation->id !!}/{!! $consultation->patient_id !!}', '_blank', 'location=yes,height=370,width=450,scrollbars=yes,status=yes');
                 },
                 
                 saveITR: function(type){

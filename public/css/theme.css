@@ -833,3 +833,7 @@ h4.name-title{
     background: rgb(237, 237, 237) none repeat scroll 0 0;
     padding: 10px;
 }
+
+.tab-pane.about{
+    margin-top :-29px!important;
+}

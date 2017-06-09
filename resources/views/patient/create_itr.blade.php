@@ -4,10 +4,11 @@
 <div class="container">
     <div class="row">
            <div class="panel panel-default">
-                <div class="panel-heading">Create ITR {{ $patient->firstname }} 
-                    <div class="col-md-4"> 
-                        <a class="btn btn-info" target="_blank" @click="print('consultation')" ><i class="fa fa-print" aria-hidden="true"></i>Print</a>
-                    </div>
+                <div class="panel-heading">
+                    Create ITR {{ $patient->firstname }}
+                    -         
+                    <a class="btn btn-info" target="_blank" @click="print('consultation')" ><i class="fa fa-print" aria-hidden="true"></i>Print</a>
+                    
                 </div>
 
                 <div class="panel-body">

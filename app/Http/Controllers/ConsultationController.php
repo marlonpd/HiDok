@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Consultation;
 use App\User;
+use App\IndividualTreatmentRecord;
 use Illuminate\Support\Facades\Auth;
 
 class ConsultationController extends Controller
@@ -37,6 +38,34 @@ class ConsultationController extends Controller
     public function health_history()
     {
         return view('patient/health_history');
+    }
+
+
+    public function consultation($id)
+    {
+        
+        $consultation = Consultation::with('patient')
+                                    ->with('doctor')   
+                                    ->where('id','=' , $id)
+                                    ->first();
+        
+        $itr = IndividualTreatmentRecord::where('consultation_id' ,'=' , $id)
+                                        ->get();
+
+        $itr = array();
+
+        $itr_type = config('constants.individual_treatment_record_type');
+
+
+        foreach($itr_type as $key=>$value)
+        {
+            $itr[$key] = IndividualTreatmentRecord::with('patient')
+                                                ->where('type', '=', $key)
+                                                ->where('consultation_id','=',$id)
+                                                ->get();
+        }
+
+        return view(config('constants.account_type_rev.'.Auth::user()->account_type).'/consultation', compact('consultation', 'itr' , 'itr_type'));
     }
 
 

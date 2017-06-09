@@ -110,7 +110,7 @@ Route::group(['middleware' => ['web'  ]], function () {
 	Route::post('/api/rate/post', 'RatingsController@api_rate_post');
 
 	Route::get('/api/patient/consultation/get', 'ConsultationController@api_patient_consultation_get');
-
+	Route::get('/consultation/{id}', 'ConsultationController@consultation');
 });
 
 

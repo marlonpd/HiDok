@@ -33,4 +33,54 @@ class ConsultationController extends Controller
          
     }
 
+    // /healthhistory
+    public function health_history()
+    {
+        return view('patient/health_history');
+    }
+
+
+    // /api/patient/consultation/get
+    public function api_patient_consultation_get(Request $request)
+    {
+    	if(Auth::user()->is_patient())
+    	{
+            $lastdate= $request->input('lastdate');
+            
+
+            if($lastdate == '')
+            {
+                $consultations = Consultation::with('patient')
+                                             ->with('doctor')   
+                                             ->where('patient_id','=' , Auth::user()->id)
+                                             ->take(10)
+                                             ->orderBy('created_at', 'ASC')
+                                             ->get();
+            }
+            else
+            {
+                $consultations = Consultation::with('patient')
+                                             ->with('doctor')
+                                             ->where('patient_id','=' , Auth::user()->id)
+                                             ->where('created_at', '>' , $lastdate)
+                                             ->take(10)
+                                             ->orderBy('created_at', 'ASC')
+                                             ->get();
+            }
+            $remaining = 0;
+            $lastitem = $consultations->last();
+            
+            if($lastitem)
+            {
+                $remaining = Consultation::where('patient_id','=' , Auth::user()->id)
+                                          ->where('created_at', '>' , $lastitem->created_at)
+                                          ->count();
+            }                      
+
+  			return json_pretty(['consultations'  => $consultations ,
+                                'remaining' => $remaining,
+                            ]);
+    	}
+    }
+
 }

@@ -100,12 +100,16 @@ Route::group(['middleware' => ['web'  ]], function () {
 	//patient 
 	Route::get('/itr/create/{consultation_type}/{patient_id}','ConsultationController@index');
 	Route::get('/itr/{id}','ITRController@patient_itr');
+
+	Route::get('/health/history' ,'ConsultationController@health_history');
 	
 	Route::get('/api/user/patients/get','doctor\DoctorPatientController@api_user_patients_get');
 	Route::get('/api/user/doctors/get','doctor\DoctorPatientController@api_user_doctors_get');
 	Route::post('/api/patient/remove/post','doctor\DoctorPatientController@api_remove_patient_post');
 
 	Route::post('/api/rate/post', 'RatingsController@api_rate_post');
+
+	Route::get('/api/patient/consultation/get', 'ConsultationController@api_patient_consultation_get');
 
 });
 

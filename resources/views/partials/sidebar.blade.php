@@ -16,7 +16,7 @@
         @if(Auth::user()->is_patient())
         
             <li>
-                <a href="/healthistory"><span class="fa-stack fa-lg pull-left"><i class="fa fa-heartbeat fa-stack-1x "></i></span>My Health History</a>
+                <a href="/health/history"><span class="fa-stack fa-lg pull-left"><i class="fa fa-heartbeat fa-stack-1x "></i></span>My Health History</a>
             </li>
             <li>
                 <a href="/doctors"><span class="fa-stack fa-lg pull-left"><i class="fa fa-user-md fa-stack-1x "></i></span>Connections</a>

@@ -131,4 +131,7 @@ class IndividualTreatmentRecordController extends Controller
         }
     }
 
+
+
+
 }

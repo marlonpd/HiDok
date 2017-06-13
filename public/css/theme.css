@@ -852,3 +852,7 @@ h4.name-title{
 h2, a{
   color: #636b6f;
 }
+
+.navbar{
+    border-radius: 0!important;
+}

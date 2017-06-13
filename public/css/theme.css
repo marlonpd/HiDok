@@ -651,7 +651,7 @@ h4.name-title{
     position: absolute; 
     left: 250px;
     width: 0;
-    height: 250px;
+    height: 272px;
     margin-left: -250px;
     overflow-y: auto;
     background: #D80100;
@@ -752,7 +752,7 @@ h4.name-title{
         width: 250px;
     }
     #wrapper.toggled-2 #sidebar-wrapper {
-        width: 40px;
+        width: 34px;
     }
     #wrapper.toggled-2 #sidebar-wrapper:hover {
         width: 250px;
@@ -836,4 +836,19 @@ h4.name-title{
 
 .tab-pane.about{
     margin-top :-29px!important;
+}
+
+/****Doctor-consultation**/
+
+.top {
+  text-align: center;
+}
+
+.shadow {
+  box-shadow: 0px 0px 5px 0px;
+  padding-top: 10px;
+}
+
+h2, a{
+  color: #636b6f;
 }

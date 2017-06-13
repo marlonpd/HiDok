@@ -111,6 +111,11 @@ Route::group(['middleware' => ['web'  ]], function () {
 
 	Route::get('/api/patient/consultation/get', 'ConsultationController@api_patient_consultation_get');
 	Route::get('/consultation/{id}', 'ConsultationController@consultation');
+	Route::get('/consultations', 'ConsultationController@consultations');
+
+	Route::get('/api/doctor/consultations/get','ConsultationController@api_doctor_consultations_get');
+
+	Route::post('/api/consultation/delete/post' , 'ConsultationController@api_consultation_delete_post');
 });
 
 

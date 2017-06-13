@@ -40,6 +40,58 @@ class ConsultationController extends Controller
         return view('patient/health_history');
     }
 
+    // /consultations
+
+    public function consultations()
+    {
+        /*$consultations = Consultation::with('patient') 
+                                    ->where('doctor_id','=' ,  Auth::user()->id)
+                                    ->first();*/
+
+        return view('doctor/consultations');
+    }
+
+    // /api/doctor/consultations/get
+    public function api_doctor_consultations_get(Request $request)
+    {
+    	if(Auth::user()->is_doctor())
+    	{
+            $lastdate= $request->input('lastdate');
+            
+
+            if($lastdate == '')
+            {
+                $consultations = Consultation::with('patient')  
+                                             ->where('doctor_id','=' , Auth::user()->id)
+                                             ->take(10)
+                                             ->orderBy('created_at', 'ASC')
+                                             ->get();
+            }
+            else
+            {
+                $consultations = Consultation::with('patient')
+                                             ->where('doctor_id','=' , Auth::user()->id)
+                                             ->where('created_at', '>' , $lastdate)
+                                             ->take(10)
+                                             ->orderBy('created_at', 'ASC')
+                                             ->get();
+            }
+            $remaining = 0;
+            $lastitem = $consultations->last();
+            
+            if($lastitem)
+            {
+                $remaining = Consultation::where('doctor_id','=' , Auth::user()->id)
+                                          ->where('created_at', '>' , $lastitem->created_at)
+                                          ->count();
+            }                      
+
+  			return json_pretty(['consultations'  => $consultations ,
+                                'remaining' => $remaining,
+                            ]);
+    	}
+    }
+
 
     public function consultation($id)
     {
@@ -65,7 +117,7 @@ class ConsultationController extends Controller
                                                 ->get();
         }
 
-        return view(config('constants.account_type_rev.'.Auth::user()->account_type).'/consultation', compact('consultation', 'itr' , 'itr_type'));
+        return view('patient/consultation', compact('consultation', 'itr' , 'itr_type'));
     }
 
 
@@ -110,6 +162,22 @@ class ConsultationController extends Controller
                                 'remaining' => $remaining,
                             ]);
     	}
+    }
+
+    // /api/consultation/delete/post
+    public function api_consultation_delete_post(Request $request)
+    {
+        $id = $request->input('id');
+        $consultation = Consultation::where('id','=',$id)
+                                    ->delete();
+
+        if($consultation)
+        {
+           	return json_pretty(['status' => 'success']);
+        }
+        else{
+            return json_pretty(['status' => 'error']);
+        }
     }
 
 }

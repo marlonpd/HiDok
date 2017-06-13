@@ -845,8 +845,7 @@ h4.name-title{
 }
 
 .shadow {
-  box-shadow: 0px 0px 5px 0px;
-  padding-top: 10px;
+  padding-top: 0;
 }
 
 h2, a{

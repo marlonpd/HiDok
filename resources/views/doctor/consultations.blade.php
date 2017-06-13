@@ -13,10 +13,10 @@
                     <div class="row">
                          <div class="shadow"  v-for="consultation in consultations" >
                                 <div class="col-sm-12">
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-1">
                                     <img src="https://www.infrascan.net/demo/assets/img/avatar5.png" class="img-circle" width="60px">
                                     </div>
-                                    <div class="col-sm-8">
+                                    <div class="col-sm-9">
                                     <h4><a href="#">@{{ consultation['patient'].firstname }} @{{ consultation['patient'].lastname }}</a></h4>
                                     <p><a href="#">Consultaiton date : @{{ consultation.created_at }}</a></p>
                                     </div>

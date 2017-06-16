@@ -17,7 +17,7 @@ class CreateFeelingsTable extends Migration
             $table->uuid('id');
             $table->char('patient_id',36);
             $table->string('content');
-            $table->tinyInteger('private')->default(1); 
+            $table->tinyInteger('public')->default(0); 
             $table->timestamps();
         });
     }

@@ -79,7 +79,7 @@ Vue.component('add-cardiovascular-system-form', require('./components/itr/AddCar
 Vue.component('add-abdomen-form', require('./components/itr/AddAbdomenForm.vue'));
 Vue.component('add-genito-urinary-system-form', require('./components/itr/AddGenitoUrinarySystemForm.vue'));
 Vue.component('add-extremity-form', require('./components/itr/AddExtremityForm.vue'));
-
+Vue.component('edit-feeling-form', require('./components/EditFeelingForm.vue'));
 
 const app = new Vue({
   router,

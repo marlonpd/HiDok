@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Alsofronie\Uuid\UuidModelTrait;
 
 class Feeling extends Model
 {

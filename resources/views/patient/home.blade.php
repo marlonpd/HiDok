@@ -22,11 +22,11 @@
 
             <div class="span8">
                 
-                <template v-for="feeling in feelings">
+                <template v-for="(feeling, key, index)  in feelings">
                     <div>
                         <div class="pull-right">
                             <i class="fa fa-pencil fa-1 hand-pointer" data-toggle="modal" data-target="#edit-feeling-form" @click="updateFeeling(feeling, $event)" aria-hidden="true"></i>
-                            <i class="fa fa-trash fa-1 hand-pointer" @click="deleteFeeling(feeling,$event)" aria-hidden="true"></i>
+                            <i class="fa fa-trash fa-1 hand-pointer"  v-on:remove="feelings.splice(key, 1)" @click="deleteFeeling(key , feeling , $event)" aria-hidden="true"></i>
                         </div>
                         <p>@{{ feeling.content }}</p>
                         <div>
@@ -120,8 +120,9 @@
                     this.selectedFeeling = feeling;
                 },
 
-                deleteFeeling: function(feeling, event){
+                deleteFeeling: function(index , feeling, event){
                     
+
                     event.preventDefault();
                     var self = this; 
                     var feel = feeling;
@@ -138,7 +139,9 @@
                             if(isConfirm){
                                 self.$http.post( '/api/feeling/delete/post' , feel ,function(data){
                                     if(data['status'] == 'success'){
-                                        self.feelings.$remove(feeling);
+                                      //  self.feelings.$remove(index);
+                                      //self.fetchFeelings();
+                                      self.feelings.splice(index, 1);
                                     }else{
 
                                     }

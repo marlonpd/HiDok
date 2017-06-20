@@ -55,6 +55,7 @@ Route::group(['middleware' => ['web'  ]], function () {
 	Route::post('/api/appointment/consult/post', 'AppointmentController@api_appointment_consult_post');
 	Route::post('/api/appointment/delete/post', 'AppointmentController@api_appointment_delete_post');
 	Route::post('/api/appointment/reschedule/post', 'AppointmentController@api_appointment_reschedule_post');
+	Route::get('/api/appointments/get' , 'AppointmentController@api_appointments_get');
 
 	Route::get('/api/symptoms/get', 'SymptomController@api_symptoms_get');
 	Route::post('/api/chief/complaint/post', 'ChiefComplaintController@api_chief_complaint_post');
@@ -116,11 +117,11 @@ Route::group(['middleware' => ['web'  ]], function () {
 	Route::get('/api/doctor/consultations/get','ConsultationController@api_doctor_consultations_get');
 	Route::post('/api/consultation/delete/post' , 'ConsultationController@api_consultation_delete_post');
 
-	Route::post('/api/feeling/post' , 'FeelingController@api_feeling_post');
-	Route::get('/api/feelings/get' , 'FeelingController@api_feelings_get');
-	Route::post('/api/feeling/update/post' , 'FeelingController@api_feeling_update_post');
-	Route::post('/api/feeling/delete/post' , 'FeelingController@api_feeling_delete_post');
-	Route::post('/api/feeling/post' , 'FeelingController@api_feeling_post');
+	Route::post('/api/post/post' , 'PostController@api_post_post');
+	Route::get('/api/posts/get' , 'PostController@api_posts_get');
+	Route::post('/api/post/update/post' , 'PostController@api_post_update_post');
+	Route::post('/api/post/delete/post' , 'PostController@api_post_delete_post');
+	Route::post('/api/post/post' , 'PostController@api_post_post');
 
 });
 

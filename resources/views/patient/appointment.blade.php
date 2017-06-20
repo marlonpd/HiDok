@@ -78,6 +78,8 @@
                     appointments : {},
                     appointment : {},
                     editAppointment : {},
+                    lastdate : "",
+                    showLoadMoreBtn : true, 
                 }
             },
 
@@ -146,6 +148,36 @@
 
                     
                 },
+
+
+                fetchAppointments: function(){
+                    this.$http.get('/api/appointments/get?lastdate='+this.lastdate, function(data){
+                        this.appointments = data['appointments'];
+                    });
+                },
+                
+                loadMore: function(){
+                    var lastitem = this.appointments[Object.keys(this.appointments)[Object.keys(this.appointments).length - 1]];
+                    this.lastdate = lastitem.created_at;
+                    self = this;
+                    var l = Ladda.create(document.querySelector( '.loader' ));
+                    l.start();
+                    this.$http.get('/api/appointments/get?lastdate='+this.lastdate, function(data){
+                        var apps = data['appointments'];
+                        if(data['remaining'] == 0){
+                            self.showLoadMoreBtn = false;
+                        }
+
+                        if(data['error'] == 'Unauthenticated'){
+                            windows.location = 'http://hidok.com';
+                        }
+
+                        apps.forEach(function(app , index){
+                            self.consultations.push(app);
+                        });
+                        l.stop();
+                    });
+                }
       
             },
 

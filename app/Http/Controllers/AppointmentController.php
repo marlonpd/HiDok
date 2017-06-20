@@ -148,6 +148,93 @@ class AppointmentController extends Controller
         return json_pretty(['appointments' => $appointments]);                     
     }
 
+    // /' /api/appointments/get'
+    public function api_appointments_get(Request $request)
+    {
+        if(Auth::user()->is_patient())
+    	{
+            $lastdate= $request->input('lastdate');
+            
+
+            if($lastdate == '')
+            {
+                $appointments = Appointment::with('patient')
+                                           ->with('doctor') 
+                                           ->with('clinic')  
+                                           ->where('patient_id','=' , Auth::user()->id)
+                                           ->take(10)
+                                           ->orderBy('created_at', 'ASC')
+                                           ->get();
+            }
+            else
+            {
+                $appointments = Appointment::with('patient')
+                                            ->with('doctor')
+                                            ->with('clinic')
+                                            ->where('patient_id','=' , Auth::user()->id)
+                                            ->where('created_at','>' , $lastdate)
+                                            ->take(10)
+                                            ->orderBy('created_at', 'ASC')
+                                            ->get();
+            }
+            $remaining = 0;
+            $lastitem = $appointments->last();
+            
+            if($lastitem)
+            {
+                $remaining = Appointment::with('doctor')
+                                        ->with('clinic')
+                                        ->where('patient_id','=' , Auth::user()->id)
+                                        ->where('created_at', '>' , $lastitem->created_at)
+                                        ->count();
+            }                      
+
+  			return json_pretty(['appointments'  => $appointments ,
+                                'remaining'     => $remaining,
+                            ]);
+    	}
+        else
+        {
+            $lastdate= $request->input('lastdate');
+            
+
+            if($lastdate == '')
+            {
+                $appointments = Appointment::with('patient')
+                                           ->with('clinic')
+                                           ->where('doctor_id','=' , Auth::user()->id)
+                                           ->take(10)
+                                           ->orderBy('created_at', 'ASC')
+                                           ->get();
+            }
+            else
+            {
+                $appointments = Appointment::with('patient')
+                                            ->with('clinic')
+                                            ->where('doctor_id','=' , Auth::user()->id)
+                                            ->where('created_at', '>' , $lastdate)
+                                            ->take(10)
+                                            ->orderBy('created_at', 'ASC')
+                                            ->get();
+            }
+            $remaining = 0;
+            $lastitem = $appointments->last();
+            
+            if($lastitem)
+            {
+                $remaining = Appointment::with('patient')
+                                        ->with('clinic')
+                                        ->where('doctor_id','=' , Auth::user()->id)
+                                        ->where('created_at', '>' , $lastitem->created_at)
+                                        ->count();
+            }                      
+
+  			return json_pretty(['appointments'  => $appointments ,
+                                'remaining'     => $remaining,
+                            ]);
+        }
+    }
+
     //api/appointment/confirm/post
     public function api_appointment_confirm_post(Request $request)
     {

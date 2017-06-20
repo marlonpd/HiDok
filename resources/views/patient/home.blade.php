@@ -11,7 +11,7 @@
                         <ul>
                             <li><input type="checkbox" name="private" v-model="post.public" checkv-bind:true-value="1" v-bind:false-value="0"></li> Share to doctor
                         </ul>
-                        <button type="submit" @click="saveFeeling($event)" class="btn btn-success green"><i class="fa fa-share"></i> Submit</button>
+                        <button type="submit" @click="savepost($event)" class="btn btn-success green"><i class="fa fa-share"></i> Submit</button>
                     </form>
                     
 
@@ -20,17 +20,22 @@
                 
             </div><!-- Widget Area -->
 
+            <div class="clr"></div>
+            <div class="section" v-show="posts.length == 0 ">
+                <h2>Nothing to show</h2>
+            </div>
+
             <div class="span8">
                 
-                <template v-for="(feeling, key, index)  in feelings">
+                <template v-for="(post, key, index)  in posts">
                     <div>
                         <div class="pull-right">
-                            <i class="fa fa-pencil fa-1 hand-pointer" data-toggle="modal" data-target="#edit-feeling-form" @click="updateFeeling(feeling, $event)" aria-hidden="true"></i>
-                            <i class="fa fa-trash fa-1 hand-pointer"  v-on:remove="feelings.splice(key, 1)" @click="deleteFeeling(key , feeling , $event)" aria-hidden="true"></i>
+                            <i class="fa fa-pencil fa-1 hand-pointer" data-toggle="modal" data-target="#edit-post-form" @click="updatepost(post, $event)" aria-hidden="true"></i>
+                            <i class="fa fa-trash fa-1 hand-pointer"   @click="deletepost(key , post , $event)" aria-hidden="true"></i>
                         </div>
-                        <p>@{{ feeling.content }}</p>
+                        <p>@{{ post.content }}</p>
                         <div>
-                            <span class="badge badge-success">Posted @{{ feeling.created_at }}</span><div class="pull-right"><span class="label">alice</span> <span class="label">story</span> <span class="label">blog</span> <span class="label">personal</span></div>
+                            <span class="badge badge-success">Posted @{{ post.created_at }}</span><div class="pull-right"><span class="label">alice</span> <span class="label">story</span> <span class="label">blog</span> <span class="label">personal</span></div>
                         </div> 
                         <hr>
                     </div>
@@ -39,7 +44,7 @@
 
             <br>
             <br>
-            <div v-show="showLoadMoreBtn" class="row loadmore-container" style="text-align:center;">
+            <div v-show="showLoadMoreBtn && posts.length > 10" class="row loadmore-container" style="text-align:center;">
                 <button value="Load More" @click="loadMore()" style="width:30%;" class="btn btn-primary ladda-button loader" data-style="expand-left"><span class="ladda-label">Load More</span></button>      
             </div>
             <br>
@@ -64,7 +69,7 @@
     </div>  
 </div>
 
-<edit-feeling-form :feeling="selectedFeeling"></edit-feeling-form>
+<edit-post-form :post="selectedpost"></edit-post-form>
 @endsection
 
 @section('javascripts')
@@ -75,7 +80,7 @@
             mounted() {},
 
             created: function() {
-                this.fetchFeelings();
+                this.fetchposts();
             },
 
             data(){
@@ -86,23 +91,23 @@
                     },
                     lastdate : "",
                     showLoadMoreBtn : true, 
-                    feelings : {},
-                    selectedFeeling : {},
+                    posts : {},
+                    selectedpost : {},
                 }
             },
 
             events: {},
 
             methods: {
-                saveFeeling: function(event){
+                savepost: function(event){
                     event.preventDefault();
 
                     if(this.post.content != ''){
-                        this.$http.post( '/api/feeling/post' , this.post ,function(data){
+                        this.$http.post( '/api/post/post' , this.post ,function(data){
                             if(data['status'] == 'success'){
                                 this.post.content = '';
                                 this.post.public = 1;
-                                this.fetchFeelings();
+                                this.fetchposts();
                             }else{
 
                             }
@@ -110,22 +115,22 @@
                     }
                 },
 
-                fetchFeelings: function(){
-                    this.$http.get('/api/feelings/get' , function(data){
-                        this.feelings = data['feelings'];
+                fetchposts: function(){
+                    this.$http.get('/api/posts/get' , function(data){
+                        this.posts = data['posts'];
                     });
                 },
 
-                updateFeeling: function(feeling){
-                    this.selectedFeeling = feeling;
+                updatepost: function(post){
+                    this.selectedpost = post;
                 },
 
-                deleteFeeling: function(index , feeling, event){
+                deletepost: function(index , post, event){
                     
 
                     event.preventDefault();
                     var self = this; 
-                    var feel = feeling;
+                    var feel = post;
 
                     swal({
                         title: 'Are you sure?',
@@ -135,15 +140,13 @@
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
                         confirmButtonText: 'Yes, delete it!'
-                    }).then(function (isConfirm, feeling) {
+                    }).then(function (isConfirm, post) {
                             if(isConfirm){
-                                self.$http.post( '/api/feeling/delete/post' , feel ,function(data){
+                                self.$http.post( '/api/post/delete/post' , feel ,function(data){
                                     if(data['status'] == 'success'){
-                                      //  self.feelings.$remove(index);
-                                      //self.fetchFeelings();
-                                      self.feelings.splice(index, 1);
+                                      self.posts.splice(index, 1);
                                     }else{
-
+                                        swal("error","Please try again!", "error");
                                     }
                                 });
                             }
@@ -155,13 +158,13 @@
                 },
 
                 loadMore: function(){
-                    var lastitem = this.feelings[Object.keys(this.feelings)[Object.keys(this.feelings).length - 1]];
+                    var lastitem = this.posts[Object.keys(this.posts)[Object.keys(this.posts).length - 1]];
                     this.lastdate = lastitem.created_at;
                     self = this;
                     var l = Ladda.create(document.querySelector( '.loader' ));
                     l.start();
-                    this.$http.get('/api/feelings/get?lastdate='+this.lastdate, function(data){
-                        var moreFeelings = data['feelings'];
+                    this.$http.get('/api/posts/get?lastdate='+this.lastdate, function(data){
+                        var moreposts = data['posts'];
                         if(data['remaining'] == 0){
                             self.showLoadMoreBtn = false;
                         }
@@ -170,8 +173,8 @@
                             windows.location = 'http://hidok.com';
                         }
 
-                        moreFeelings.forEach(function(moreFeeling , index){
-                            self.feelings.push(moreFeeling);
+                        moreposts.forEach(function(morepost , index){
+                            self.posts.push(morepost);
                         });
                         l.stop();
                     });

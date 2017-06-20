@@ -9,17 +9,12 @@
 
                 <div class="panel-body">
 
-                    <div id="accordion">
-                      
-                       @foreach ($clinics as $clinic)
-                          <h3>{{ $clinic->name }}, {{ $clinic->address }}, {{ $clinic->from_day }}-{{ $clinic->to_day }} @ {{ $clinic->from_time }} - {{ $clinic->to_time }}</h3>
-                          <div>
-                            <p>
+                  
                       
 
 
 
-                                 <div class="row" v-for="appointment in appointments['{!! $clinic->id !!}']">
+                                 <div class="row" v-for="appointment in appointments">
                                         <div class="col-sm-2">
                                             <div class="thumbnail">
                                                 <img class="img-responsive user-photo" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png">
@@ -33,6 +28,8 @@
                                                 <span class="text-muted">requested 5 days ago</span>
                                             </div>
                                             <div class="panel-body">
+                                             Clinic: @{{ appointment.clinic.name }}
+                                             <br>
                                              @{{ appointment.appointment_date }}
                                              <br>
                                              Note: @{{ appointment.note }}
@@ -73,6 +70,10 @@
 
 
 
+                                <br>
+                                <div v-show="showLoadMoreBtn" class="row loadmore-container" style="text-align:center;">
+                                    <button value="Load More" @click="loadMore()" style="width:30%;" class="btn btn-primary ladda-button loader" data-style="expand-left"><span class="ladda-label">Load More</span></button>      
+                                </div>        
 
 
 
@@ -82,12 +83,6 @@
 
 
 
-
-                            </p>
-                          </div>
-                       @endforeach
-                     
-                    </div>
 
 
 
@@ -122,7 +117,7 @@
                 
             },
             created: function() {
-                this.fetchAllAppointments();                
+                this.fetchAllUserAppointments();                
             },
 
 
@@ -133,6 +128,10 @@
                    appointments : {},  
                    appoinment_id : 0,
                    editAppointment : {},
+
+                   lastdate : "",
+                   showLoadMoreBtn : true, 
+                   consultations : {},
                 }
             },
 
@@ -193,6 +192,12 @@
                     });
                 },
 
+                fetchAllUserAppointments: function(){
+                    this.$http.get('/api/appointments/get?lastdate='+this.lastdate, function(data){
+                        this.appointments = data['appointments'];
+                    });
+                },
+
                 consult : function(appointment){
                   /*  this.$http.post('/api/appointment/consult/post', appointment, function(data){
                         if(data == 'success'){
@@ -238,6 +243,29 @@
                 reschedAppointment : function(appointment, event){
                     event.preventDefault();
 
+                },
+
+                loadMore: function(){
+                    var lastitem = this.appointments[Object.keys(this.appointments)[Object.keys(this.appointments).length - 1]];
+                    this.lastdate = lastitem.created_at;
+                    self = this;
+                    var l = Ladda.create(document.querySelector( '.loader' ));
+                    l.start();
+                    this.$http.get('/api/appointments/get?lastdate='+this.lastdate, function(data){
+                        var items = data['appointments'];
+                        if(data['remaining'] == 0){
+                            self.showLoadMoreBtn = false;
+                        }
+
+                        if(data['error'] == 'Unauthenticated'){
+                            windows.location = 'http://hidok.com';
+                        }
+
+                        items.forEach(function(item , index){
+                            self.appointments.push(item);
+                        });
+                        l.stop();
+                    });
                 },
 
                 deleteAppointment : function(appointment, event){

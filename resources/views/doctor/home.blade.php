@@ -2,104 +2,135 @@
 
 @section('content')
 <div class="container">
-    <div class="row">
-           <div class="panel panel-default">
-                <div class="panel-heading">Home</div>
-                <div class="panel-body">
-                    test
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                </div>
-           </div>     
+    <div class="col-sm-8 background-white">
+            <div class="post-area">
+                <div class="status-upload">
+                    <form>
+
+                       <textarea v-model="post.content" placeholder="What do you feel right now?" ></textarea>
+                        <ul>
+                            <li><input type="checkbox" name="private" v-model="post.public" checkv-bind:true-value="1" v-bind:false-value="0"></li> Share to doctor
+                        </ul>
+                        <button type="submit" @click="savepost($event)" class="btn btn-success green"><i class="fa fa-share"></i> Submit</button>
+                    </form>
+                    
+
+                </div><!-- Status Upload  -->
+
+                
+            </div><!-- Widget Area -->
+
+            <div class="clr"></div>
+            <div class="section" v-show="posts.length == 0 ">
+                <h2>Nothing to show</h2>
+            </div>
+
+            <div class="span8">
+                
+                <template v-for="(post, key, index)  in posts">
+                    <div>
+                        <div class="pull-right">
+                            <i class="fa fa-pencil fa-1 hand-pointer" data-toggle="modal" data-target="#edit-post-form" @click="updatepost(post, $event)" aria-hidden="true"></i>
+                            <i class="fa fa-trash fa-1 hand-pointer"   @click="deletepost(key , post , $event)" aria-hidden="true"></i>
+                        </div>
+                        <p>@{{ post.content }}</p>
+                        <div>
+                            <span class="badge badge-success">Posted @{{ post.created_at }}</span><div class="pull-right"><span class="label">alice</span> <span class="label">story</span> <span class="label">blog</span> <span class="label">personal</span></div>
+                        </div> 
+                        <hr>
+                    </div>
+                </template>
+            </div>
+
+            <br>
+            <br>
+            <div v-show="showLoadMoreBtn && posts.length > 10" class="row loadmore-container" style="text-align:center;">
+                <button value="Load More" @click="loadMore()" style="width:30%;" class="btn btn-primary ladda-button loader" data-style="expand-left"><span class="ladda-label">Load More</span></button>      
+            </div>
+            <br>
+
     </div>
+    <div class="col-sm-4 ">
+      <!--Body content-->
+      <div class="row background-white margin-left-xs">
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+      </div>
+    </div>  
 </div>
+
+<edit-post-form :post="selectedpost"></edit-post-form>
 @endsection
-
-
-
-
 
 @section('javascripts')
     <script>
 
+
         var childMixin = {
+            mounted() {},
 
-            mounted() {
+            created: function() {
+                this.fetchposts();
             },
-
-            created: function() {},
 
             data(){
                 return {
-                    appointments : {},
-                    appointment : {},
-                    editAppointment : {},
-                    appointmentITR : {}
+                    post : {
+                        content : '',
+                        public : 1,
+                    },
+                    lastdate : "",
+                    showLoadMoreBtn : true, 
+                    posts : {},
+                    selectedpost : {},
                 }
             },
 
-            events: {
-
-            },
+            events: {},
 
             methods: {
+                savepost: function(event){
+                    event.preventDefault();
 
-                setAppointmentMain : function(appointment){
-                    this.editAppointment = appointment;
-                    Vue.nextTick(function () {});
+                    if(this.post.content != ''){
+                        this.$http.post( '/api/post/post' , this.post ,function(data){
+                            if(data['status'] == 'success'){
+                                this.post.content = '';
+                                this.post.public = 1;
+                                this.fetchposts();
+                            }else{
+
+                            }
+                        });
+                    }
                 },
 
-                viewITR : function(appointment){
-                    window.location = "/patient/itr/"+appointment.patient_id;
-                },
-
-                setAppointmentChild: function(appointment){
-                    this.$data.editAppointment = appointment;
-                },
-
-                fetchScheduleAppointment : function(clinic_id){
-                    this.$http.get('/api/auth/appointment/get/'+clinic_id, function(data){
-                        this.appointments = data['appointments'];
+                fetchposts: function(){
+                    this.$http.get('/api/posts/get' , function(data){
+                        this.posts = data['posts'];
                     });
                 },
 
-                confirmAppointment : function(appointment, event){
-                    event.preventDefault();
-
-                    this.$http.post('/api/appointment/confirm/post', appointment, function(data){
-                        if(data == 'success'){
-                        appointment.confirmed = 1;
-                        }else{
-                        swal("Error","Please try again!", "error");
-                        }
-                    });
+                updatepost: function(post){
+                    this.selectedpost = post;
                 },
 
-                consult : function(appointment){
-                    this.$http.post('/api/appointment/consult/post', appointment, function(data){
-                        if(data == 'success'){
-                        appointment.confirmed = 2;
-                        }else{
-                        swal("Error","Please try again!", "error");
-                        }
-                    });
-                },
+                deletepost: function(index , post, event){
+                    
 
-                reschedAppointment : function(appointment, event){
                     event.preventDefault();
-                },
-
-                deleteAppointment : function(appointment, event){
-                    event.preventDefault();
-
                     var self = this; 
-                    var thisAppointment = appointment;
+                    var feel = post;
 
                     swal({
                         title: 'Are you sure?',
@@ -109,31 +140,45 @@
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
                         confirmButtonText: 'Yes, delete it!'
-                    }).then(function (isConfirm,appointment) {
-                            if(isConfirm){       
-                                self.$http.post('/api/appointment/delete/post', thisAppointment.id, function(data){
-                                    if(data == "success"){
-                                        swal(
-                                            'Deleted!',
-                                            'Your item has been deleted.',
-                                            'success'
-                                        );
-
-                                        this.fetchScheduleAppointment(self.clinic_id);
+                    }).then(function (isConfirm, post) {
+                            if(isConfirm){
+                                self.$http.post( '/api/post/delete/post' , feel ,function(data){
+                                    if(data['status'] == 'success'){
+                                      self.posts.splice(index, 1);
+                                    }else{
+                                        swal("error","Please try again!", "error");
                                     }
                                 });
-                    
-
                             }
                             else
                             {
                                 swal("cancelled","Your categories are safe", "error");
                             }
                     });
-
-                    
                 },
-      
+
+                loadMore: function(){
+                    var lastitem = this.posts[Object.keys(this.posts)[Object.keys(this.posts).length - 1]];
+                    this.lastdate = lastitem.created_at;
+                    self = this;
+                    var l = Ladda.create(document.querySelector( '.loader' ));
+                    l.start();
+                    this.$http.get('/api/posts/get?lastdate='+this.lastdate, function(data){
+                        var moreposts = data['posts'];
+                        if(data['remaining'] == 0){
+                            self.showLoadMoreBtn = false;
+                        }
+
+                        if(data['error'] == 'Unauthenticated'){
+                            windows.location = 'http://hidok.com';
+                        }
+
+                        moreposts.forEach(function(morepost , index){
+                            self.posts.push(morepost);
+                        });
+                        l.stop();
+                    });
+                }
             },
 
 

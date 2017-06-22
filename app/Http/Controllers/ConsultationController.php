@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Consultation;
 use App\User;
+use App\DoctorPatient;
 use App\IndividualTreatmentRecord;
 use Illuminate\Support\Facades\Auth;
 
@@ -25,6 +26,7 @@ class ConsultationController extends Controller
         
         if($consultation->save())
         {
+            $this->add_patient($patient_id);
             return view('patient/create_itr', compact('patient','consultation'));
         }
         else
@@ -178,6 +180,14 @@ class ConsultationController extends Controller
         else{
             return json_pretty(['status' => 'error']);
         }
+    }
+
+    public function add_patient( $patient_id)
+    {
+        $patient = new DoctorPatient();
+        $patient->patient_id = $patient_id;
+        $patient->doctor_id = Auth::user()->id;
+        $patient->save();
     }
 
 }

@@ -979,3 +979,7 @@ h2, a{
 .clr{
     clear: both;
 }
+
+.hide{
+    display:none;
+}

@@ -26,6 +26,9 @@
             </div>
 
             <div class="span8">
+                <div>
+                    <span><a href="#" @click="fetchposts(0)">All</a>|<a href="#" @click="fetchposts(1)">My Post</a></span>
+                </div>
                 
                 <template v-for="(post, key, index)  in posts">
                     <div>
@@ -80,7 +83,7 @@
             mounted() {},
 
             created: function() {
-                this.fetchposts();
+                this.fetchposts(0);
             },
 
             data(){
@@ -115,8 +118,8 @@
                     }
                 },
 
-                fetchposts: function(){
-                    this.$http.get('/api/posts/get' , function(data){
+                fetchposts: function(filter){
+                    this.$http.get('/api/posts/get?filter='+filter , function(data){
                         this.posts = data['posts'];
                     });
                 },

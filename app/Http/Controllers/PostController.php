@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Post;
+use App\DoctorPatient;
+use DB;
 use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
@@ -19,17 +21,9 @@ class PostController extends Controller
         $this->middleware('auth');
     }
 
-
-    // api/post/post
-    // /api/posts/get
-  // /api/post/update/post
-    // /api/post/delete/post
     // /api/post/post
     public function api_post_post(Request $request)
     {
-        //return $request->input();
-    	//$post = $this->create_post($request->input());
-
         $post = new Post();
         $post->user_id = Auth::user()->id;
         $post->content = $request->input('content');
@@ -39,7 +33,7 @@ class PostController extends Controller
         {
             return json_pretty(['status' => 'success',
                                 'post' => $post,
-            ]);
+                            ]);
         }
         else
         {
@@ -56,24 +50,6 @@ class PostController extends Controller
 				        ]);
     }
 
-    /*public function api_posts_get()
-    {
-        if(Auth::user()->is_patient())
-        {
-            $posts = post::where('user_id' , '=' , Auth::user()->id)
-                                ->orderBy('created_at', 'DESC')
-                                ->get();
-                       
-        }
-        else
-        {
-
-        }                        
-
-        return json_pretty(['posts' => $posts]);                    
-  
-    }*/
- // /api/post/update/post
     // /api/post/delete/post
     public function api_post_delete_post(Request $request)
     {
@@ -117,22 +93,86 @@ class PostController extends Controller
     	if(Auth::user()->is_patient() || Auth::user()->is_doctor())
     	{
             $lastdate= $request->input('lastdate');
+            $filter = $request->input('filter');
             
-
             if($lastdate == '')
             {
-                $posts = Post::where('user_id','=' , Auth::user()->id)
-                                        ->take(10)
-                                        ->orderBy('created_at', 'DESC')
-                                        ->get();
+                // if filter == 1, fetch only users post, else fetch doctors post too
+                if($filter == 1)
+                {    
+                    $posts = Post::with('users')
+                                 ->where('user_id','=' , Auth::user()->id)
+                                 ->take(10)
+                                 ->orderBy('created_at', 'DESC')
+                                 ->get();
+                }
+                else
+                {
+                    if(Auth::user()->is_patient())
+                    {
+                        $posts = DB::table('posts')
+                                    ->leftjoin('doctor_patient', 'posts.user_id', '=' , 'doctor_patient.doctor_id')
+                                    ->join('users', 'posts.user_id', '=','users.id')
+                                    ->select('posts.*','users.*') 
+                                    ->orwhere('doctor_patient.patient_id', '=', Auth::user()->id)
+                                    ->orWhere('posts.user_id', '=', Auth::user()->id)
+                                    ->take(10)
+                                    ->orderBy('posts.created_at', 'DESC')
+                                    ->get(); 
+                    }
+                    else
+                    {
+                        $posts = DB::table('posts')
+                                   ->leftjoin('doctor_patient','doctor_patient.patient_id', '=' , 'posts.user_id' )
+                                   ->join('users', 'posts.user_id', '=','users.id')
+                                   ->select('posts.*','users.*')
+                                   ->orWhere('doctor_patient.doctor_id', '=', Auth::user()->id)
+                                   ->orWhere('posts.user_id', '=', Auth::user()->id)
+                                   ->take(10)
+                                   ->orderBy('posts.created_at', 'DESC')
+                                   ->get();                        
+                    }
+
+                }
             }
             else
             {
-                $posts = Post::where('user_id','=' , Auth::user()->id)
-                                             ->where('created_at', '>' , $lastdate)
-                                             ->take(10)
-                                             ->orderBy('created_at', 'DESC')
-                                             ->get();
+                if($filter == 1)
+                {  
+                    $posts = Post::with('users')
+                                 ->where('user_id','=' , Auth::user()->id)
+                                 ->where('created_at', '>' , $lastdate)
+                                 ->take(10)
+                                 ->orderBy('created_at', 'DESC')
+                                 ->get();
+                }
+                else
+                {
+                    if(Auth::user()->is_patient())
+                    {
+                        $posts = DB::table('posts')
+                                    ->leftjoin('doctor_patient', 'posts.user_id', '=' , 'doctor_patient.doctor_id')
+                                    ->join('users', 'posts.user_id', '=','users.id')
+                                    ->select('posts.*','users.*')
+                                    ->orwhere('doctor_patient.patient_id', '=', Auth::user()->id)
+                                    ->orWhere('posts.user_id', '=', Auth::user()->id)
+                                    ->take(10)
+                                    ->orderBy('posts.created_at', 'DESC')
+                                    ->get(); 
+                    }
+                    else
+                    {
+                        $posts = DB::table('posts')
+                                   ->join('doctor_patient', 'posts.user_id', '=' , 'doctor_patient.patient_id')
+                                   ->join('users', 'posts.user_id', '=','users.id')
+                                   ->select('posts.*','users.*') 
+                                   ->orWhere('doctor_patient.doctor_id', '=', Auth::user()->id)
+                                   ->orWhere('posts.user_id', '=', Auth::user()->id)
+                                   ->take(10)
+                                   ->orderBy('posts.created_at', 'DESC')
+                                   ->get(); 
+                    }                
+                }
             }
 
             $remaining = 0;
@@ -140,9 +180,56 @@ class PostController extends Controller
             
             if($lastitem)
             {
-                $remaining = Post::where('user_id','=' , Auth::user()->id)
-                                          ->where('created_at', '>' , $lastitem->created_at)
-                                          ->count();
+                if($filter == 1)
+                {
+                    if(Auth::user()->is_patient())
+                    {
+  
+
+                        $remaining = DB::table('posts')
+                                        ->leftjoin('doctor_patient', 'posts.user_id', '=' , 'doctor_patient.doctor_id')
+                                        ->join('users', 'posts.user_id', '=','users.id')
+                                        ->orwhere('doctor_patient.patient_id', '=', Auth::user()->id)
+                                        ->orWhere('posts.user_id', '=', Auth::user()->id)
+                                        ->where('posts.created_at', '>' , $lastitem->created_at)
+                                        ->count(); 
+                    }
+                    else
+                    {
+                        $remaining = DB::table('posts')
+                                       ->leftjoin('doctor_patient', 'posts.user_id', '=' , 'doctor_patient.patient_id')
+                                       ->join('users', 'posts.user_id', '=','users.id')
+                                       ->orWhere('doctor_patient.doctor_id', '=', Auth::user()->id)
+                                       ->orWhere('posts.user_id', '=', Auth::user()->id)
+                                       ->where('posts.created_at', '>' , $lastitem->created_at)
+                                       ->count();  
+                    }
+                }
+                else
+                {
+
+                    if(Auth::user()->is_patient())
+                    {
+                        $remaining = DB::table('posts')
+                                        ->leftjoin('doctor_patient', 'posts.user_id', '=' , 'doctor_patient.doctor_id')
+                                        ->join('users', 'posts.user_id', '=','users.id')
+                                        ->select('posts.*','users.*')
+                                        ->where('posts.created_at', '>' , $lastitem->created_at)
+                                        ->orwhere('doctor_patient.patient_id', '=', Auth::user()->id)
+                                        ->orWhere('posts.user_id', '=', Auth::user()->id)
+                                        ->count();    
+                    }
+                    else
+                    {
+                        $remaining = DB::table('posts')
+                                        ->leftjoin('doctor_patient', 'posts.user_id', '=' , 'doctor_patient.patient_id')
+                                        ->join('users', 'posts.user_id', '=','users.id')
+                                        ->orwhere('posts.created_at', '>' , $lastitem->created_at)
+                                        ->orWhere('doctor_patient.doctor_id', '=', Auth::user()->id)
+                                        ->orWhere('posts.user_id', '=', Auth::user()->id)
+                                        ->count();    
+                    } 
+                }                    
             }                      
 
   			return json_pretty(['posts'  => $posts ,

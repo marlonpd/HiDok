@@ -39,8 +39,8 @@
                       <ul class="nav nav-tabs tabs-left search-tabs-left">
                         <li class="active"><a href="#home" data-toggle="tab">Doctor</a></li>
                         <li class=""><a href="#profile" data-toggle="tab">Hospital</a></li>
-                        <li class=""><a href="#messages" data-toggle="tab">Pharmacy</a></li>
-                        <li><a href="#settings" data-toggle="tab">Laboratory</a></li>
+                        <li class="hide"><a href="#messages" data-toggle="tab">Pharmacy</a></li>
+                        <li class="hide"><a href="#settings" data-toggle="tab">Laboratory</a></li>
                       </ul>
                     </div>
 

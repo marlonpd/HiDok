@@ -28,13 +28,7 @@ class IndividualTreatmentRecordController extends Controller
         $patient_id = $request->input('patient_id');
         $consultation_id = $request->input('consultation_id');
         $itr = IndividualTreatmentRecord::where('consultation_id','=',$consultation_id)->first();
-        
-        /*if($itr != null)
-        {
-            $itr = IndividualTreatmentRecord::where('consultation_id','=',$consultation_id)
-                                            ->where('type', '=' , $type)
-                                            ->delete();
-        }*/
+
         if(is_array($value))
         {
             foreach ($value as $item) 

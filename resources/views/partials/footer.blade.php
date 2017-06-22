@@ -16,7 +16,7 @@
 					   Email Address : info@hi-dok.com
 					</span><br>
 
-					<p class="footer-links">
+					<p class="footer-links hide" >
 					Register :
 					|
 					<a href="/hospital/register">Hospital</a>

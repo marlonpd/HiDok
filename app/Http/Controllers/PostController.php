@@ -100,11 +100,26 @@ class PostController extends Controller
                 // if filter == 1, fetch only users post, else fetch doctors post too
                 if($filter == 1)
                 {    
-                    $posts = Post::with('users')
-                                 ->where('user_id','=' , Auth::user()->id)
-                                 ->take(10)
-                                 ->orderBy('created_at', 'DESC')
-                                 ->get();
+                    /*return $posts = Post::with(array('users'=>
+                                            function($query){
+                                                $query->select('id',
+                                                               'lastname',
+                                                               'firstname',
+                                                               'middlename',
+                                                               'thumbnail');
+                                            }
+                                         ))
+                                        ->where('user_id','=' , Auth::user()->id)
+                                        ->take(10)
+                                        ->orderBy('created_at', 'DESC')
+                                        ->get(['content','created_at']);*/
+                    $posts = DB::table('posts')
+                               ->join('users', 'posts.user_id', '=','users.id') 
+                               ->select('posts.content' ,'posts.created_at','users.id','users.lastname', 'users.firstname','users.middlename','users.thumbnail') 
+                               ->where('user_id','=' , Auth::user()->id)
+                               ->take(10)
+                               ->orderBy('created_at', 'DESC')
+                               ->get();
                 }
                 else
                 {
@@ -113,24 +128,24 @@ class PostController extends Controller
                         $posts = DB::table('posts')
                                     ->leftjoin('doctor_patient', 'posts.user_id', '=' , 'doctor_patient.doctor_id')
                                     ->join('users', 'posts.user_id', '=','users.id')
-                                    ->select('posts.*','users.*') 
-                                    ->orwhere('doctor_patient.patient_id', '=', Auth::user()->id)
-                                    ->orWhere('posts.user_id', '=', Auth::user()->id)
+                                    ->select('posts.content' ,'posts.created_at','users.id','users.lastname', 'users.firstname','users.middlename','users.thumbnail') 
+                                    ->orwhere('doctor_patient.patient_id', '=', ''.Auth::user()->id.'')
+                                    ->orWhere('posts.user_id', '=', ''.Auth::user()->id.'')
                                     ->take(10)
                                     ->orderBy('posts.created_at', 'DESC')
-                                    ->get(); 
+                                    ->get(['id','content','created_at','lastname','firstname','middlename','thumbnail']); 
                     }
                     else
                     {
                         $posts = DB::table('posts')
                                    ->leftjoin('doctor_patient','doctor_patient.patient_id', '=' , 'posts.user_id' )
                                    ->join('users', 'posts.user_id', '=','users.id')
-                                   ->select('posts.*','users.*')
-                                   ->orWhere('doctor_patient.doctor_id', '=', Auth::user()->id)
-                                   ->orWhere('posts.user_id', '=', Auth::user()->id)
+                                   ->select('posts.content' ,'posts.created_at','users.id','users.lastname', 'users.firstname','users.middlename','users.thumbnail') 
+                                   ->orWhere('doctor_patient.doctor_id', '=', ''.Auth::user()->id.'')
+                                   ->orWhere('posts.user_id', '=', ''.Auth::user()->id.'')
                                    ->take(10)
                                    ->orderBy('posts.created_at', 'DESC')
-                                   ->get();                        
+                                   ->get(['id','content','created_at','lastname','firstname','middlename','thumbnail']);                        
                     }
 
                 }
@@ -139,8 +154,16 @@ class PostController extends Controller
             {
                 if($filter == 1)
                 {  
-                    $posts = Post::with('users')
-                                 ->where('user_id','=' , Auth::user()->id)
+                    $posts = Post::with(array('users'=>
+                                            function($query){
+                                                $query->select('id',
+                                                               'lastname',
+                                                               'firstname',
+                                                               'middlename',
+                                                               'thumbnail');
+                                            }
+                                         ))
+                                 ->where('user_id','=' , '"'.Auth::user()->id.'')
                                  ->where('created_at', '>' , $lastdate)
                                  ->take(10)
                                  ->orderBy('created_at', 'DESC')
@@ -151,11 +174,12 @@ class PostController extends Controller
                     if(Auth::user()->is_patient())
                     {
                         $posts = DB::table('posts')
-                                    ->leftjoin('doctor_patient', 'posts.user_id', '=' , 'doctor_patient.doctor_id')
+                                    ->leftjoin('doctor_patient','doctor_patient.doctor_id', '=' ,  'posts.user_id')
                                     ->join('users', 'posts.user_id', '=','users.id')
-                                    ->select('posts.*','users.*')
-                                    ->orwhere('doctor_patient.patient_id', '=', Auth::user()->id)
-                                    ->orWhere('posts.user_id', '=', Auth::user()->id)
+                                    ->select('posts.content' ,'posts.created_at','users.id','users.lastname', 'users.firstname','users.middlename','users.thumbnail') 
+                                    ->orwhere('doctor_patient.patient_id', '=', ''.Auth::user()->id.'')
+                                    ->orWhere('posts.user_id', '=', ''.Auth::user()->id.'')
+                                    ->where('posts.created_at', '>' , $lastdate)
                                     ->take(10)
                                     ->orderBy('posts.created_at', 'DESC')
                                     ->get(); 
@@ -163,11 +187,12 @@ class PostController extends Controller
                     else
                     {
                         $posts = DB::table('posts')
-                                   ->join('doctor_patient', 'posts.user_id', '=' , 'doctor_patient.patient_id')
+                                   ->join('doctor_patient', 'doctor_patient.patient_id', '=' ,'posts.user_id' )
                                    ->join('users', 'posts.user_id', '=','users.id')
-                                   ->select('posts.*','users.*') 
-                                   ->orWhere('doctor_patient.doctor_id', '=', Auth::user()->id)
-                                   ->orWhere('posts.user_id', '=', Auth::user()->id)
+                                   ->select('posts.content' ,'posts.created_at','users.id','users.lastname', 'users.firstname','users.middlename','users.thumbnail') 
+                                   ->orWhere('doctor_patient.doctor_id', '=', ''.Auth::user()->id.'')
+                                   ->orWhere('posts.user_id', '=', ''.Auth::user()->id.'')
+                                   ->where('posts.created_at', '>' , $lastdate)
                                    ->take(10)
                                    ->orderBy('posts.created_at', 'DESC')
                                    ->get(); 
@@ -177,6 +202,7 @@ class PostController extends Controller
 
             $remaining = 0;
             $lastitem = $posts->last();
+
             
             if($lastitem)
             {
@@ -187,20 +213,21 @@ class PostController extends Controller
   
 
                         $remaining = DB::table('posts')
-                                        ->leftjoin('doctor_patient', 'posts.user_id', '=' , 'doctor_patient.doctor_id')
-                                        ->join('users', 'posts.user_id', '=','users.id')
-                                        ->orwhere('doctor_patient.patient_id', '=', Auth::user()->id)
-                                        ->orWhere('posts.user_id', '=', Auth::user()->id)
-                                        ->where('posts.created_at', '>' , $lastitem->created_at)
-                                        ->count(); 
+                                       ->leftjoin('doctor_patient', 'doctor_patient.doctor_id', '=' , 'posts.user_id')
+                                       ->join('users', 'posts.user_id', '=','users.id')
+                                       ->orWhere('posts.user_id', '=', ''.Auth::user()->id.'')
+                                       ->where('posts.created_at', '>' , $lastitem->created_at)
+                                       ->count(); 
+
+
                     }
                     else
                     {
                         $remaining = DB::table('posts')
                                        ->leftjoin('doctor_patient', 'posts.user_id', '=' , 'doctor_patient.patient_id')
                                        ->join('users', 'posts.user_id', '=','users.id')
-                                       ->orWhere('doctor_patient.doctor_id', '=', Auth::user()->id)
-                                       ->orWhere('posts.user_id', '=', Auth::user()->id)
+                                       ->orWhere('doctor_patient.doctor_id', '=', ''.Auth::user()->id.'')
+                                       ->orWhere('posts.user_id', '=', ''.Auth::user()->id.'')
                                        ->where('posts.created_at', '>' , $lastitem->created_at)
                                        ->count();  
                     }
@@ -211,12 +238,11 @@ class PostController extends Controller
                     if(Auth::user()->is_patient())
                     {
                         $remaining = DB::table('posts')
-                                        ->leftjoin('doctor_patient', 'posts.user_id', '=' , 'doctor_patient.doctor_id')
+                                        ->leftjoin('doctor_patient','doctor_patient.doctor_id', '=' ,  'posts.user_id')
                                         ->join('users', 'posts.user_id', '=','users.id')
-                                        ->select('posts.*','users.*')
                                         ->where('posts.created_at', '>' , $lastitem->created_at)
-                                        ->orwhere('doctor_patient.patient_id', '=', Auth::user()->id)
-                                        ->orWhere('posts.user_id', '=', Auth::user()->id)
+                                        ->orwhere('doctor_patient.patient_id', '=', ''.Auth::user()->id.'')
+                                        ->orWhere('posts.user_id', '=', ''.Auth::user()->id.'')
                                         ->count();    
                     }
                     else
@@ -224,9 +250,9 @@ class PostController extends Controller
                         $remaining = DB::table('posts')
                                         ->leftjoin('doctor_patient', 'posts.user_id', '=' , 'doctor_patient.patient_id')
                                         ->join('users', 'posts.user_id', '=','users.id')
-                                        ->orwhere('posts.created_at', '>' , $lastitem->created_at)
-                                        ->orWhere('doctor_patient.doctor_id', '=', Auth::user()->id)
-                                        ->orWhere('posts.user_id', '=', Auth::user()->id)
+                                        ->where('posts.created_at', '>' , $lastitem->created_at)
+                                        ->orWhere('doctor_patient.doctor_id', '=',''.Auth::user()->id.'')
+                                        ->orWhere('posts.user_id', '=',''.Auth::user()->id.'')
                                         ->count();    
                     } 
                 }                    

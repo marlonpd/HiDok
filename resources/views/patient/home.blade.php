@@ -27,7 +27,7 @@
 
             <div class="span8">
                 <div>
-                    <span><a href="#" @click="fetchposts(0)">All</a>|<a href="#" @click="fetchposts(1)">My Post</a></span>
+                    <span class="breadcrum"><a href="#" @click="filterposts(0,$event)">All</a><span class="separator">|</span><a href="#" @click="filterposts(1,$event)">My Post</a></span>
                 </div>
                 
                 <template v-for="(post, key, index)  in posts">
@@ -47,7 +47,7 @@
 
             <br>
             <br>
-            <div v-show="showLoadMoreBtn && posts.length > 10" class="row loadmore-container" style="text-align:center;">
+            <div v-show="showLoadMoreBtn" class="row loadmore-container" style="text-align:center;">
                 <button value="Load More" @click="loadMore()" style="width:30%;" class="btn btn-primary ladda-button loader" data-style="expand-left"><span class="ladda-label">Load More</span></button>      
             </div>
             <br>
@@ -110,7 +110,7 @@
                             if(data['status'] == 'success'){
                                 this.post.content = '';
                                 this.post.public = 1;
-                                this.fetchposts();
+                                this.fetchposts(0);
                             }else{
 
                             }
@@ -118,9 +118,17 @@
                     }
                 },
 
+                filterposts: function(filter,event){
+                    event.preventDefault();
+                    this.fetchposts(filter);
+                },
+
                 fetchposts: function(filter){
                     this.$http.get('/api/posts/get?filter='+filter , function(data){
                         this.posts = data['posts'];
+                        if(data['remaining'] > 10){
+                            self.showLoadMoreBtn = true;
+                        }
                     });
                 },
 
@@ -129,8 +137,6 @@
                 },
 
                 deletepost: function(index , post, event){
-                    
-
                     event.preventDefault();
                     var self = this; 
                     var feel = post;

@@ -14,7 +14,7 @@
                    <div class="row" v-for="feedback in feedbacks">
                         <div class="col-sm-2">
                         <div class="thumbnail">
-                        <img class="img-responsive user-photo" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png">
+                        <img class="img-responsive user-photo" :src="feedback.patient.thumbnail">
                         </div><!-- /thumbnail -->
                         </div><!-- /col-sm-1 -->
 
@@ -40,6 +40,12 @@
 
                         <!-- /col-sm-5 -->
                     </div> 
+
+                    <br>
+                    <div v-show="showLoadMoreBtn" class="row loadmore-container" style="text-align:center;">
+                        <button value="Load More" @click="loadMore()" style="width:30%;" class="btn btn-primary ladda-button loader" data-style="expand-left"><span class="ladda-label">Load More</span></button>      
+                    </div>
+
                    
                 </div>
             </div>
@@ -55,23 +61,51 @@
     <script>
         var childMixin = {
 
-            mounted(){
-              
+            mounted(){  
             },
+
             created: function() {
-                this.fetchFeedback();
+                this.fetchUserFeedbacks();
             },
-
-
 
             data: function(){
                 return {
-
+                    lastdate : "",
+                    showLoadMoreBtn : true, 
                 }
             },
 
             methods:{
+                fetchUserFeedbacks: function(){
+                    this.$http.get('/api/feedbacks/get?lastdate='+this.lastdate, function(data){
+                        this.feedbacks = data['feedbacks'];
+                    });
+                },
+                
+                loadMore: function(){
+                    var lastitem = this.feedbacks[Object.keys(this.feedbacks)[Object.keys(this.feedbacks).length - 1]];
+                    this.lastdate = lastitem.created_at;
+                    self = this;
+                    var l = Ladda.create(document.querySelector( '.loader' ));
+                    l.start();
+                    this.$http.get('/api/feedbacks/get?lastdate='+this.lastdate, function(data){
+                        var items = data['feedbacks'];
+                        if(data['remaining'] == 0){
+                            self.showLoadMoreBtn = false;
+                        }else{
+                            self.showLoadMoreBtn = false;
+                        }
 
+                        if(data['error'] == 'Unauthenticated'){
+                            windows.location = 'http://hidok.com';
+                        }
+
+                        items.forEach(function(item , index){
+                            self.feedbacks.push(item);
+                        });
+                        l.stop();
+                    });
+                }
 
 
             }

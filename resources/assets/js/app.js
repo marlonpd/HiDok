@@ -81,6 +81,9 @@ Vue.component('add-genito-urinary-system-form', require('./components/itr/AddGen
 Vue.component('add-extremity-form', require('./components/itr/AddExtremityForm.vue'));
 Vue.component('edit-post-form', require('./components/EditPostForm.vue'));
 
+
+
+
 const app = new Vue({
   router,
   el: '#app',
@@ -107,6 +110,7 @@ const app = new Vue({
 
   mounted: function(){
   },
+
 
   methods:{
     reSchedAppointments : function(appointmentId, clinicId){

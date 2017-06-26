@@ -26,25 +26,67 @@
             </div>
 
             <div class="span8">
+                <div>
+                    <span class="breadcrum"><a href="#" @click="filterposts(0,$event)">All</a><span class="separator">|</span><a href="#" @click="filterposts(1,$event)">My Post</a></span>
+                </div>
                 
-                <template v-for="(post, key, index)  in posts">
-                    <div>
-                        <div class="pull-right">
-                            <i class="fa fa-pencil fa-1 hand-pointer" data-toggle="modal" data-target="#edit-post-form" @click="updatepost(post, $event)" aria-hidden="true"></i>
-                            <i class="fa fa-trash fa-1 hand-pointer"   @click="deletepost(key , post , $event)" aria-hidden="true"></i>
-                        </div>
-                        <p>@{{ post.content }}</p>
-                        <div>
-                            <span class="badge badge-success">Posted @{{ post.created_at }}</span><div class="pull-right"><span class="label">alice</span> <span class="label">story</span> <span class="label">blog</span> <span class="label">personal</span></div>
+                <template v-for="(post, key, index)  in posts ">
+                    <div class="post-detail">
+                        <div class="col-md-2">
+                            <div class="post-userphoto">
+                                <a href="">
+                                    <img :src="post.thumbnail" class="img-responsive user-photo">
+                                </a>
+                            </div>
                         </div> 
-                        <hr>
+
+                        <div class="col-md-10">
+                            <div class="row">
+                                <div class="pull-left">
+                                 @{{ post.firstname | capitalize}} @{{ post.lastname | capitalize}}
+                                </div>
+
+                                <div class="pull-right">
+                                    
+                                     <div class="dropdown post-option">
+                                        <button class="btn dropdown-toggle post-option-btn" type="button" data-toggle="dropdown">
+                                        <span class="caret"></span></button>
+                                        <ul class="dropdown-menu post-option-menu">
+                                            <li class="hand-pointer"  @click="updatepost(post, $event)" data-toggle="modal" data-target="#edit-post-form"  aria-hidden="true"><i class="fa fa-pencil fa-1" ></i>Edit </li>
+                                            <li class="hand-pointer"   @click="deletepost(key , post , $event)"><i class="fa fa-trash fa-1 " aria-hidden="true"></i>Delete</li>
+                                        </ul>
+                                    </div> 
+
+                                </div>
+
+                            </div>
+                            
+                            <div class="row">
+                                
+
+                                <p>@{{ post.content | truncate(300, ' ') }}
+
+                                <div v-show="post.content.length > 300 ">
+                                    <a :href='"/post/"+post.post_id'>read more</a>
+                                </div>
+                                </p> 
+
+                                <div>
+                                    <span class="date">Posted @{{ post.created_at }}</span><div class="pull-right"><span class="label">alice</span> <span class="label">story</span> <span class="label">blog</span> <span class="label">personal</span></div>
+                                </div> 
+
+                            </div>
+                            
+                        </div>
+                        <div class="clr"></div>
                     </div>
+
                 </template>
             </div>
 
             <br>
             <br>
-            <div v-show="showLoadMoreBtn && posts.length > 10" class="row loadmore-container" style="text-align:center;">
+            <div v-show="showLoadMoreBtn" class="row loadmore-container" style="text-align:center;">
                 <button value="Load More" @click="loadMore()" style="width:30%;" class="btn btn-primary ladda-button loader" data-style="expand-left"><span class="ladda-label">Load More</span></button>      
             </div>
             <br>
@@ -80,7 +122,7 @@
             mounted() {},
 
             created: function() {
-                this.fetchposts();
+                this.fetchposts(0);
             },
 
             data(){
@@ -107,7 +149,7 @@
                             if(data['status'] == 'success'){
                                 this.post.content = '';
                                 this.post.public = 1;
-                                this.fetchposts();
+                                this.fetchposts(0);
                             }else{
 
                             }
@@ -115,9 +157,25 @@
                     }
                 },
 
-                fetchposts: function(){
-                    this.$http.get('/api/posts/get' , function(data){
+                filterposts: function(filter,event){
+                    event.preventDefault();
+                    if(filter == 1){
+                        this.showLoadMoreBtn = true;
+                    }else{
+
+                    }
+                    this.fetchposts(filter);
+                },
+
+                fetchposts: function(filter){
+                    this.$http.get('/api/posts/get?filter='+filter , function(data){
                         this.posts = data['posts'];
+                        if(data['remaining'] > 10){
+                            self.showLoadMoreBtn = true;
+                        }else{
+                            self.showLoadMoreBtn = false;
+                            
+                        }
                     });
                 },
 
@@ -126,8 +184,6 @@
                 },
 
                 deletepost: function(index , post, event){
-                    
-
                     event.preventDefault();
                     var self = this; 
                     var feel = post;
@@ -167,6 +223,8 @@
                         var moreposts = data['posts'];
                         if(data['remaining'] == 0){
                             self.showLoadMoreBtn = false;
+                        }else{
+                            self.showLoadMoreBtn = true;
                         }
 
                         if(data['error'] == 'Unauthenticated'){

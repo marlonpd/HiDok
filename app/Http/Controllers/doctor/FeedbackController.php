@@ -47,24 +47,54 @@ class FeedbackController extends Controller
     }
 
     //api/feedback/get
-    public function api_feedbacks_get()
+    public function api_feedbacks_get(Request $request)
     {
-    	$feedbacks = Feedback::with('patient')
-    						->where('doctor_id' , '=' , Auth::user()->id)
-    						->get();
+    	if(Auth::user()->is_doctor())
+    	{
+            $lastdate= $request->input('lastdate');
+            
 
+            if($lastdate == '')
+            {
+                $feedbacks = Feedback::with('patient') 
+                                         ->where('doctor_id' , '=' , Auth::user()->id)
+                                         ->take(10)
+                                         ->orderBy('created_at', 'ASC')
+                                         ->get();
+            }
+            else
+            {
+                $feedbacks = Feedback::with('patient')
+                                        ->where('doctor_id' , '=' , Auth::user()->id)
+                                        ->where('created_at', '>' , $lastdate)
+                                        ->take(10)
+                                        ->orderBy('created_at', 'ASC')
+                                        ->get();
+            }
 
-        return json_pretty(['feedbacks' => $feedbacks]);                    
-  
+            $remaining = 0;
+            $lastitem = $feedbacks->last();
+            
+            if($lastitem)
+            {
+                $remaining = Feedback::where('doctor_id','=' , Auth::user()->id)
+                                     ->where('created_at', '>' , $lastitem->created_at)
+                                     ->count();
+            }                      
+
+  			return json_pretty(['feedbacks'  => $feedbacks ,
+                                'remaining' => $remaining,
+                            ]);
+    	}
     }
 
 
     public function api_feedback_approved_get($id)
     {
         $feedbacks = Feedback::with('patient')
-                    ->where('doctor_id' , '=' , $id)
-                    ->where('approved','=' , 1)
-                    ->get();
+                             ->where('doctor_id' , '=' , $id)
+                             ->where('approved','=' , 1)
+                             ->get();
 
         return response()->json(['feedbacks' => $feedbacks]);
     }

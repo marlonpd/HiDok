@@ -255,10 +255,17 @@ class AppointmentController extends Controller
 
     public function add_patient( $patient_id)
     {
-        $patient = new DoctorPatient();
-        $patient->patient_id = $patient_id;
-        $patient->doctor_id = Auth::user()->id;
-        $patient->save();
+        $is_friend = DoctorPatient::where('patient_id' , '=' ,$patient_id)
+                                  ->where('doctor_id' , '=',  Auth::user()->id)
+                                  ->count();
+
+        if($is_friend == 0)
+        { 
+            $patient = new DoctorPatient();
+            $patient->patient_id = $patient_id;
+            $patient->doctor_id = Auth::user()->id;
+            $patient->save();
+        }
     }
 
     //api/appointment/consult/post

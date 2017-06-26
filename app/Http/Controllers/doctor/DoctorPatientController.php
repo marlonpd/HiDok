@@ -28,11 +28,11 @@ class DoctorPatientController extends Controller
     }
 
     ///api/patient/remove/post
-    public function api_patient_remove_post(Request $request)
+    public function api_patient_delete_post(Request $request)
     {
-    	$patient = Patient::findOrFail($request->input('id'));
+    	$patient = DoctorPatient::where('id' , '=' , $request->input('id'))->delete();
     	
-    	if($patient->destroy())
+    	if($patient)
     	{
  			return json_pretty(['status' => 'success']);  
         }

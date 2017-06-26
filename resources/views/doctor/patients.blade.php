@@ -11,10 +11,14 @@
 
         <div class="panel-body">
 
-        <div class="col-md-4" v-for="patient in userPatients">
+        <div class="col-md-4" v-for="(patient, key, index) in userPatients">
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="row">
+                       <div class="pull-right">
+                            <span class="hand-pointer" @click="deletePatient(index , patient, $event)">X</div>
+                        </div>
+
                         <div class="col-md-4">
                             <img  :src="patient.patient.thumbnail" class="img-responsive user-photo thumb">
                         </div>
@@ -27,6 +31,8 @@
                                 Remove</button>
                  
                         </div>
+
+                        
                     </div>
                 </div>
             </div>
@@ -65,6 +71,7 @@
                 return {
                     lastdate : "",
                     showLoadMoreBtn : true, 
+                    userPatients : {},
                 }
             },
 
@@ -75,6 +82,36 @@
                     fetchUserPatients: function(){
                         this.$http.get('/api/user/patients/get?lastdate='+this.lastdate, function(data){
                             this.userPatients = data['patients'];
+                        });
+                    },
+
+                    deletePatient: function(index , patient, event){
+                        event.preventDefault();
+                        var self = this; 
+                        var user = patient;
+
+                        swal({
+                            title: 'Are you sure?',
+                            text: "You won't be able to revert this!",
+                            type: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes, delete it!'
+                        }).then(function (isConfirm, post) {
+                                if(isConfirm){
+                                    self.$http.post( '/api/patient/delete/post' , user ,function(data){
+                                        if(data['status'] == 'success'){
+                                            self.userPatients.splice(index, 1);
+                                        }else{
+                                            swal("error","Please try again!", "error");
+                                        }
+                                    });
+                                }
+                                else
+                                {
+                                    swal("cancelled","Your categories are safe", "error");
+                                }
                         });
                     },
 

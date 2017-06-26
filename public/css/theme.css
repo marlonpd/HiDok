@@ -994,3 +994,48 @@ h2, a{
     font-weight: bold;
     width: 100%;
 }
+
+.post-detail {
+    border-bottom: 1px solid gray;
+    padding-top: 10px;
+}
+
+.span1 {
+    width: 60px;
+}
+
+.post-option{
+    min-width: 5px!important;
+    
+    
+}
+
+.post-option-menu {
+    min-width: 10px;
+    padding: 8px;
+    width: 80px;
+}
+
+.post-option .caret{
+    color:gray;
+} 
+
+.post-option-btn{
+    background: #FFFFFF;
+}
+
+.post-option-menu{
+    top: 67%!important;
+    left: -53px!important;
+}
+
+span.date{
+    color: #999;
+    padding: 0 3px 2px;
+    text-decoration: none;
+    font-size: 10px;
+}
+
+.post-userphoto {
+    width: 98px;
+}

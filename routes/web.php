@@ -106,7 +106,7 @@ Route::group(['middleware' => ['web'  ]], function () {
 	
 	Route::get('/api/user/patients/get','doctor\DoctorPatientController@api_user_patients_get');
 	Route::get('/api/user/doctors/get','doctor\DoctorPatientController@api_user_doctors_get');
-	Route::post('/api/patient/remove/post','doctor\DoctorPatientController@api_remove_patient_post');
+	Route::post('/api/patient/delete/post','doctor\DoctorPatientController@api_patient_delete_post');
 
 	Route::post('/api/rate/post', 'RatingsController@api_rate_post');
 
@@ -122,6 +122,7 @@ Route::group(['middleware' => ['web'  ]], function () {
 	Route::post('/api/post/update/post' , 'PostController@api_post_update_post');
 	Route::post('/api/post/delete/post' , 'PostController@api_post_delete_post');
 	Route::post('/api/post/post' , 'PostController@api_post_post');
+	Route::get('/post/{id}', 'PostController@post');
 
 });
 

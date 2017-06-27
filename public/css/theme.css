@@ -1039,3 +1039,7 @@ span.date{
 .post-userphoto {
     width: 98px;
 }
+
+.loadmore-container {
+    margin: 10px;
+}

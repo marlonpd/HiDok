@@ -25,11 +25,6 @@
                         <div class="col-md-8">
                             <h6><a :href="'/patient/profile/'+patient.patient.id"> @{{ patient.patient.firstname }} @{{ patient.patient.lastname }}</a></h6>
                             <p>@{{ patient.created_at}}
-                            <p style="font-size: 12px;">Web Dev</p>
-                            <button class="btn btn-primary btn-xs">
-                                <i class="fa fa-plus" aria-hidden="true"></i>
-                                Remove</button>
-                 
                         </div>
 
                         
@@ -38,15 +33,13 @@
             </div>
         </div>
        
-
-       
+            <div v-show="showLoadMoreBtn" class="row loadmore-container" style="text-align:center;">
+                <button value="Load More" @click="loadMore()" style="width:30%;" class="btn btn-primary ladda-button loader" data-style="expand-left"><span class="ladda-label">Load More</span></button>      
+            </div>
     </div>
 
 
-    <div v-show="showLoadMoreBtn" class="row loadmore-container" style="text-align:center;">
-           <button value="Load More" @click="loadMore()" style="width:30%;" class="btn btn-primary ladda-button loader" data-style="expand-left"><span class="ladda-label">Load More</span></button>      
-    </div>
-
+ 
 
     
 </div>

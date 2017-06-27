@@ -14,7 +14,7 @@
                          <div class="shadow"  v-for="consultation in consultations" >
                                 <div class="col-sm-12">
                                     <div class="col-sm-1">
-                                    <img src="https://www.infrascan.net/demo/assets/img/avatar5.png" class="img-circle" width="60px">
+                                    <img :src="consultation.patient.thumbnail" width="60px">
                                     </div>
                                     <div class="col-sm-9">
                                     <h4><a href="#">@{{ consultation['patient'].firstname }} @{{ consultation['patient'].lastname }}</a></h4>
@@ -36,10 +36,10 @@
                     
                     <br>
                     <br>
-                    <div v-show="showLoadMoreBtn" class="row loadmore-container" style="text-align:center;">
-                        <button value="Load More" @click="loadMore()" style="width:30%;" class="btn btn-primary ladda-button loader" data-style="expand-left"><span class="ladda-label">Load More</span></button>      
-                    </div>
-                    <br>
+                    
+                </div>
+                <div v-if="showLoadMoreBtn" class="row loadmore-container" style="text-align:center;">
+                    <button value="Load More" @click="loadMore()" style="width:30%;" class="btn btn-primary ladda-button loader" data-style="expand-left"><span class="ladda-label">Load More</span></button>      
                 </div>
            </div>     
     </div>
@@ -53,7 +53,6 @@
 
         var childMixin = {
             mounted() {
-
             },
 
             created: function() {
@@ -69,7 +68,6 @@
             },
 
             events: {
-
             },
 
             methods: {
@@ -109,6 +107,12 @@
                 fetchUserConsultations: function(){
                     this.$http.get('/api/doctor/consultations/get?lastdate='+this.lastdate, function(data){
                         this.consultations = data['consultations'];
+                        
+                        if(this.consultations.length <= 10 ){
+                            this.showLoadMoreBtn = false;
+                        }else{
+                            this.showLoadMoreBtn = true;
+                        }
                     });
                 },
                 

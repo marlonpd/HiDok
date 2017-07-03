@@ -210,10 +210,6 @@ class PostController extends Controller
                                        ->orWhere('posts.user_id', '=', '"'.Auth::user()->id.'"')
                                        ->where('posts.created_at', '<' , $lastitem->created_at)
                                        ->count(); 
-
-
-
-
                     }
                     else
                     {

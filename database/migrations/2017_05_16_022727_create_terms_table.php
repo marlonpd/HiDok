@@ -17,6 +17,7 @@ class CreateTermsTable extends Migration
             $table->uuid('id');
             $table->string('name');
             $table->string('description')->nullable();
+            $table->char('patient_id',36)->nullable();
             $table->string('type')->default(0);
             $table->uuid('category');
         });

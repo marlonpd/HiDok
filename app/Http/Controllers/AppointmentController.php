@@ -13,7 +13,7 @@ use App\DoctorPatient;
 
 class AppointmentController extends Controller
 {
-   	
+
    	public function __construct()
     {
         $this->middleware(['auth']);
@@ -151,89 +151,190 @@ class AppointmentController extends Controller
     // /' /api/appointments/get'
     public function api_appointments_get(Request $request)
     {
+    
         if(Auth::user()->is_patient())
     	{
-            $lastdate= $request->input('lastdate');
-            
+            return $this->search_patient($request);
+    	}
+        else
+        {
+            return $this->search_doctor($request);
+        }
+    }
 
-            if($lastdate == '')
+
+    public function search_patient($request)
+    {   
+
+        $query = Appointment::query();
+        $lastdate= $request->input('lastdate');
+        $key = $request->input('key');
+
+        if($lastdate == '')
+        {
+            $query = $query->with(array('doctor' => function($query)  use (&$key) {
+                                if($key != '')
+                                {
+                                    $query->orWhere('lastname', 'like',  '%'.$key.'%')
+                                            ->orWhere('firstname', 'like', '%'.$key.'%' )
+                                            ->orWhere('middlename', 'like', '%'.$key.'%' );
+                                }
+                            })) 
+                            ->with('clinic')  
+                            ->where('patient_id','=' , Auth::user()->id)
+                            ->take(10)
+                            ->orderBy('created_at', 'ASC');                          
+        }
+        else
+        {
+            $query = $query->with('patient')
+                            ->with(array('doctor' => function($query) use ($key) {
+                                if($key != '')
+                                {
+                                    $query->orWhere('lastname', 'like',  '%'.$key.'%')
+                                        ->orWhere('firstname', 'like', '%'.$key.'%' )
+                                        ->orWhere('middlename', 'like', '%'.$key.'%' );
+                                }
+                            }))
+                            ->with('clinic')
+                            ->where('patient_id','=' , Auth::user()->id)
+                            ->where('created_at','>' , $lastdate)
+                            ->take(10)
+                            ->orderBy('created_at', 'ASC');
+        }
+        $remaining = 0;
+        $appointments = $query->get();
+        $lastitem = $appointments->last();
+
+    
+        if($lastitem)
+        {
+            if($key != '')
             {
-                $appointments = Appointment::with('patient')
-                                           ->with('doctor') 
-                                           ->with('clinic')  
-                                           ->where('patient_id','=' , Auth::user()->id)
-                                           ->take(10)
-                                           ->orderBy('created_at', 'ASC')
-                                           ->get();
-            }
-            else
-            {
-                $appointments = Appointment::with('patient')
-                                            ->with('doctor')
-                                            ->with('clinic')
-                                            ->where('patient_id','=' , Auth::user()->id)
-                                            ->where('created_at','>' , $lastdate)
-                                            ->take(10)
-                                            ->orderBy('created_at', 'ASC')
-                                            ->get();
-            }
-            $remaining = 0;
-            $lastitem = $appointments->last();
-            
-            if($lastitem)
-            {
-                $remaining = Appointment::with('doctor')
+                $remaining = Appointment::with(array('doctor' => function($query)  use (&$key) {
+                                            if($key != '')
+                                            {
+                                                $query->orWhere('lastname', 'like',  '%'.$key.'%')
+                                                        ->orWhere('firstname', 'like', '%'.$key.'%' )
+                                                        ->orWhere('middlename', 'like', '%'.$key.'%' );
+                                            }
+                                        }))
                                         ->with('clinic')
                                         ->where('patient_id','=' , Auth::user()->id)
                                         ->where('created_at', '>' , $lastitem->created_at)
                                         ->count();
-            }                      
-
-  			return json_pretty(['appointments'  => $appointments ,
-                                'remaining'     => $remaining,
-                            ]);
-    	}
-        else
-        {
-            $lastdate= $request->input('lastdate');
-            
-
-            if($lastdate == '')
-            {
-                $appointments = Appointment::with('patient')
-                                           ->with('clinic')
-                                           ->where('doctor_id','=' , Auth::user()->id)
-                                           ->take(10)
-                                           ->orderBy('created_at', 'ASC')
-                                           ->get();
             }
             else
-            {
-                $appointments = Appointment::with('patient')
-                                            ->with('clinic')
-                                            ->where('doctor_id','=' , Auth::user()->id)
-                                            ->where('created_at', '>' , $lastdate)
-                                            ->take(10)
-                                            ->orderBy('created_at', 'ASC')
-                                            ->get();
+            { 
+                $remaining = Appointment::with(array('doctor' => function($query)  use (&$key) {
+                                            if($key != '')
+                                            {
+                                                $query->orWhere('lastname', 'like',  '%'.$key.'%')
+                                                        ->orWhere('firstname', 'like', '%'.$key.'%' )
+                                                        ->orWhere('middlename', 'like', '%'.$key.'%' );
+                                            }
+                                        }))
+                                        ->with('clinic')
+                                        ->where('patient_id','=' , Auth::user()->id)
+                                        ->where('created_at', '>' , $lastitem->created_at)
+                                        ->count();
             }
-            $remaining = 0;
-            $lastitem = $appointments->last();
+        }                      
+
+        return json_pretty(['appointments'  => $appointments ,
+                            'remaining'     => $remaining,
+                        ]);
+    }
+
+    public function search_doctor($request)
+    {
+
+        $query = Appointment::query();
+        $lastdate= $request->input('lastdate');
+        $key = $request->input('key');
+             
+
+        if($lastdate == '')
+        {
             
-            if($lastitem)
+                
+            $query = $query->with('clinic')
+                            ->where('doctor_id','=' , Auth::user()->id)
+                            ->with(array('patient' => function($query) use ($key) {
+                                if($key != '')
+                                {
+                                    $query->where('lastname', 'like', '%'.$key.'%');
+                                }
+                            }))        
+                            ->where('doctor_id','=' , Auth::user()->id)                    
+                            ->take(10)
+                            ->orderBy('created_at', 'ASC');
+        }
+        else
+        {
+            
+
+            $query = $query->with(array('patient' => function($query) use ($key) {
+                                if($key != '')
+                                {
+                                    $query->where('lastname', 'like',  '%'.$key.'%')
+                                            ->where('firstname', 'like', '%'.$key.'%' )
+                                            ->where('middlename', 'like', '%'.$key.'%' );
+                                }
+                            }))
+                            ->with('clinic')
+                            ->where('doctor_id','=' , Auth::user()->id)
+                            ->where('created_at', '>' , $lastdate)
+                            ->take(10)
+                            ->orderBy('created_at', 'ASC');
+        }
+
+
+        $remaining = 0;
+        $appointments = $query->get();
+        $lastitem = $appointments->last();
+        
+        if($lastitem)
+        {
+            if($key != '')
             {
-                $remaining = Appointment::with('patient')
+                $remaining = Appointment::with(array('patient' => function($query) use ($key) {
+                                            if($key != '')
+                                            {
+                                                $query->where('lastname', 'like',  '%'.$key.'%')
+                                                        ->where('firstname', 'like', '%'.$key.'%' )
+                                                        ->where('middlename', 'like', '%'.$key.'%' );
+                                            }
+                                        }))
                                         ->with('clinic')
                                         ->where('doctor_id','=' , Auth::user()->id)
                                         ->where('created_at', '>' , $lastitem->created_at)
                                         ->count();
-            }                      
+            
+            }
+            else
+            {
+                $remaining = Appointment::with(array('patient' => function($query) use ($key) {
+                                            if($key != '')
+                                            {
+                                                $query->where('lastname', 'like',  '%'.$key.'%')
+                                                        ->where('firstname', 'like', '%'.$key.'%' )
+                                                        ->where('middlename', 'like', '%'.$key.'%' );
+                                            }
+                                        }))
+                                        ->with('clinic')
+                                        ->where('doctor_id','=' , Auth::user()->id)
+                                        ->where('created_at', '>' , $lastitem->created_at)
+                                        ->count();
+            }                            
+        }                      
 
-  			return json_pretty(['appointments'  => $appointments ,
-                                'remaining'     => $remaining,
-                            ]);
-        }
+        return json_pretty(['appointments'  => $appointments ,
+                            'remaining'     => $remaining,
+                        ]);
     }
+
+    
 
     //api/appointment/confirm/post
     public function api_appointment_confirm_post(Request $request)

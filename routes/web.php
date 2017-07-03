@@ -99,7 +99,9 @@ Route::group(['middleware' => ['web'  ]], function () {
 	Route::post('/api/update/profile/post' , 'ProfileController@api_update_profile_post');
 	
 	//patient 
-	Route::get('/itr/create/{consultation_type}/{patient_id}','ConsultationController@index');
+	Route::get('/consultation/create/{consultation_type}/{patient_id}','ConsultationController@consultation_create');
+	Route::get('/consultation/new/{consultation_id}','ConsultationController@consultation_new');
+
 	Route::get('/itr/{id}','ITRController@patient_itr');
 
 	Route::get('/health/history' ,'ConsultationController@health_history');
@@ -111,7 +113,7 @@ Route::group(['middleware' => ['web'  ]], function () {
 	Route::post('/api/rate/post', 'RatingsController@api_rate_post');
 
 	Route::get('/api/patient/consultation/get', 'ConsultationController@api_patient_consultation_get');
-	Route::get('/consultation/{id}', 'ConsultationController@consultation');
+	//Route::get('/consultation/{id}', 'ConsultationController@consultation');
 	Route::get('/consultations', 'ConsultationController@consultations');
 
 	Route::get('/api/doctor/consultations/get','ConsultationController@api_doctor_consultations_get');

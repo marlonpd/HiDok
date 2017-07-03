@@ -60,7 +60,7 @@ class User extends Eloquent implements Authenticatable
 
     public function fullname()
     {
-        return ($this->account_type == config('constants.account_type.patient') || $this->account_type == config('constants.account_type.doctor')) ? ($this->firstname.' '.$this->middlename.' '.$this->lastname) : ($this->name); 
+        return ($this->account_type == config('constants.account_type.patient') || $this->account_type == config('constants.account_type.doctor')) ? ucwords($this->firstname.' '.$this->middlename.' '.$this->lastname) : ucfirst(trans($this->name)); 
     }
 
     public function user_type()

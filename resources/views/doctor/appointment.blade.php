@@ -5,27 +5,38 @@
     <div class="row">
 
             <div class="panel panel-default">
-                <div class="panel-heading">Appointments</div>
+                <div class="panel-heading">Appointments
+                
+                <div class="pull-right">
+                    <input type="text" class="form-control input-md" name="searchKey" v-model="searchKey" v-on:keyup="search()"/>
+                </div>
+
+                <div class="clr"></div>
+
+                </div>
 
                 <div class="panel-body">
 
                   
-                      
 
 
-
-                                 <div class="row" v-for="appointment in appointments">
-                                        <div class="col-sm-2">
-                                            <div class="thumbnail">
-                                                <img class="img-responsive user-photo" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png">
-                                            </div><!-- /thumbnail -->
-                                        </div><!-- /col-sm-1 -->
-
-                                        <div class="col-sm-4">
-                                            <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                                <strong> @{{ appointment.patient.lastname }} , @{{ appointment.patient.firstname  }}</strong> 
-                                                <span class="text-muted">requested 5 days ago</span>
+                            <div class="shadow"  v-for="appointment in appointments" >
+                            <div class="row">
+                                <div class="col-sm-1">
+                                    <div class="thumbnail">         
+                                        <img :src="'/'+appointment.patient.thumbnail" width="60px">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-sm-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <strong> @{{ appointment.patient.lastname }} , @{{ appointment.patient.firstname  }}</strong> 
+                                            <span class="text-muted">You requested this 5 days ago</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <strong> @{{ appointment.patient.lastname }} , @{{ appointment.patient.firstname  }}</strong> 
+                                            <span class="text-muted">requested 5 days ago</span>
                                             </div>
                                             <div class="panel-body">
                                              Clinic: @{{ appointment.clinic.name }}
@@ -33,32 +44,29 @@
                                              @{{ appointment.appointment_date }}
                                              <br>
                                              Note: @{{ appointment.note }}
-                                             
-                                            </div><!-- /panel-body -->
-                                            </div><!-- /panel panel-default -->
-                                        </div><!-- /col-sm-5 -->
 
-                                        <div class="col-sm-6">
-                                             <div class="btn-group vcenter">
-                                             
-                                              <button  v-if="appointment.confirmed == 0 && appointment.re_schedule_by_id != authUser.id" type="button" class="btn btn-primary btn-success" @click="confirmAppointment(appointment, $event)"> Confirm</button>
+                                        </div><!-- /panel-body -->
+                                    </div><!-- /panel panel-default -->
+                                </div><!-- /col-sm-6 -->
+                                
+                                <div class="col-sm-5">
+                                        <button  v-if="appointment.confirmed == 0 && appointment.re_schedule_by_id != authUser.id" type="button" class="btn btn-primary btn-success" @click="confirmAppointment(appointment, $event)"> Confirm</button>
 
-                                              <button  v-if="appointment.confirmed == 0 && appointment.re_schedule_by_id == authUser.id" type="button" class="btn btn-primary btn-success disabled" @click="confirmAppointment(appointment, $event)">Confirm</button>
-                                                                  
-                                              <button  v-if="appointment.confirmed == 1 && appointment.re_schedule_by_id != authUser.id" type="button" class="btn btn-primary btn-success" @click="newConsultation(appointment)">Consult</button>
+                                        <button  v-if="appointment.confirmed == 0 && appointment.re_schedule_by_id == authUser.id" type="button" class="btn btn-primary btn-success disabled" @click="confirmAppointment(appointment, $event)">Confirm</button>
+                                                            
+                                        <button  v-if="appointment.confirmed == 1 && appointment.re_schedule_by_id != authUser.id" type="button" class="btn btn-primary btn-success" @click="newConsultation(appointment)">Consult</button>
 
-                                               <button  v-if="appointment.confirmed == 1 && appointment.re_schedule_by_id == authUser.id" type="button" class="btn btn-primary btn-success disabled" @click="newConsultation(appointment)">Consult</button>
+                                        <button  v-if="appointment.confirmed == 1 && appointment.re_schedule_by_id == authUser.id" type="button" class="btn btn-primary btn-success disabled" @click="newConsultation(appointment)">Consult</button>
 
-                                              <button  v-if="appointment.confirmed == 2" type="button" class="btn btn-primary btn-success disabled" >Consult</button>
-                                              <button type="button" class="btn btn-primary btn-infor"  data-title="Re-Schedule" data-toggle="modal" data-target="#reschedule" @click="setAppointmentChild(appointment)">Re-Schedule</button>
-                                              <button type="button" class="btn btn-primary btn-danger" @click="deleteAppointment(appointment, $event)">Delete</button>
-                                            </div>   
-
-                                             
-                                        </div><!-- /col-sm-1 -->
-
-                                        <!-- /col-sm-5 -->
-                                    </div> 
+                                        <button  v-if="appointment.confirmed == 2" type="button" class="btn btn-primary btn-success disabled" >Consult</button>
+                                        <button type="button" class="btn btn-primary btn-infor"  data-title="Re-Schedule" data-toggle="modal" data-target="#reschedule" @click="setAppointmentChild(appointment)">Re-Schedule</button>
+                                        <button type="button" class="btn btn-primary btn-danger" @click="deleteAppointment(appointment, $event)">Delete</button>
+                                 </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <hr />
+                            <div class="clearfix"></div>
+                        </div>
 
 
 
@@ -134,10 +142,20 @@
                    lastdate : "",
                    showLoadMoreBtn : true, 
                    consultations : {},
+                   searchKey : '',
                 }
             },
 
+
             methods:{
+
+                search: function(){
+                    self = this;
+                    clearTimeout(this.timer);
+                    this.timer = setTimeout(function() {
+                        self.fetchAllUserAppointments();
+                    }, 2000);
+                },
 
                 setAppointmentMain : function(appointment){
                     this.editAppointment = appointment;
@@ -160,10 +178,8 @@
 
                 confirmAppointment : function(appointment, event){
                     event.preventDefault();
-
                     self = this;
 
-                    
                     swal({
                         title: 'Are you sure?',
                         text: "You won't be able to revert this!",
@@ -195,50 +211,32 @@
                 },
 
                 fetchAllUserAppointments: function(){
-                    this.$http.get('/api/appointments/get?lastdate='+this.lastdate, function(data){
+                    this.$http.get('/api/appointments/get?lastdate='+this.lastdate+'&key='+this.searchKey, function(data){
                         this.appointments = data['appointments'];
                     });
                 },
 
                 consult : function(appointment){
-                  /*  this.$http.post('/api/appointment/consult/post', appointment, function(data){
-                        if(data == 'success'){
-                        appointment.confirmed = 2;
-                        }else{
-                        swal("Error","Please try again!", "error");
-                        }
-                    });*/
                 },
 
                 newConsultation: function(appointment){
-                    var inputOptions = new Promise(function (resolve) {
-                    setTimeout(function () {
-                        resolve({
-                        '0': 'Checkup',
-                        '1': 'Admit',
-                        })
-                    }, 1000)
-                    })
-
-                    
-
                     swal({
-                        title: 'Select consultaion type',
-                        input: 'radio',
-                        confirmButtonText: 'Create',
-                        inputOptions: inputOptions,
-                        inputValidator: function (result) {
-                            return new Promise(function (resolve, reject) {
-                            if (result) {
-                                resolve()
-                            } else {
-                                reject('You need to select something!')
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        type: 'info',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, continue!'
+                    }).then(function (isConfirm) {
+
+                            if(isConfirm){
+                                 window.location = '/itr/create/0/'+appointment.patient_id;
+                            }else{
+                                swal("cancelled","Your categories are safe", "error");
                             }
-                            })
-                        }
-                    }).then(function (result) {
-                        window.location = '/itr/create/'+result+'/'+appointment.patient_id;
-                    })
+                    
+                    });
                    
                 },
 
@@ -253,7 +251,7 @@
                     self = this;
                     var l = Ladda.create(document.querySelector( '.loader' ));
                     l.start();
-                    this.$http.get('/api/appointments/get?lastdate='+this.lastdate, function(data){
+                    this.$http.get('/api/appointments/get?lastdate='+this.lastdate+'&key='+this.searchKey, function(data){
                         var items = data['appointments'];
                         if(data['remaining'] == 0){
                             self.showLoadMoreBtn = false;

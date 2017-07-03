@@ -18,7 +18,7 @@
     <body >
       <div id="app">
      
-             @include('partials.nav')
+              @include('partials.nav')
               <div class="main-container" >
                   <div id="wrapper" class="toggled-2">
                       @if (Auth::check())

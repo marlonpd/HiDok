@@ -46,9 +46,9 @@
                                  @{{ post.firstname | capitalize}} @{{ post.lastname | capitalize}}
                                 </div>
 
-                                <div class="pull-right">
+                                <div  class="pull-right">
                                     
-                                     <div class="dropdown post-option">
+                                     <div v-if="authUser.id == post.id" class="dropdown post-option">
                                         <button class="btn dropdown-toggle post-option-btn" type="button" data-toggle="dropdown">
                                         <span class="caret"></span></button>
                                         <ul class="dropdown-menu post-option-menu">

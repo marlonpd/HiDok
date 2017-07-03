@@ -108,7 +108,7 @@
                           <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <span class="glyphicon glyphicon-user"></span> 
-                                <strong>{{ Auth::user()->firstname }}</strong>
+                                <strong>{{ ucfirst(trans(Auth::user()->firstname)) }}</strong>
                                 <span class="glyphicon glyphicon-chevron-down"></span>
                             </a>
                             <ul class="dropdown-menu account-menu">

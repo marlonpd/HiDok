@@ -12,17 +12,15 @@
             <li>
                 <a href="/home"><span class="fa-stack fa-lg pull-left"><i class="fa fa-home fa-stack-1x "></i></span>Home</a>
             </li>
-
         @if(Auth::user()->is_patient())
-        
+            <li>
+                <a href="/appointment"><span class="fa-stack fa-lg pull-left"><i class="fa fa-address-book fa-stack-1x "></i></span>Appointments</a>
+            </li>
             <li>
                 <a href="/health/history"><span class="fa-stack fa-lg pull-left"><i class="fa fa-heartbeat fa-stack-1x "></i></span>My Health History</a>
             </li>
             <li>
                 <a href="/doctors"><span class="fa-stack fa-lg pull-left"><i class="fa fa-user-md fa-stack-1x "></i></span>My Doctors</a>
-            </li>
-            <li>
-                <a href="/appointment"><span class="fa-stack fa-lg pull-left"><i class="fa fa-address-book fa-stack-1x "></i></span>Appointment</a>
             </li>
         @endif    
         
@@ -30,14 +28,14 @@
             <li>
                 <a href="/appointment"> <span class="fa-stack fa-lg pull-left"><i class="fa fa-address-book fa-stack-1x "></i></span>Appointment</a>
             </li>
+              <li>
+                <a href="/patients"><span class="fa-stack fa-lg pull-left"><i class="fa fa-users fa-stack-1x "></i></span>Patients</a>
+            </li>
+            <li>
+                <a href="/consultations"><span class="fa-stack fa-lg pull-left"><i class="fa fa-address-book fa-stack-1x "></i></span>History</a>
+            </li>
             <li>
                 <a href="/clinic"><span class="fa-stack fa-lg pull-left"><i class="fa fa-hospital-o fa-stack-1x "></i></span>Clinics</a>
-            </li>
-            <li>
-                <a href="/consultations"><span class="fa-stack fa-lg pull-left"><i class="fa fa-address-book fa-stack-1x "></i></span>Consultations</a>
-            </li>
-            <li>
-                <a href="/patients"><span class="fa-stack fa-lg pull-left"><i class="fa fa-users fa-stack-1x "></i></span>Patients</a>
             </li>
             <li>
                 <a href="/feedback"><span class="fa-stack fa-lg pull-left"><i class="fa fa-comments fa-stack-1x "></i></span>Feedback</a>

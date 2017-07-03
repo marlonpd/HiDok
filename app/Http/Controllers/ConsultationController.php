@@ -16,25 +16,7 @@ class ConsultationController extends Controller
         $this->middleware(['auth']);
     }
 
-    public function index($consultation_type , $patient_id)
-    {
-        $consultation = new Consultation();
-        $consultation->patient_id = $patient_id;
-        $consultation->doctor_id = Auth::user()->id;
-        $consultation->type = $consultation_type;
-        $patient = User::findOrFail($patient_id);
-        
-        if($consultation->save())
-        {
-            $this->add_patient($patient_id);
-            return view('patient/create_itr', compact('patient','consultation'));
-        }
-        else
-        {
-
-        }
-         
-    }
+    
 
     // /healthhistory
     public function health_history()
@@ -94,8 +76,56 @@ class ConsultationController extends Controller
     	}
     }
 
+    public function consultation_create($consultation_type , $patient_id)
+    {
+        $consultation = new Consultation();
+        $consultation->patient_id = $patient_id;
+        $consultation->doctor_id = Auth::user()->id;
+        $consultation->type = $consultation_type;
+        $patient = User::findOrFail($patient_id);
+        
+        if($consultation->save())
+        {
+            $this->add_patient($patient_id);
+             return redirect('/consultation/new/'+$consultation->id);
+            //return view('patient/create_itr', compact('patient','consultation'));
+        }
+        else
+        {
 
-    public function consultation($id)
+        }
+         
+    }
+
+    public function consultation_new($id)
+    {
+        $consultation = Consultation::with('patient')
+                                    ->with('doctor')   
+                                    ->where('id','=' , $id)
+                                    ->first();
+        
+        $itr = IndividualTreatmentRecord::where('consultation_id' ,'=' , $id)
+                                        ->get();
+
+        $itr = array();
+
+        $itr_type = config('constants.individual_treatment_record_type');
+
+
+        foreach($itr_type as $key=>$value)
+        {
+            $itr[$key] = IndividualTreatmentRecord::with('patient')
+                                                ->where('type', '=', $key)
+                                                ->where('consultation_id','=',$id)
+                                                ->get();
+        }
+
+        return view('patient/consultation', compact('consultation', 'itr' , 'itr_type'));
+
+    }
+
+
+    /*public function consultation($id)
     {
         
         $consultation = Consultation::with('patient')
@@ -120,7 +150,7 @@ class ConsultationController extends Controller
         }
 
         return view('patient/consultation', compact('consultation', 'itr' , 'itr_type'));
-    }
+    }*/
 
 
     // /api/patient/consultation/get
@@ -184,10 +214,16 @@ class ConsultationController extends Controller
 
     public function add_patient( $patient_id)
     {
-        $patient = new DoctorPatient();
-        $patient->patient_id = $patient_id;
-        $patient->doctor_id = Auth::user()->id;
-        $patient->save();
+        $is_friend = DoctorPatient::where('patient_id' , '=' ,$patient_id)
+                                  ->where('doctor_id' , '=',  Auth::user()->id)
+                                  ->count();
+        if($is_friend == 0)
+        { 
+            $patient = new DoctorPatient();
+            $patient->patient_id = $patient_id;
+            $patient->doctor_id = Auth::user()->id;
+            $patient->save();
+        }
     }
 
 }

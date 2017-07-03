@@ -102,6 +102,7 @@ const app = new Vue({
       userPatients : {},
       userDoctors : {},
       defaultPhoto : '',
+      searchKey : '',
     }
   },
 

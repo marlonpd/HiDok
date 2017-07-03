@@ -33,10 +33,8 @@
                 <template v-for="(post, key, index)  in posts ">
                     <div class="post-detail">
                         <div class="col-md-2">
-                            <div class="post-userphoto">
-                                <a href="">
-                                    <img :src="post.thumbnail" class="img-responsive user-photo">
-                                </a>
+                            <div class="post-userphoto thumbnail">
+                                <img :src="post.thumbnail" class="img-responsive user-photo">
                             </div>
                         </div> 
 
@@ -48,7 +46,7 @@
 
                                 <div class="pull-right">
                                     
-                                     <div class="dropdown post-option">
+                                     <div v-if="authUser.id == post.id" class="dropdown post-option">
                                         <button class="btn dropdown-toggle post-option-btn" type="button" data-toggle="dropdown">
                                         <span class="caret"></span></button>
                                         <ul class="dropdown-menu post-option-menu">
@@ -86,7 +84,7 @@
 
             <br>
             <br>
-            <div v-show="showLoadMoreBtn" class="row loadmore-container" style="text-align:center;">
+            <div v-if="showLoadMoreBtn" class="row loadmore-container" style="text-align:center;">
                 <button value="Load More" @click="loadMore()" style="width:30%;" class="btn btn-primary ladda-button loader" data-style="expand-left"><span class="ladda-label">Load More</span></button>      
             </div>
             <br>
@@ -135,6 +133,7 @@
                     showLoadMoreBtn : true, 
                     posts : {},
                     selectedpost : {},
+                    filter : 0,
                 }
             },
 
@@ -160,9 +159,11 @@
                 filterposts: function(filter,event){
                     event.preventDefault();
                     if(filter == 1){
+                        this.filter = 1;    
                         this.showLoadMoreBtn = true;
                     }else{
-
+                        this.filter = 0;
+                         this.showLoadMoreBtn = false;
                     }
                     this.fetchposts(filter);
                 },
@@ -219,7 +220,7 @@
                     self = this;
                     var l = Ladda.create(document.querySelector( '.loader' ));
                     l.start();
-                    this.$http.get('/api/posts/get?lastdate='+this.lastdate, function(data){
+                    this.$http.get('/api/posts/get?lastdate='+this.lastdate+'&filter='+this.filter, function(data){
                         var moreposts = data['posts'];
                         if(data['remaining'] == 0){
                             self.showLoadMoreBtn = false;

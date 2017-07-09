@@ -15,10 +15,10 @@
                    </div>
 
                     <div class="row abdomens-list-pnl">
-                        <template v-for="abdomen in filterBy(abdomens, searchkey)">
+                        <template v-for="(abdomen,index) in filterBy(abdomens, searchkey)">
                             <div class="col-md-4">
                                 <div class="checkbox">
-                                    <label><input type="checkbox" @click="selectabdomens($event,abdomen)" value="">{{ abdomen }}</label>
+                                    <label><input  v-bind:id="'abdomen'+index" type="checkbox" @click="selectabdomens($event,abdomen,index)" value="">{{ abdomen }}</label>
                                 </div>
                             </div>
                         </template>
@@ -59,6 +59,7 @@
                 searchkey : '',
                 selectedabdomens : [],
                 other: '',
+                indexes : [],     
             }
         },
 
@@ -67,11 +68,13 @@
         events: {},
 
         methods: {
-            selectabdomens: function(event, abdomen){
+            selectabdomens: function(event, abdomen,index){
                 if($(event.target).is(':checked')){
                     this.selectedabdomens.push(abdomen);
+                     this.indexes.push(index);
                 }else{
                     this.selectedabdomens = this.removeA( this.selectedabdomens, abdomen);
+                    this.indexes = this.removeA( this.indexes, index);
                 }
             },
 
@@ -103,6 +106,10 @@
                     if(data['status'] == 'success'){
                         this.$parent.fetchITR('abdomen');
                         this.other = '';
+                        this.indexes.forEach(function(i , index){
+                            $('#abdomen'+i).prop("checked",false);
+                        });
+                        this.indexes = [];    
                         this.selectedabdomens = [];
                          l.stop();
                         $('#add-abdomen-form').modal('hide');

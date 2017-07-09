@@ -15,10 +15,10 @@
                    </div>
 
                     <div class="row skins-list-pnl">
-                        <template v-for="skin in filterBy(skins, searchkey)">
+                        <template v-for="(skin,index) in filterBy(skins, searchkey)">
                             <div class="col-md-4">
                                 <div class="checkbox">
-                                    <label><input type="checkbox" @click="selectskins($event,skin)" value="">{{ skin }}</label>
+                                    <label><input  v-bind:id="'skin'+index"  type="checkbox" @click="selectskins($event,skin,index)" value="">{{ skin }}</label>
                                 </div>
                             </div>
                         </template>
@@ -59,6 +59,7 @@
                 searchkey : '',
                 selectedskins : [],
                 other: '',
+                indexes : [], 
             }
         },
 
@@ -67,11 +68,13 @@
         events: {},
 
         methods: {
-            selectskins: function(event, skin){
+            selectskins: function(event, skin,index){
                 if($(event.target).is(':checked')){
                     this.selectedskins.push(skin);
+                    this.indexes.push(index);
                 }else{
                     this.selectedskins = this.removeA( this.selectedskins, skin);
+                     this.indexes = this.removeA( this.indexes, index);
                 }
             },
 
@@ -103,6 +106,10 @@
                     if(data['status'] == 'success'){
                         this.$parent.fetchITR('skin');
                         this.other = '';
+                        this.indexes.forEach(function(i , index){
+                            $('#skin'+i).prop("checked",false);
+                        });
+                        this.indexes = [];   
                         this.selectedskins = [];
                          l.stop();
                         $('#add-skins-form').modal('hide');

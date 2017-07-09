@@ -15,10 +15,10 @@
                    </div>
 
                     <div class="row necks-list-pnl">
-                        <template v-for="neck in filterBy(necks, searchkey)">
+                        <template v-for="(neck,index) in filterBy(necks, searchkey)">
                             <div class="col-md-4">
                                 <div class="checkbox">
-                                    <label><input type="checkbox" @click="selectnecks($event,neck)" value="">{{ neck }}</label>
+                                    <label><input  v-bind:id="'neck'+index"  type="checkbox" @click="selectnecks($event,neck,index)" value="">{{ neck }}</label>
                                 </div>
                             </div>
                         </template>
@@ -59,6 +59,7 @@
                 searchkey : '',
                 selectednecks : [],
                 other: '',
+                indexes : [],          
             }
         },
 
@@ -67,11 +68,13 @@
         events: {},
 
         methods: {
-            selectnecks: function(event, neck){
+            selectnecks: function(event, neck,index){
                 if($(event.target).is(':checked')){
                     this.selectednecks.push(neck);
+                    this.indexes.push(index);
                 }else{
                     this.selectednecks = this.removeA( this.selectednecks, neck);
+                    this.indexes = this.removeA( this.indexes, index);
                 }
             },
 
@@ -103,6 +106,10 @@
                     if(data['status'] == 'success'){
                         this.$parent.fetchITR('neck');
                         this.other = '';
+                        this.indexes.forEach(function(i , index){
+                            $('#neck'+i).prop("checked",false);
+                        });
+                        this.indexes = [];  
                         this.selectednecks = [];
                          l.stop();
                         $('#add-necks-form').modal('hide');

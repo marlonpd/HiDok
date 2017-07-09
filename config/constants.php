@@ -65,6 +65,17 @@ return ['constants' =>
 				'diagnosis'                   => 'Diagnosis',
 				'treatment'                   => 'Treatment',
 				'other_medical_intervention'  => 'Other Medical Intervention',
+				'abdomen'					  => 'Abdomen',
+				'cardiovascular_system'		  => 'Cardiovascular System',
+				'chest_and_lungs'			  => 'Chest and Lungs',
+				'extremities'				  => 'Extremities',
+				'general_appearance'		  => 'General Appearance',
+				'genito_urinary_system'		  => 'Genito Urinary System',
+				'heent'						  => 'Heent',	
+				'neck'						  => 'Neck',
+				'skin'						  => 'Skin',
+				'symptom'					  => 'Symptom',
+
 		],
 		'account_type_label' => [
 				'patient'    => 'Patient',

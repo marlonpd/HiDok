@@ -15,10 +15,10 @@
                    </div>
 
                     <div class="row chestAndLungs-list-pnl">
-                        <template v-for="cal in filterBy(chestandlungs, searchkey)">
+                        <template v-for="(cal,index) in filterBy(chestandlungs, searchkey)">
                             <div class="col-md-4">
                                 <div class="checkbox">
-                                    <label><input type="checkbox" @click="selectchestAndLungs($event,cal)" value="">{{ cal }}</label>
+                                    <label><input type="checkbox" @click="selectchestAndLungs($event,cal,index)" value="">{{ cal }}</label>
                                 </div>
                             </div>
                         </template>
@@ -59,6 +59,7 @@
                 searchkey : '',
                 selectedchestAndLungs : [],
                 other: '',
+                indexes : [],  
             }
         },
 
@@ -67,12 +68,15 @@
         events: {},
 
         methods: {
-            selectchestAndLungs: function(event, skin){
+            selectchestAndLungs: function(event, skin, index){
                 if($(event.target).is(':checked')){
                     this.selectedchestAndLungs.push(skin);
+                    this.indexes.push(index);
                 }else{
                     this.selectedchestAndLungs = this.removeA( this.selectedchestAndLungs, skin);
+                    this.indexes = this.removeA( this.indexes, index);
                 }
+
             },
 
             removeA: function(arr) {
@@ -103,6 +107,9 @@
                     if(data['status'] == 'success'){
                         this.$parent.fetchITR('chest_and_lungs');
                         this.other = '';
+                        this.indexes.forEach(function(i , index){
+                            $('#chest_and_lungs'+i).prop("checked",false);
+                        });
                         this.selectedchestAndLungs = [];
                         l.stop();
                         $('#add-chest-and-lungs-form').modal('hide');

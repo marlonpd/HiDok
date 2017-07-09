@@ -31,9 +31,10 @@
               <li>
                 <a href="/patients"><span class="fa-stack fa-lg pull-left"><i class="fa fa-users fa-stack-1x "></i></span>Patients</a>
             </li>
-            <li>
+            <!--
+            <li >
                 <a href="/consultations"><span class="fa-stack fa-lg pull-left"><i class="fa fa-address-book fa-stack-1x "></i></span>History</a>
-            </li>
+            </li> -->
             <li>
                 <a href="/clinic"><span class="fa-stack fa-lg pull-left"><i class="fa fa-hospital-o fa-stack-1x "></i></span>Clinics</a>
             </li>

@@ -1043,3 +1043,28 @@ span.date{
 .loadmore-container {
     margin: 10px;
 }
+
+.consultations-pnl{
+    border: 1px solid #d3e0e9;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+    margin-bottom: 22px;
+}
+
+.consultation-detail{
+    border: 1px solid #d3e0e9;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+    margin: 5px;
+    paddingnv: 5px;
+}
+
+.consultation-active{
+    background: #EDEDED;
+}
+
+#more-details{
+    display:none;
+}

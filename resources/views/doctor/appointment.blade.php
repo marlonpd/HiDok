@@ -8,7 +8,7 @@
                 <div class="panel-heading">Appointments
                 
                 <div class="pull-right">
-                    <input type="text" class="form-control input-md" name="searchKey" v-model="searchKey" v-on:keyup="search()"/>
+                    <input type="text" class="form-control input-md" name="searchKey" v-model="searchKey" />
                 </div>
 
                 <div class="clr"></div>
@@ -18,9 +18,7 @@
                 <div class="panel-body">
 
                   
-
-
-                            <div class="shadow"  v-for="appointment in appointments" >
+                            <div class="shadow"  v-for="appointment in filterBy(appointments,searchKey)" >
                             <div class="row">
                                 <div class="col-sm-1">
                                     <div class="thumbnail">         
@@ -222,7 +220,7 @@
                 newConsultation: function(appointment){
                     swal({
                         title: 'Are you sure?',
-                        text: "You won't be able to revert this!",
+                        text: "You won't be able to revert this",
                         type: 'info',
                         showCancelButton: true,
                         confirmButtonColor: '#3085d6',
@@ -231,7 +229,7 @@
                     }).then(function (isConfirm) {
 
                             if(isConfirm){
-                                 window.location = '/itr/create/0/'+appointment.patient_id;
+                                 window.location = '/consultation/create/0/'+appointment.patient_id+'/'+appointment.id;
                             }else{
                                 swal("cancelled","Your categories are safe", "error");
                             }

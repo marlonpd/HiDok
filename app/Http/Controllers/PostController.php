@@ -15,7 +15,6 @@ class PostController extends Controller
     *
     * @return void
     */
-
     public function __construct()
     {
         $this->middleware('auth');
@@ -53,11 +52,9 @@ class PostController extends Controller
     // /api/post/delete/post
     public function api_post_delete_post(Request $request)
     {
-        $id = $request->input('id');
-        
+        $id = $request->input('post_id');
         $post = Post::where('id', '=' , $id)
-                          ->delete();
-
+                    ->delete();
 
         if($post)
         {
@@ -72,7 +69,7 @@ class PostController extends Controller
     // /api/post/update/post
     public function api_post_update_post(Request $request)
     {
-        $post = Post::find($request->input('id'));
+        $post = Post::find($request->input('post_id'));
         $post->content = $request->input('content');
         $post->public = $request->input('public') ? 1 : 0;
 

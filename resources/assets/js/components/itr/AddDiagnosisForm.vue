@@ -15,10 +15,10 @@
                    </div>
 
                     <div class="row diagnosis-list-pnl">
-                        <template v-for="diagnosis in filterBy(diagnose, searchkey)">
+                        <template v-for="(diagnosis,index) in filterBy(diagnose, searchkey)">
                             <div class="col-md-4">
                                 <div class="checkbox">
-                                    <label><input type="checkbox" @click="selectDiagnosis($event,diagnosis)" value="">{{ diagnosis }}</label>
+                                    <label><input v-bind:id="'diagnosis'+index" type="checkbox" @click="selectDiagnosis($event,diagnosis,index)" value="">{{ diagnosis }}</label>
                                 </div>
                             </div>
                         </template>
@@ -58,6 +58,7 @@
             return {
                 searchkey : '',
                 selectedDiagnosis : [],
+                indexes : [],  
                 other: '',
             }
         },
@@ -69,11 +70,13 @@
         methods: {
 
 
-            selectDiagnosis: function(event, diagnosis){
+            selectDiagnosis: function(event, diagnosis, index){
                  if($(event.target).is(':checked')){
                     this.selectedDiagnosis.push(diagnosis);
+                    this.indexes.push(index);
                 }else{
                     this.selectedDiagnosis = this.removeA( this.selectedDiagnosis, diagnosis);
+                    this.indexes = this.removeA( this.indexes, index);
                 }
                 
             },
@@ -105,6 +108,10 @@
                     if(data['status'] == 'success'){
                         this.$parent.fetchITR('diagnosis');
                         this.other = '';
+                        this.indexes.forEach(function(i , index){
+                            $('#diagnosis'+i).prop("checked",false);
+                        });
+                        this.indexes = []; 
                         this.selectedDiagnosis = [];
                         l.stop();
                         $('#add-diagnosis-form').modal('hide');

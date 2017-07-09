@@ -15,10 +15,10 @@
                    </div>
 
                     <div class="row general-appearances-list-pnl">
-                        <template v-for="ga in filterBy(general_appearances, searchkey)">
+                        <template v-for="(ga,index) in filterBy(general_appearances, searchkey)">
                             <div class="col-md-4">
                                 <div class="checkbox">
-                                    <label><input type="checkbox" @click="selectGeneralAppearances($event,ga)" value="">{{ ga }}</label>
+                                    <label><input  v-bind:id="'general_appearances'+index" type="checkbox" @click="selectGeneralAppearances($event,ga,index)" value="">{{ ga }}</label>
                                 </div>
                             </div>
                         </template>
@@ -59,6 +59,7 @@
                 searchkey : '',
                 selectedGeneralAppearances : [],
                 other: '',
+                indexes : [],
             }
         },
 
@@ -67,11 +68,13 @@
         events: {},
 
         methods: {
-            selectGeneralAppearances: function(event, ga){
+            selectGeneralAppearances: function(event, ga,index){
                 if($(event.target).is(':checked')){
                     this.selectedGeneralAppearances.push(ga);
+                    this.indexes.push(index);
                 }else{
                     this.selectedGeneralAppearances = this.removeA( this.selectedGeneralAppearances, ga);
+                    this.indexes = this.removeA( this.indexes, index);
                 }
             },
 
@@ -103,6 +106,10 @@
                     if(data['status'] == 'success'){
                         this.$parent.fetchITR('general_appearance');
                         this.other = '';
+                        this.indexes.forEach(function(i , index){
+                            $('#general_appearances'+i).prop("checked",false);
+                        });
+                        this.indexes = [];  
                         this.selectedGeneralAppearances = [];
                          l.stop();
                         $('#add-general-appearances-form').modal('hide');

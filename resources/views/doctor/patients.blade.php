@@ -7,11 +7,18 @@
       
 
         <div class="panel panel-default">
-        <div class="panel-heading">Patients</div>
+        <div class="panel-heading">Patients
+        
+        <div class="pull-right">
+            <input type="text" class="form-control input-md" name="searchKey" v-model="searchKey" />
+            
+        </div>
+        <div class="clr"></div>
+        </div>
 
         <div class="panel-body">
 
-        <div class="col-md-4" v-for="(patient, key, index) in userPatients">
+        <div class="col-md-4" v-for="(patient, key, index) in  filterBy(userPatients,searchKey)">
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="row">
@@ -65,6 +72,7 @@
                     lastdate : "",
                     showLoadMoreBtn : true, 
                     userPatients : {},
+                    searchKey : '',
                 }
             },
 
@@ -109,6 +117,11 @@
                     },
 
                     loadMore: function(){
+
+                       var firstItem = {};
+
+                    
+
                        var lastitem = this.userPatients[Object.keys(this.userPatients)[Object.keys(this.userPatients).length - 1]];
                        this.lastdate = lastitem.created_at;
                        self = this;

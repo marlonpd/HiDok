@@ -5,13 +5,19 @@
     <div class="row">
     
             <div class="panel panel-default">
-                <div class="panel-heading">Feedback</div>
+                <div class="panel-heading">Feedback
+                <div class="pull-right">
+                    <input type="text" class="form-control input-md" name="searchKey" v-model="searchKey" />
+                    
+                </div>
+                <div class="clr"></div>
+                </div>
 
                 <div class="panel-body">
              
 
 
-                   <div class="row" v-for="feedback in feedbacks">
+                   <div class="row" v-for="feedback in filterBy(feedbacks,searchKey)">
                         <div class="col-sm-2">
                         <div class="thumbnail">
                         <img class="img-responsive user-photo" :src="feedback.patient.thumbnail">
@@ -72,6 +78,7 @@
                 return {
                     lastdate : "",
                     showLoadMoreBtn : true, 
+                    searchKey : '',
                 }
             },
 

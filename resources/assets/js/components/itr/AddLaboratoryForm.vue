@@ -16,10 +16,10 @@
                    </div>
 
                     <div class="row laboratory-list-pnl">
-                        <template v-for="laboratory in filterBy(laboratories, searchkey)">
+                        <template v-for="(laboratory,index) in filterBy(laboratories, searchkey)">
                             <div class="col-md-4">
                                 <div class="checkbox">
-                                    <label><input type="checkbox" @click="selectlaboratory($event,laboratory)" value="">{{ laboratory }}</label>
+                                    <label><input  v-bind:id="'laboratory'+index" type="checkbox" @click="selectlaboratory($event,laboratory,index)" value="">{{ laboratory }}</label>
                                 </div>
                             </div>
                         </template>
@@ -60,6 +60,7 @@
                 searchkey : '',
                 selectedlaboratory : [],
                 other: '',
+                indexes: [],
             }
         },
 
@@ -70,13 +71,14 @@
         methods: {
 
 
-            selectlaboratory: function(event, laboratory){
+            selectlaboratory: function(event, laboratory,index){
                 if($(event.target).is(':checked')){
                     this.selectedlaboratory.push(laboratory);
+                    this.indexes.push(index);
                 }else{
                     this.selectedlaboratory = this.removeA( this.selectedlaboratory, laboratory);
+                    this.indexes = this.removeA( this.indexes, index);
                 }
-                
             },
 
             removeA: function(arr) {
@@ -104,6 +106,10 @@
                 this.$http.post('/api/itr/post',data, function(data){
                     if(data['status'] == 'success'){
                         this.$parent.fetchITR('laboratory');
+                        this.indexes.forEach(function(i , index){
+                            $('#laboratory'+i).prop("checked",false);
+                        });
+                        this.indexes = [];  
                         this.selectedlaboratory = [];
                          l.stop();
                         $('#add-laboratory-form').modal('hide');

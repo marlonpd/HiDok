@@ -15,10 +15,10 @@
                    </div>
 
                     <div class="row extremities-list-pnl">
-                        <template v-for="extremity in filterBy(extremities, searchkey)">
+                        <template v-for="(extremity,index) in filterBy(extremities, searchkey)">
                             <div class="col-md-4">
                                 <div class="checkbox">
-                                    <label><input type="checkbox" @click="selectextremities($event,extremity)" value="">{{ extremity }}</label>
+                                    <label><input v-bind:id="'extremities'+index" type="checkbox" @click="selectextremities($event,extremity,index)" value="">{{ extremity }}</label>
                                 </div>
                             </div>
                         </template>
@@ -59,6 +59,7 @@
                 searchkey : '',
                 selectedextremities : [],
                 other: '',
+                indexes : [],
             }
         },
 
@@ -67,11 +68,13 @@
         events: {},
 
         methods: {
-            selectextremities: function(event, skin){
+            selectextremities: function(event, skin, index ){
                 if($(event.target).is(':checked')){
                     this.selectedextremities.push(skin);
+                    this.indexes.push(index);
                 }else{
                     this.selectedextremities = this.removeA( this.selectedextremities, skin);
+                    this.indexes = this.removeA( this.indexes, index);
                 }
             },
 
@@ -103,6 +106,10 @@
                     if(data['status'] == 'success'){
                         this.$parent.fetchITR('extremities');
                         this.other = '';
+                        this.indexes.forEach(function(i , index){
+                            $('#extremities'+i).prop("checked",false);
+                        });
+                        this.indexes = [];  
                         this.selectedextremities = [];
                          l.stop();
                         $('#add-extremity-form').modal('hide');

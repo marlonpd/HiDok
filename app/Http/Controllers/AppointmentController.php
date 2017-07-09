@@ -176,8 +176,8 @@ class AppointmentController extends Controller
                                 if($key != '')
                                 {
                                     $query->orWhere('lastname', 'like',  '%'.$key.'%')
-                                            ->orWhere('firstname', 'like', '%'.$key.'%' )
-                                            ->orWhere('middlename', 'like', '%'.$key.'%' );
+                                          ->orWhere('firstname', 'like', '%'.$key.'%' )
+                                          ->orWhere('middlename', 'like', '%'.$key.'%' );
                                 }
                             })) 
                             ->with('clinic')  
@@ -266,7 +266,8 @@ class AppointmentController extends Controller
                                     $query->where('lastname', 'like', '%'.$key.'%');
                                 }
                             }))        
-                            ->where('doctor_id','=' , Auth::user()->id)                    
+                            ->where('doctor_id','=' , Auth::user()->id)
+                            ->where('confirmed' , '!=' , 2)                    
                             ->take(10)
                             ->orderBy('created_at', 'ASC');
         }
@@ -278,12 +279,13 @@ class AppointmentController extends Controller
                                 if($key != '')
                                 {
                                     $query->where('lastname', 'like',  '%'.$key.'%')
-                                            ->where('firstname', 'like', '%'.$key.'%' )
-                                            ->where('middlename', 'like', '%'.$key.'%' );
+                                          ->where('firstname', 'like', '%'.$key.'%' )
+                                          ->where('middlename', 'like', '%'.$key.'%' );
                                 }
                             }))
                             ->with('clinic')
                             ->where('doctor_id','=' , Auth::user()->id)
+                            ->where('confirmed' , '!=' , 2)
                             ->where('created_at', '>' , $lastdate)
                             ->take(10)
                             ->orderBy('created_at', 'ASC');
@@ -309,6 +311,7 @@ class AppointmentController extends Controller
                                         ->with('clinic')
                                         ->where('doctor_id','=' , Auth::user()->id)
                                         ->where('created_at', '>' , $lastitem->created_at)
+                                        ->where('confirmed' , '!=' , 2)
                                         ->count();
             
             }
@@ -325,6 +328,7 @@ class AppointmentController extends Controller
                                         ->with('clinic')
                                         ->where('doctor_id','=' , Auth::user()->id)
                                         ->where('created_at', '>' , $lastitem->created_at)
+                                        ->where('confirmed' , '!=' , 2)
                                         ->count();
             }                            
         }                      
@@ -334,7 +338,6 @@ class AppointmentController extends Controller
                         ]);
     }
 
-    
 
     //api/appointment/confirm/post
     public function api_appointment_confirm_post(Request $request)

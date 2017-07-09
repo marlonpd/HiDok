@@ -15,10 +15,10 @@
                    </div>
 
                     <div class="row genito-urinary-system-list-pnl">
-                        <template v-for="gus in filterBy(genitourinarysystems, searchkey)">
+                        <template v-for="(gus,index) in filterBy(genitourinarysystems, searchkey)">
                             <div class="col-md-4">
                                 <div class="checkbox">
-                                    <label><input type="checkbox" @click="selectgenitoUrinarySystem($event,gus)" value="">{{ gus }}</label>
+                                    <label><input  v-bind:id="'genito_urinary_system'+index" type="checkbox" @click="selectgenitoUrinarySystem($event,gus,index)" value="">{{ gus }}</label>
                                 </div>
                             </div>
                         </template>
@@ -59,6 +59,7 @@
                 searchkey : '',
                 selectedgenitoUrinarySystem : [],
                 other: '',
+                indexes : [], 
             }
         },
 
@@ -67,12 +68,15 @@
         events: {},
 
         methods: {
-            selectgenitoUrinarySystem: function(event, skin){
+            selectgenitoUrinarySystem: function(event, skin,index){
                 if($(event.target).is(':checked')){
                     this.selectedgenitoUrinarySystem.push(skin);
+                    this.indexes.push(index);
                 }else{
                     this.selectedgenitoUrinarySystem = this.removeA( this.selectedgenitoUrinarySystem, skin);
+                    this.indexes = this.removeA( this.indexes, index);
                 }
+    
             },
 
             removeA: function(arr) {
@@ -103,6 +107,10 @@
                     if(data['status'] == 'success'){
                         this.$parent.fetchITR('genito_urinary_system');
                         this.other = '';
+                         this.indexes.forEach(function(i , index){
+                            $('#genito_urinary_system'+i).prop("checked",false);
+                        });
+                        this.indexes = [];        
                         this.selectedgenitoUrinarySystem = [];
                          l.stop();
                         $('#add-genito-urinary-system-form').modal('hide');

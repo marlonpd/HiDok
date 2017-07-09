@@ -6,8 +6,10 @@ use Illuminate\Http\Request;
 use App\Consultation;
 use App\User;
 use App\DoctorPatient;
+use App\Appointment;
 use App\IndividualTreatmentRecord;
 use Illuminate\Support\Facades\Auth;
+use Redirect;
 
 class ConsultationController extends Controller
 {
@@ -35,6 +37,56 @@ class ConsultationController extends Controller
         return view('doctor/consultations');
     }
 
+
+    public function patient_consultations($id)
+    {
+        $patient = User::where('id', '=' , $id)
+                       ->first();
+                       
+        $consultations = Consultation::where('patient_id', '=', $patient->id)
+                                     ->get();
+        
+        return view('patient/consultations', compact('patient' , 'consultations'));
+    }
+
+
+    public function api_consultations_get(Request $request)
+    {
+        $lastdate= $request->input('lastdate');
+        $patient_id = $request->input('patient_id');
+
+        if($lastdate == '')
+        {
+            $consultations = Consultation::with('doctor')
+                                         ->where('patient_id','=' ,$patient_id)
+                                         ->take(10)
+                                         ->orderBy('created_at', 'ASC')
+                                         ->get();
+        }
+        else
+        {
+            $consultations = Consultation::with('doctor')
+                                         ->where('patient_id','=' ,$patient_id)
+                                         ->where('created_at', '>' , $lastdate)
+                                         ->take(10)
+                                         ->orderBy('created_at', 'ASC')
+                                         ->get();
+        }
+        $remaining = 0;
+        $lastitem = $consultations->last();
+        
+        if($lastitem)
+        {
+            $remaining = Consultation::where('patient_id','=' ,$patient_id)
+                                     ->where('created_at', '>' , $lastitem->created_at)
+                                     ->count();
+        }                      
+
+        return json_pretty(['consultations'  => $consultations,
+                            'remaining'      => $remaining,
+                        ]);
+    }
+
     // /api/doctor/consultations/get
     public function api_doctor_consultations_get(Request $request)
     {
@@ -46,6 +98,7 @@ class ConsultationController extends Controller
             if($lastdate == '')
             {
                 $consultations = Consultation::with('patient')  
+                                             ->with('doctor')
                                              ->where('doctor_id','=' , Auth::user()->id)
                                              ->take(10)
                                              ->orderBy('created_at', 'ASC')
@@ -54,6 +107,7 @@ class ConsultationController extends Controller
             else
             {
                 $consultations = Consultation::with('patient')
+                                             ->with('doctor')
                                              ->where('doctor_id','=' , Auth::user()->id)
                                              ->where('created_at', '>' , $lastdate)
                                              ->take(10)
@@ -76,8 +130,41 @@ class ConsultationController extends Controller
     	}
     }
 
-    public function consultation_create($consultation_type , $patient_id)
+   
+    public function api_consultation_create(Request $request)
     {
+        
+        $patient_id = $request->input('patient_id');
+
+        $consultation = new Consultation();
+        $consultation->patient_id = $patient_id;
+        $consultation->doctor_id = Auth::user()->id;
+        $consultation->type = 0;
+        
+        if($consultation->save())
+        {
+            $consultation = Consultation::with('doctor')
+                                        ->with('patient')
+                                        ->where('id' ,'=' , $consultation->id)
+                                        ->first();
+
+            return json_pretty(['status'        => 'success' ,
+                                'consultation'  => $consultation,
+                                ]);
+        }
+        else
+        {
+            return json_pretty(['status'  =>  'error']);
+        }
+    }
+
+    public function consultation_create($consultation_type , $patient_id, $appointment_id)
+    {
+
+        $appointment = Appointment::find($appointment_id);
+        $appointment->confirmed = config('constants.appointment_status.confirm'); // change later to consult
+        $appointment->save();
+
         $consultation = new Consultation();
         $consultation->patient_id = $patient_id;
         $consultation->doctor_id = Auth::user()->id;
@@ -86,42 +173,36 @@ class ConsultationController extends Controller
         
         if($consultation->save())
         {
+            $consultation = $consultation->id;
             $this->add_patient($patient_id);
-             return redirect('/consultation/new/'+$consultation->id);
-            //return view('patient/create_itr', compact('patient','consultation'));
+
+            return redirect("/patient/consultations/$patient_id");
         }
         else
         {
-
+            return "else";
         }
          
     }
 
-    public function consultation_new($id)
-    {
+    public function consultation_new($consultation_id)
+    {   
         $consultation = Consultation::with('patient')
                                     ->with('doctor')   
-                                    ->where('id','=' , $id)
+                                    ->where('id','=' , $consultation_id)
                                     ->first();
-        
-        $itr = IndividualTreatmentRecord::where('consultation_id' ,'=' , $id)
-                                        ->get();
-
         $itr = array();
-
         $itr_type = config('constants.individual_treatment_record_type');
-
 
         foreach($itr_type as $key=>$value)
         {
             $itr[$key] = IndividualTreatmentRecord::with('patient')
-                                                ->where('type', '=', $key)
-                                                ->where('consultation_id','=',$id)
-                                                ->get();
+                                                  ->where('type', '=', $key)
+                                                  ->where('consultation_id','=',$id)
+                                                  ->get();
         }
 
         return view('patient/consultation', compact('consultation', 'itr' , 'itr_type'));
-
     }
 
 

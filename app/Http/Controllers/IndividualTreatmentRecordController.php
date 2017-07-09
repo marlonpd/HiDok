@@ -27,10 +27,8 @@ class IndividualTreatmentRecordController extends Controller
         $type = $request->input('type');
         $patient_id = $request->input('patient_id');
         $consultation_id = $request->input('consultation_id');
-        $itr = IndividualTreatmentRecord::where('consultation_id','=',$consultation_id)->first();
 
-        if(is_array($value))
-        {
+        if(is_array($value) ){
             foreach ($value as $item) 
             {
                 $itr = new IndividualTreatmentRecord(); 
@@ -41,23 +39,83 @@ class IndividualTreatmentRecordController extends Controller
                 $itr->type = $type;
                 $itr->save();
             }
-        }
-        else
-        {
-             $itr = new IndividualTreatmentRecord(); 
-             $itr->patient_id = $patient_id;
-             $itr->doctor_id =Auth::user()->id;
-             $itr->consultation_id = $consultation_id;
-             $itr->value = $value;
-             $itr->type = $type;
-             $itr->save();
+            
+        }else{
+
+            if($type == 'treatment' || $type=='vital_sign')
+            {
+                $itr = new IndividualTreatmentRecord(); 
+                $itr->patient_id = $patient_id;
+                $itr->doctor_id =Auth::user()->id;
+                $itr->consultation_id = $consultation_id;
+                $itr->value = $value;
+                $itr->type = $type;
+                $itr->save();
+            }
+            else
+            {
+                $itr = IndividualTreatmentRecord::where('consultation_id','=',$consultation_id )
+                                            ->where('type' , '=' ,$type)
+                                            ->first();
+                if($itr)
+                {
+                    $itr->value = $value;
+                    $itr->save();
+                }
+                else
+                {
+                    $itr = new IndividualTreatmentRecord(); 
+                    $itr->patient_id = $patient_id;
+                    $itr->doctor_id =Auth::user()->id;
+                    $itr->consultation_id = $consultation_id;
+                    $itr->value = $value;
+                    $itr->type = $type;
+                    $itr->save();
+                }
+            }
+
         }
 
         return json_pretty(['status' => 'success']);
     }
 
      // /api/itr/get
-    public function api_itr_get($consultation_id,$type)
+    public function api_itr_get($consultation_id, $type)
+    {
+        $itr = array();
+        $itr_type = config('constants.individual_treatment_record_type');
+
+        if($type == 'all')
+        {
+            foreach($itr_type as $key=>$value)
+            {
+                $itr[$key] = IndividualTreatmentRecord::with('patient')
+                                                    ->where('type', '=', $key)
+                                                    ->where('consultation_id','=',$consultation_id)
+                                                    ->get();
+            }
+
+            return json_pretty(['status' => 'success',
+                                'itr'    => $itr,
+                        ]);       
+        }
+        else
+        {
+            $itr = IndividualTreatmentRecord::where('consultation_id','=',$consultation_id)
+                                        ->where('type', '=', $type)
+                                        ->get();
+
+            return json_pretty(['status'   => 'success',
+                                $type => $itr,
+                    ]);  
+        }
+
+
+
+                                   
+    }
+    
+    /*public function api_itr_get($consultation_id,$type)
     {
         $itr = IndividualTreatmentRecord::where('consultation_id','=',$consultation_id)
                                         ->where('type', '=', $type)
@@ -66,7 +124,7 @@ class IndividualTreatmentRecordController extends Controller
        return json_pretty(['status'   => 'success',
                            $type => $itr,
               ]);                                  
-    }
+    }*/
 
     // '/api/itr/delete/post''
     public function api_itr_delete_post(Request $request)

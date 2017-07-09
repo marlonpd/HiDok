@@ -15,10 +15,10 @@
                    </div>
 
                     <div class="row heents-list-pnl">
-                        <template v-for="heent in filterBy(heents, searchkey)">
+                        <template v-for="(heent,index) in filterBy(heents, searchkey)">
                             <div class="col-md-4">
                                 <div class="checkbox">
-                                    <label><input type="checkbox" @click="selectheents($event,heent)" value="">{{ heent }}</label>
+                                    <label><input v-bind:id="'heent'+index" type="checkbox" @click="selectheents($event,heent,index)" value="">{{ heent }}</label>
                                 </div>
                             </div>
                         </template>
@@ -59,6 +59,7 @@
                 searchkey : '',
                 selectedheents : [],
                 other: '',
+                indexes:[],
             }
         },
 
@@ -67,12 +68,15 @@
         events: {},
 
         methods: {
-            selectheents: function(event, heent){
+            selectheents: function(event, heent,index){
                 if($(event.target).is(':checked')){
                     this.selectedheents.push(heent);
+                    this.indexes.push(index);
                 }else{
                     this.selectedheents = this.removeA( this.selectedheents, heent);
+                     this.indexes = this.removeA( this.indexes, index);
                 }
+
             },
 
             removeA: function(arr) {
@@ -103,6 +107,10 @@
                     if(data['status'] == 'success'){
                         this.$parent.fetchITR('heent');
                         this.other = '';
+                        this.indexes.forEach(function(i , index){
+                            $('#heent'+i).prop("checked",false);
+                        });
+                        this.indexes = [];   
                         this.selectedheents = [];
                          l.stop();
                         $('#add-heent-form').modal('hide');

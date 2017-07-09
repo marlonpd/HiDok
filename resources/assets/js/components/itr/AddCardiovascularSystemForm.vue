@@ -15,10 +15,10 @@
                    </div>
 
                     <div class="row cardiovascularSystems-list-pnl">
-                        <template v-for="cal in filterBy(cardiovascularsystems, searchkey)">
+                        <template v-for="(cal,index) in filterBy(cardiovascularsystems, searchkey)">
                             <div class="col-md-4">
                                 <div class="checkbox">
-                                    <label><input type="checkbox" @click="selectcardiovascularSystems($event,cal)" value="">{{ cal }}</label>
+                                    <label><input v-bind:id="'cardiovascular_system'+index" type="checkbox" @click="selectcardiovascularSystems($event,cal,index)" value="">{{ cal }}</label>
                                 </div>
                             </div>
                         </template>
@@ -59,6 +59,7 @@
                 searchkey : '',
                 selectedcardiovascularSystems : [],
                 other: '',
+                indexes : [],  
             }
         },
 
@@ -67,10 +68,12 @@
         events: {},
 
         methods: {
-            selectcardiovascularSystems: function(event, skin){
+            selectcardiovascularSystems: function(event, skin,index){
                 if($(event.target).is(':checked')){
                     this.selectedcardiovascularSystems.push(skin);
+                    this.indexes.push(index);
                 }else{
+                    this.indexes = this.removeA( this.indexes, index);
                     this.selectedcardiovascularSystems = this.removeA( this.selectedcardiovascularSystems, skin);
                 }
             },
@@ -103,6 +106,9 @@
                     if(data['status'] == 'success'){
                         this.$parent.fetchITR('cardiovascular_system');
                         this.other = '';
+                        this.indexes.forEach(function(i , index){
+                            $('#cardiovascular_system'+i).prop("checked",false);
+                        });
                         this.selectedcardiovascularSystems = [];
                          l.stop();
                         $('#add-cardiovascular-systems-form').modal('hide');

@@ -15,10 +15,10 @@
                    </div>
 
                     <div class="row symptoms-list-pnl">
-                        <template v-for="symptom in filterBy(symptoms, searchkey)">
+                        <template v-for="(symptom,index) in filterBy(symptoms, searchkey)">
                             <div class="col-md-4">
                                 <div class="checkbox">
-                                    <label><input type="checkbox" @click="selectSymptoms($event,symptom)" value="">{{ symptom }}</label>
+                                    <label><input v-bind:id="index" type="checkbox" @click="selectSymptoms($event,symptom, index)" value="">{{ symptom }}</label>
                                 </div>
                             </div>
                         </template>
@@ -58,7 +58,9 @@
             return {
                 searchkey : '',
                 selectedSymptoms : [],
+                indexes : [],                
                 other: '',
+                type : ''
             }
         },
 
@@ -67,11 +69,13 @@
         events: {},
 
         methods: {
-            selectSymptoms: function(event, symptom){
+            selectSymptoms: function(event, symptom ,index){
                 if($(event.target).is(':checked')){
                     this.selectedSymptoms.push(symptom);
+                    this.indexes.push(index);
                 }else{
                     this.selectedSymptoms = this.removeA( this.selectedSymptoms, symptom);
+                    this.indexes = this.removeA( this.indexes, index);
                 }
             },
 
@@ -103,8 +107,12 @@
                     if(data['status'] == 'success'){
                         this.$parent.fetchITR('chief_complaint');
                         this.other = '';
+                        this.indexes.forEach(function(i , index){
+                            $('#'+i).prop("checked",false);
+                        });
+                        this.indexes = [];                        
                         this.selectedSymptoms = [];
-                         l.stop();
+                        l.stop();
                         $('#add-symptoms-form').modal('hide');
                     }
                 });

@@ -99,11 +99,11 @@ Route::group(['middleware' => ['web'  ]], function () {
 	Route::post('/api/update/profile/post' , 'ProfileController@api_update_profile_post');
 	
 	//patient 
-	Route::get('/consultation/create/{consultation_type}/{patient_id}','ConsultationController@consultation_create');
-	Route::get('/consultation/new/{consultation_id}','ConsultationController@consultation_new');
+	Route::get('/consultation/create/{consultation_type}/{patient_id}/{appointment_id}','ConsultationController@consultation_create');
+	//Route::get('/consultation/new/{consultation_id}','ConsultationController@consultation_new');
+	Route::get('/patient/consultations/{patient_id}','ConsultationController@patient_consultations');
 
 	Route::get('/itr/{id}','ITRController@patient_itr');
-
 	Route::get('/health/history' ,'ConsultationController@health_history');
 	
 	Route::get('/api/user/patients/get','doctor\DoctorPatientController@api_user_patients_get');
@@ -118,6 +118,8 @@ Route::group(['middleware' => ['web'  ]], function () {
 
 	Route::get('/api/doctor/consultations/get','ConsultationController@api_doctor_consultations_get');
 	Route::post('/api/consultation/delete/post' , 'ConsultationController@api_consultation_delete_post');
+	Route::post('/api/consultation/create', 'ConsultationController@api_consultation_create');
+	Route::get('/api/consultations/get', 'ConsultationController@api_consultations_get');
 
 	Route::post('/api/post/post' , 'PostController@api_post_post');
 	Route::get('/api/posts/get' , 'PostController@api_posts_get');

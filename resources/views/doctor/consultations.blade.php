@@ -64,6 +64,8 @@
                     lastdate : "",
                     showLoadMoreBtn : true, 
                     consultations : {},
+
+                    
                 }
             },
 

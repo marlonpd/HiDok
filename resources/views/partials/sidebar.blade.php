@@ -17,7 +17,7 @@
                 <a href="/appointment"><span class="fa-stack fa-lg pull-left"><i class="fa fa-address-book fa-stack-1x "></i></span>Appointments</a>
             </li>
             <li>
-                <a href="/health/history"><span class="fa-stack fa-lg pull-left"><i class="fa fa-heartbeat fa-stack-1x "></i></span>My Health History</a>
+                <a href="/patient/consultations/{{Auth::user()->id}}"><span class="fa-stack fa-lg pull-left"><i class="fa fa-heartbeat fa-stack-1x "></i></span>My Health History</a>
             </li>
             <li>
                 <a href="/doctors"><span class="fa-stack fa-lg pull-left"><i class="fa fa-user-md fa-stack-1x "></i></span>My Doctors</a>
@@ -34,7 +34,7 @@
             <!--
             <li >
                 <a href="/consultations"><span class="fa-stack fa-lg pull-left"><i class="fa fa-address-book fa-stack-1x "></i></span>History</a>
-            </li> -->
+            </li> <--></-->
             <li>
                 <a href="/clinic"><span class="fa-stack fa-lg pull-left"><i class="fa fa-hospital-o fa-stack-1x "></i></span>Clinics</a>
             </li>

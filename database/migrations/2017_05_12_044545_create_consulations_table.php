@@ -18,6 +18,8 @@ class CreateConsulationsTable extends Migration
             $table->char('patient_id',36);
             $table->char('doctor_id',36);
             $table->tinyInteger('type')->default(0); 
+            $table->string('hospital',70);
+            $table->tinyInteger('admit')->default(0);
             $table->timestamps();
         });
     }

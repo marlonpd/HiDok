@@ -293,6 +293,40 @@ class ConsultationController extends Controller
         }
     }
 
+    public function api_consultation_admit_patient_post(Request $request)
+    {
+        $id = $request->input('id');
+        $admit = $request->input('admit');
+        $consultation = Consultation::where('id','=',$id)
+                                    ->first();
+        $consultation->admit = $admit;
+
+        if($consultation->save())
+        {
+           	return json_pretty(['status' => 'success']);
+        }
+        else{
+            return json_pretty(['status' => 'error']);
+        }
+    }
+
+    public function api_consultation_assign_hospital_post(Request $request)
+    {
+        $id = $request->input('id');
+        $hospital = $request->input('hospital');
+        $consultation = Consultation::where('id','=',$id)
+                                    ->first();
+        $consultation->hospital = $hospital;
+
+        if($consultation->save())
+        {
+           	return json_pretty(['status' => 'success']);
+        }
+        else{
+            return json_pretty(['status' => 'error']);
+        }
+    }
+
     public function add_patient( $patient_id)
     {
         $is_friend = DoctorPatient::where('patient_id' , '=' ,$patient_id)

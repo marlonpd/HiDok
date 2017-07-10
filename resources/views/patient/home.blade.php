@@ -33,10 +33,8 @@
                 <template v-for="(post, key, index)  in posts ">
                     <div class="post-detail">
                         <div class="col-md-2">
-                            <div class="post-userphoto">
-                                <a href="">
-                                    <img :src="post.thumbnail" class="img-responsive user-photo">
-                                </a>
+                            <div class="post-userphoto thumbnail">
+                                <img :src="post.thumbnail" class="img-responsive user-photo">
                             </div>
                         </div> 
 
@@ -47,7 +45,6 @@
                                 </div>
 
                                 <div  class="pull-right">
-                                    
                                      <div v-if="authUser.id == post.id" class="dropdown post-option">
                                         <button class="btn dropdown-toggle post-option-btn" type="button" data-toggle="dropdown">
                                         <span class="caret"></span></button>

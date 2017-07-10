@@ -123,11 +123,12 @@ Route::group(['middleware' => ['web'  ]], function () {
 
 	Route::post('/api/post/post' , 'PostController@api_post_post');
 	Route::get('/api/posts/get' , 'PostController@api_posts_get');
-	Route::post('/api/post/update/post' , 'PostController@api_post_update_post');
+	Route::post('/api/post/update/post' , 'PostController@api_post_update_post');	
+	Route::post('/api/consultation/assign/hospital/post', 'ConsultationController@api_consultation_assign_hospital_post');
 	Route::post('/api/post/delete/post' , 'PostController@api_post_delete_post');
 	Route::post('/api/post/post' , 'PostController@api_post_post');
 	Route::get('/post/{id}', 'PostController@post');
-
+	Route::post('/api/consultation/admit/patient/post' , 'ConsultationController@api_consultation_admit_patient_post');
 });
 
 

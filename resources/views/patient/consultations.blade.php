@@ -28,7 +28,9 @@
                  </span>
                  
                  <span class="row">
-                    <a type="button" class="btn default-btn btn-block" @click="createConsultation($event)" href="#">New Consultation</a>
+                    @if(Auth::user()->is_doctor())
+                        <a type="button" class="btn default-btn btn-block" @click="createConsultation($event)" href="#">New Consultation</a>
+                    @endif
                  </span>
 
                  <div class="row consultations-pnl "  >
@@ -43,7 +45,7 @@
 
                         <br>
                         <div v-if="showLoadMoreBtn" class="row loadmore-container" style="text-align:center;">
-                            <button value="Load More" @click="loadMore()" style="width:30%;" class="btn btn-primary ladda-button loader" data-style="expand-left"><span class="ladda-label">Load More</span></button>      
+                            <button value="Load More" @click="loadMore()" style="width:70%;" class="btn btn-primary ladda-button loader" data-style="expand-left"><span class="ladda-label">Load More</span></button>      
                         </div>
                  </div>
                 
@@ -65,14 +67,19 @@
                                 <p>
                                     <div class="row">
                                         <div class="pull-left"> 
+                                              @if(Auth::user()->is_doctor())  
                                               <button class="btn btn-primary btn-default" data-title="Create" data-toggle="modal" data-target="#add-symptoms-form" ><i class="fa fa-plus fa-1" aria-hidden="true"></i>Add</button>
+                                              @endif
                                         </div>
                                         <div class=" clr"></div>
                                         <hr>
                                         <template v-for="symptom in itr['chief_complaint']">
                                             <div class="col-md-4">
                                                 <div class="checkbox">
-                                                    <i @click="deleteITRItem('chief_complaint',symptom)" class="hand-pointer fa fa-times-circle fa-1 color-red" aria-hidden="true"></i><label> @{{ symptom.value }}</label>
+                                                    @if(Auth::user()->is_doctor())
+                                                    <i @click="deleteITRItem('chief_complaint',symptom)" class="hand-pointer fa fa-times-circle fa-1 color-red" aria-hidden="true"></i>
+                                                    @endif
+                                                    <label> @{{ symptom.value }}</label>
                                                 </div>
                                             </div>
                                         </template>
@@ -89,7 +96,9 @@
                                 <p>
                                     <div class="row">
                                         <div class="pull-left"> 
-                                              <button class="btn btn-primary btn-default" data-title="Create" data-toggle="modal" data-target="#add-vital-signs-form" ><i class="fa fa-plus fa-1" aria-hidden="true"></i>Add</button>
+                                              @if(Auth::user()->is_doctor())  
+                                                <button class="btn btn-primary btn-default" data-title="Create" data-toggle="modal" data-target="#add-vital-signs-form" ><i class="fa fa-plus fa-1" aria-hidden="true"></i>Add</button>
+                                              @endif
                                         </div>
                                         
                                         <div class=" clr"></div>
@@ -97,7 +106,10 @@
                                         <template v-for="vitalSign in itr['vital_sign']">
                                             <div class="col-md-4">
                                                 <div class="checkbox">
-                                                    <i @click="deleteITRItem('vital_sign',vitalSign)" class="hand-pointer fa fa-times-circle fa-1 color-red" aria-hidden="true"></i><label> @{{ vitalSign.value }}</label>
+                                                    @if(Auth::user()->is_doctor())     
+                                                        <i @click="deleteITRItem('vital_sign',vitalSign)" class="hand-pointer fa fa-times-circle fa-1 color-red" aria-hidden="true"></i>
+                                                    @endif
+                                                    <label> @{{ vitalSign.value }}</label>
                                                 </div>
                                             </div>
                                         </template>
@@ -117,9 +129,11 @@
                                         <textarea class="form-control" rows="5" id="comment" v-model="itr['present_illness_history']"></textarea>
                                     </div>     
 
+                                    @if(Auth::user()->is_doctor())
                                     <div class="span6 pull-right">
                                         <button class="btn btn-primary btn-default present_illness_history-loading"  @click="saveITR('present_illness_history')"><i class="fa fa-pencil-square-o fa-1" aria-hidden="true"></i>Save</button>
                                     </div>  
+                                    @endif
                                 </p>
                             </div>
 
@@ -130,9 +144,11 @@
                                         <textarea class="form-control" rows="5" id="comment" v-model="itr['past_medical_history']"></textarea>
                                     </div>     
 
+                                    @if(Auth::user()->is_doctor())
                                     <div class="span6 pull-right">
                                         <button class="btn btn-primary btn-default past_medical_history-loading"  @click="saveITR('past_medical_history')"><i class="fa fa-pencil-square-o fa-1" aria-hidden="true"></i>Save</button>
                                     </div>  
+                                    @endif
                             </div>
 
                             <h3>Physical Exam</h3>
@@ -140,13 +156,18 @@
                                 <p>
                                     <div>
                                         <h4>General Appearances</h4>
+                                        @if(Auth::user()->is_doctor())
                                         <button class="btn btn-primary btn-default" data-title="Create" data-toggle="modal" data-target="#add-general-appearances-form" ><i class="fa fa-plus fa-1" aria-hidden="true"></i>Add</button>
+                                        @endif
                                         <hr>
                                             <div class="row">
                                                 <template v-for="ga in itr['general_appearance']">
                                                     <div class="col-md-4">
                                                         <div class="checkbox">
-                                                            <i @click="deleteITRItem('general_appearance',ga)" class="hand-pointer fa fa-times-circle fa-1 color-red" aria-hidden="true"></i><label> @{{ ga.value }}</label>
+                                                           @if(Auth::user()->is_doctor()) 
+                                                           <i @click="deleteITRItem('general_appearance',ga)" class="hand-pointer fa fa-times-circle fa-1 color-red" aria-hidden="true"></i>
+                                                           @endif
+                                                           <label> @{{ ga.value }}</label>
                                                         </div>
                                                     </div>
                                                 </template>   
@@ -155,13 +176,18 @@
 
                                     <div>
                                         <h4>Skin</h4>
+                                        @if(Auth::user()->is_doctor())
                                         <button class="btn btn-primary btn-default" data-title="Create" data-toggle="modal" data-target="#add-skins-form" ><i class="fa fa-plus fa-1" aria-hidden="true"></i>Add</button>
+                                        @endif
                                         <hr>
                                             <div class="row">
                                                 <template v-for='skin in itr["skin"]'>
                                                     <div class="col-md-4">
                                                         <div class="checkbox">
-                                                            <i @click="deleteITRItem('skin',skin)" class="hand-pointer fa fa-times-circle fa-1 color-red" aria-hidden="true"></i><label> @{{ skin.value }}</label>
+                                                            @if(Auth::user()->is_doctor())
+                                                            <i @click="deleteITRItem('skin',skin)" class="hand-pointer fa fa-times-circle fa-1 color-red" aria-hidden="true"></i>
+                                                            @endif
+                                                            <label> @{{ skin.value }}</label>
                                                         </div>
                                                     </div>
                                                 </template>   
@@ -170,13 +196,18 @@
 
                                     <div>
                                         <h4>Heent</h4>
+                                        @if(Auth::user()->is_doctor())
                                         <button class="btn btn-primary btn-default" data-title="Create" data-toggle="modal" data-target="#add-heent-form" ><i class="fa fa-plus fa-1" aria-hidden="true"></i>Add</button>
+                                        @endif
                                         <hr>
                                             <div class="row">
                                                 <template v-for='heent in itr["heent"]'>
                                                     <div class="col-md-4">
                                                         <div class="checkbox">
-                                                            <i @click="deleteITRItem('heent',heent)" class="hand-pointer fa fa-times-circle fa-1 color-red" aria-hidden="true"></i><label> @{{ heent.value }}</label>
+                                                            @if(Auth::user()->is_doctor())
+                                                            <i @click="deleteITRItem('heent',heent)" class="hand-pointer fa fa-times-circle fa-1 color-red" aria-hidden="true"></i>
+                                                            @endif
+                                                            <label> @{{ heent.value }}</label>
                                                         </div>
                                                     </div>
                                                 </template>   
@@ -185,7 +216,9 @@
 
                                     <div>
                                         <h4>Neck</h4>
+                                        @if(Auth::user()->is_doctor())
                                         <button class="btn btn-primary btn-default" data-title="Create" data-toggle="modal" data-target="#add-necks-form" ><i class="fa fa-plus fa-1" aria-hidden="true"></i>Add</button>
+                                        @endif
                                         <hr>
                                             <div class="row">
                                                 <template v-for='neck in itr["neck"]'>
@@ -201,13 +234,18 @@
 
                                     <div>
                                         <h4>Chest and Lungs</h4>
+                                        @if(Auth::user()->is_doctor())
                                         <button class="btn btn-primary btn-default" data-title="Create" data-toggle="modal" data-target="#add-chest-and-lungs-form" ><i class="fa fa-plus fa-1" aria-hidden="true"></i>Add</button>
+                                        @endif
                                         <hr>
                                             <div class="row">
                                                 <template v-for='cl in itr["chest_and_lungs"]'>
                                                     <div class="col-md-4">
                                                         <div class="checkbox">
-                                                            <i @click="deleteITRItem('chest_and_lungs',cl)" class="hand-pointer fa fa-times-circle fa-1 color-red" aria-hidden="true"></i><label> @{{ cl.value }}</label>
+                                                            @if(Auth::user()->is_doctor())
+                                                            <i @click="deleteITRItem('chest_and_lungs',cl)" class="hand-pointer fa fa-times-circle fa-1 color-red" aria-hidden="true"></i>
+                                                            @endif
+                                                            <label> @{{ cl.value }}</label>
                                                         </div>
                                                     </div>
                                                 </template>   
@@ -217,13 +255,18 @@
 
                                     <div>
                                         <h4>Cardiovascular Systems</h4>
+                                        @if(Auth::user()->is_doctor())
                                         <button class="btn btn-primary btn-default" data-title="Create" data-toggle="modal" data-target="#add-cardiovascular-systems-form" ><i class="fa fa-plus fa-1" aria-hidden="true"></i>Add</button>
+                                        @endif
                                         <hr>
                                             <div class="row">
                                                 <template v-for='cs in itr["cardiovascular_system"]'>
                                                     <div class="col-md-4">
                                                         <div class="checkbox">
-                                                            <i @click="deleteITRItem('cardiovascular_system',cs)" class="hand-pointer fa fa-times-circle fa-1 color-red" aria-hidden="true"></i><label> @{{ cs.value }}</label>
+                                                            @if(Auth::user()->is_doctor())
+                                                            <i @click="deleteITRItem('cardiovascular_system',cs)" class="hand-pointer fa fa-times-circle fa-1 color-red" aria-hidden="true"></i>
+                                                            @endif
+                                                            <label> @{{ cs.value }}</label>
                                                         </div>
                                                     </div>
                                                 </template>   
@@ -232,13 +275,18 @@
 
                                     <div>
                                         <h4>Abdomen</h4>
+                                        @if(Auth::user()->is_doctor())
                                         <button class="btn btn-primary btn-default" data-title="Create" data-toggle="modal" data-target="#add-abdomen-form" ><i class="fa fa-plus fa-1" aria-hidden="true"></i>Add</button>
+                                        @endif
                                         <hr>
                                             <div class="row">
                                                 <template v-for='abdomen in itr["abdomen"]'>
                                                     <div class="col-md-4">
                                                         <div class="checkbox">
-                                                            <i @click="deleteITRItem('abdomen',abdomen)" class="hand-pointer fa fa-times-circle fa-1 color-red" aria-hidden="true"></i><label> @{{ abdomen.value }}</label>
+                                                            @if(Auth::user()->is_doctor())
+                                                            <i @click="deleteITRItem('abdomen',abdomen)" class="hand-pointer fa fa-times-circle fa-1 color-red" aria-hidden="true"></i>
+                                                            @endif
+                                                            <label> @{{ abdomen.value }}</label>
                                                         </div>
                                                     </div>
                                                 </template>   
@@ -248,13 +296,18 @@
 
                                     <div>
                                         <h4>Genito-Urinary System</h4>
-                                        <button class="btn btn-primary btn-default" data-title="Create" data-toggle="modal" data-target="#add-genito-urinary-system-form" ><i class="fa fa-plus fa-1" aria-hidden="true"></i>Add</button>
+                                        @if(Auth::user()->is_doctor())
+                                            <button class="btn btn-primary btn-default" data-title="Create" data-toggle="modal" data-target="#add-genito-urinary-system-form" ><i class="fa fa-plus fa-1" aria-hidden="true"></i>Add</button>
+                                        @endif
                                         <hr>
                                             <div class="row">
                                                 <template v-for='gus in itr["genito_urinary_system"]'>
                                                     <div class="col-md-4">
                                                         <div class="checkbox">
-                                                            <i @click="deleteITRItem('genito_urinary_system',gus)" class="hand-pointer fa fa-times-circle fa-1 color-red" aria-hidden="true"></i><label> @{{ gus.value }}</label>
+                                                            @if(Auth::user()->is_doctor())
+                                                            <i @click="deleteITRItem('genito_urinary_system',gus)" class="hand-pointer fa fa-times-circle fa-1 color-red" aria-hidden="true"></i>
+                                                            @endif
+                                                            <label> @{{ gus.value }}</label>
                                                         </div>
                                                     </div>
                                                 </template>   
@@ -264,13 +317,18 @@
 
                                     <div>
                                         <h4>Extremities</h4>
+                                        @if(Auth::user()->is_doctor())
                                         <button class="btn btn-primary btn-default" data-title="Create" data-toggle="modal" data-target="#add-extremity-form" ><i class="fa fa-plus fa-1" aria-hidden="true"></i>Add</button>
+                                        @endif
                                         <hr>
                                             <div class="row">
                                                 <template v-for='extremity in itr["extremities"]'>
                                                     <div class="col-md-4">
                                                         <div class="checkbox">
-                                                            <i @click="deleteITRItem('extremities',extremity)" class="hand-pointer fa fa-times-circle fa-1 color-red" aria-hidden="true"></i><label> @{{ extremity.value }}</label>
+                                                            @if(Auth::user()->is_doctor())
+                                                            <i @click="deleteITRItem('extremities',extremity)" class="hand-pointer fa fa-times-circle fa-1 color-red" aria-hidden="true"></i>
+                                                            @endif
+                                                            <label> @{{ extremity.value }}</label>
                                                         </div>
                                                     </div>
                                                 </template>   
@@ -281,13 +339,15 @@
                                 </p>
                             </div>
 
-                            <h3>Laboratory</h3>
+                            <h3>Diagnostic Tests</h3>
                             <div>
                                 <p>
 
                                     <div class="pull-left"> 
+                                        @if(Auth::user()->is_doctor())
                                         <button class="btn btn-primary btn-default" data-title="Create" data-toggle="modal" data-target="#add-laboratory-form" ><i class="fa fa-plus fa-1" aria-hidden="true"></i>Add</button>
-                                        <a class="btn btn-info" target="_blank" @click="print('laboratory')" ><i class="fa fa-print" aria-hidden="true"></i>Print</a>
+                                        @endif
+                                        <a class="btn btn-info" target="_blank" @click="print('laboratory',$event)" ><i class="fa fa-print" aria-hidden="true"></i>Print</a>
                                     </div>
                                     <div class="clr"></div>
                                     <hr>
@@ -296,7 +356,10 @@
                                         <template v-for='laboratory in itr["laboratory"]'>
                                             <div class="col-md-4">
                                                 <div class="checkbox">
-                                                    <i @click="deleteITRItem('laboratory',laboratory)" class="hand-pointer fa fa-times-circle fa-1 color-red" aria-hidden="true"></i><label> @{{ laboratory.value }}</label>
+                                                    @if(Auth::user()->is_doctor())
+                                                    <i @click="deleteITRItem('laboratory',laboratory)" class="hand-pointer fa fa-times-circle fa-1 color-red" aria-hidden="true"></i>
+                                                    @endif
+                                                    <label> @{{ laboratory.value }}</label>
                                                 </div>
                                             </div>
                                         </template>   
@@ -311,7 +374,9 @@
                             <div>
                                 <p>
                                     <div class="pull-left"> 
+                                        @if(Auth::user()->is_doctor())
                                             <button class="btn btn-primary btn-default" data-title="Create" data-toggle="modal" data-target="#add-diagnosis-form" ><i class="fa fa-plus fa-1" aria-hidden="true"></i>Add</button>
+                                        @endif    
                                     </div>
                                     <div class="clr"></div>
                                     <hr>
@@ -320,7 +385,10 @@
                                         <template v-for='diagnose in itr["diagnosis"]'>
                                             <div class="col-md-4">
                                                 <div class="checkbox">
-                                                    <i @click="deleteITRItem('diagnosis',diagnose)" class="hand-pointer fa fa-times-circle fa-1 color-red" aria-hidden="true"></i><label> @{{ diagnose.value }}</label>
+                                                    @if(Auth::user()->is_doctor())
+                                                    <i @click="deleteITRItem('diagnosis',diagnose)" class="hand-pointer fa fa-times-circle fa-1 color-red" aria-hidden="true"></i>
+                                                    @endif
+                                                    <label> @{{ diagnose.value }}</label>
                                                 </div>
                                             </div>
                                         </template>   
@@ -338,17 +406,22 @@
                             <div>
                                 <p>
                                     <div class="col-md-4"> 
+                                        @if(Auth::user()->is_doctor())
                                         <button class="btn btn-primary btn-default" data-title="Create" data-toggle="modal" data-target="#add-treatment-form" ><i class="fa fa-plus fa-1" aria-hidden="true"></i>Add</button>
-                                        <a class="btn btn-info" target="_blank" @click="print('treatment')" ><i class="fa fa-print" aria-hidden="true"></i>Print</a>
+                                        @endif
+                                        <a class="btn btn-info" target="_blank" @click="print('treatment',$event)" ><i class="fa fa-print" aria-hidden="true"></i>Print</a>
                                     </div>
-                                    <div class="clr">.e</div>
+                                    <div class="clr"></div>
                                     <hr>
 
                                     <div class="row">
                                         <template v-for='treatment in itr["treatment"]'>
                                             <div class="col-md-4">
                                                 <div class="checkbox">
-                                                    <i @click="deleteITRItem('treatment',treatment)" class="hand-pointer fa fa-times-circle fa-1 color-red" aria-hidden="true"></i><label> @{{ treatment.value }}</label>
+                                                    @if(Auth::user()->is_doctor())
+                                                    <i @click="deleteITRItem('treatment',treatment)" class="hand-pointer fa fa-times-circle fa-1 color-red" aria-hidden="true"></i>
+                                                    @endif
+                                                    <label> @{{ treatment.value }}</label>
                                                 </div>
                                             </div>
                                         </template>   
@@ -365,10 +438,13 @@
                                         <textarea class="form-control" rows="5" id="comment" v-model="itr['other_medical_intervention']"></textarea>
                                     </div>     
 
+                                    
+                                    @if(Auth::user()->is_doctor())    
                                     <div class="span6 pull-right">
                                         
                                         <button class="btn btn-primary btn-default other_medical_intervention-loading"  @click="saveITR('other_medical_intervention')"><i class="fa fa-pencil-square-o fa-1" aria-hidden="true"></i>Save</button>
                                     </div>  
+                                    @endif
                             </div>
 
                         </div>
@@ -376,17 +452,28 @@
                         
 
                         <!--- End accordion -->
+                        <br>
+
+                        @if(Auth::user()->is_doctor())
+                        <div>
+                            <span><input type="checkbox" v-model="consultation.admit" v-bind:true-value="1" v-bind:false-value="0" @click="admitPatient($event)"> Admint patient?</span> 
+                            <span v-if="consultation.admit == 1">Hospital: <input type="text" v-model="consultation.hospital"  v-on:keyup="assignHospital($event)"></span>
+                            <span v-if="consultation.admit == 1">(<a href="#" @click="print('doctors_order',$event)">doctor's order</a>)</span>
+                        
+                        </div>
+                        @endif
 
                        
 
                 </div>
            </div> <!-- End of Tabs -->   
 
-
+                    @if(Auth::user()->is_doctor())
                     <div class="pull-right margin-sm">
                         <button type="button" class="btn btn-primary btn-danger" @click="deleteConsultation( $event)">Delete</button>       
-                        <a class="btn btn-info" target="_blank" @click="print('consultation')" ><i class="fa fa-print" aria-hidden="true"></i>Print</a>
+                        <a class="btn btn-info" target="_blank" @click="print('consultation',$event)" ><i class="fa fa-print" aria-hidden="true"></i>Print</a>
                     </div>
+                    @endif
 
                   </div>
               </div>
@@ -466,7 +553,6 @@
                     diagnose : {},
                     generalAppearances : {},
 
-
                     itrTxt: {
                         bhpi : '',
                         pmh : '',
@@ -502,12 +588,52 @@
                     diagnoses : {},
                     itr  : {},
                     consultation :{},
+                    remaining : 0,
                 }
             },
             
             events: {},
 
             methods: {
+                assignHospital: function(event){
+                    event.preventDefault();
+                    self = this; 
+                    clearTimeout(this.timer);
+                    this.timer = setTimeout(function() {
+                        self.$http.post('/api/consultation/assign/hospital/post',self.consultation,function(data){
+                            if(data['status'] == 'success'){
+                                swal({
+                                    title: 'Success!',
+                                    text: 'Data saved.',
+                                    showConfirmButton : false,
+                                    timer: 500,
+                                    type : 'success',
+                                }).then(function () {},function (dismiss) {});
+                            }else{
+                                    swal("Error","Please try again!", "error");
+                            }
+                        });
+                        
+                    }, 2000);
+                },
+
+               admitPatient: function(event){
+                    event.preventDefault();
+                    this.$http.post('/api/consultation/admit/patient/post',this.consultation,function(data){
+                        if(data['status'] == 'success'){
+                            swal({
+                                title: 'Success!',
+                                text: 'Data saved.',
+                                showConfirmButton : false,
+                                timer: 500,
+                                type : 'success',
+                            }).then(function () {},function (dismiss) {});
+                        }else{
+                             swal("Error","Please try again!", "error");
+                        }
+                    });
+
+                },
 
                 deleteConsultation: function(event){
                     event.preventDefault();
@@ -555,7 +681,8 @@
                 
                 },
 
-                print: function(type){
+                print: function(type, event){
+                    event.preventDefault();
                     window.open('/print/'+type+'/'+this.consultation.id+'/'+this.consultation.patient_id+'', '_blank', 'location=yes,height=370,width=450,scrollbars=yes,status=yes');
                 },
 
@@ -564,10 +691,11 @@
                         this.consultations = data['consultations'];
                         this.consultation = this.consultations[0];
                         this.fetchITR('all');
-                        if(this.consultations.length <= 10 ){
-                            this.showLoadMoreBtn = false;
-                        }else{
+                        this.remaining = data['remaining'];
+                        if(this.remaining > 0 ){
                             this.showLoadMoreBtn = true;
+                        }else{
+                            this.showLoadMoreBtn = false;
                         }
                     });
                 },

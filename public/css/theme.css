@@ -398,7 +398,7 @@
 }
 
 .search-menu {
-	min-width: 383px;
+	min-width: 286px;
 }
 
 .accordion-heading .accordion-toggle, .accordion-inner, .nav-stacked li > a {
@@ -1067,4 +1067,13 @@ span.date{
 
 #more-details{
     display:none;
+}
+
+.consultations-pnl {
+    height: 530px;
+    overflow-y:scroll;
+}
+
+.search-field{
+    margin: 5px;
 }

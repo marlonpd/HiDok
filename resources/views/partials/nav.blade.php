@@ -45,16 +45,47 @@
                           @if (Auth::check())
 
                             <li class="dropdown">
-                              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-search"></i></a>
+                              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Looking for? <i class="glyphicon glyphicon-search"></i></a>
                               <ul class="dropdown-menu search-menu" style="padding:12px;">
                                   <form class="form-inline" action="/search" method="get">
-                                  <select class="form-control pull-left" name="account">
+                                  <!--<select class="form-control pull-left" name="account">
                                     <option value="doctor">Doctor</option>
                                     <option value="hospital">Hospital</option>
                                     <option value="laboratory">Laboratory</option>
                                     <option value="pharmacy">Pharmacy</option>
-                                  </select>
-                              <button type="submit" class="btn btn-default pull-right"><i class="glyphicon glyphicon-search"></i></button><input class="form-control pull-left" placeholder="Search" type="text" name="name">
+                                  </select>-->
+                                    <div class="col-sm-9">
+                                      <input type="hidden" name="account" value="doctor">
+                                      <div class="search-field">
+                                        @if(!empty($specialization))
+                                          <input type="text" class="form-control" id="specialization" name="specialization" placeholder="Specialization" value="{{ $specialization}}">
+                                        @else
+                                          <input type="text" class="form-control" id="specialization" name="specialization" placeholder="Specialization" value="">
+                                        @endif
+                                      </div>
+
+                                      <div class="search-field">
+                                      @if(!empty($name))
+                                        <input type="text" class="form-control" id="name" name="name" placeholder="Name" value="{{ $name}}">
+                                        @else
+                                        <input type="text" class="form-control" id="name" name="name" placeholder="Name" value="">
+                                        @endif
+                                      </div>
+
+                                      <div class="search-field">
+                                        @if(!empty($location))
+                                        <input type="text" class="form-control" id="location" name="location" placeholder="Location" value="{{$location}}">
+                                        @else
+                                        <input type="text" class="form-control" id="location" name="location" placeholder="Location" value="">
+                                        @endif
+
+                                      </div>
+                                    </div>
+                                    
+                                    <div class="col-sm-3">
+                                      <button type="submit" class="btn btn-default pull-right"><i class="glyphicon glyphicon-search"></i></button>
+                                    </div>
+                                    <!--<input class="form-control pull-left" placeholder="Search" type="text" name="name">-->
                                   </form>
                                 </ul>
                             </li>

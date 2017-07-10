@@ -7,6 +7,7 @@ use App\IndividualTreatmentRecord;
 use Illuminate\Support\Facades\Auth;
 use App\Clinic;
 use App\User;
+use App\Consultation;
 
 class IndividualTreatmentRecordController extends Controller
 {
@@ -171,11 +172,20 @@ class IndividualTreatmentRecordController extends Controller
         $clinic = Clinic::where('doctor_id', '=',''+Auth::user()->id+'')
                         ->where('default_address', '=', '1')
                         ->first();
+
+        
         
         
         if($type == "consultation")
         {                
             return view("print/$type", compact('itr','type', 'itr_type' ,'clinic', 'patient'));
+        }
+        else if($type == "doctors_order")
+        {
+            $consultation = Consultation::where('id','=',$id)
+                                    ->first();
+
+            return view("print/$type", compact('itr','type', 'clinic', 'patient', 'consultation'));
         }
         else
         {

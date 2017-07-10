@@ -93,7 +93,10 @@
             },
 
             submitSelectedlaboratory: function(){
-
+                if(this.other != ''){
+                    this.selectedlaboratory.push(this.other);
+                    this.other = '';
+                }
                 var data = { value        : this.selectedlaboratory,
                              patient_id      : this.patient_id,
                              consultation_id : this.consultation_id,

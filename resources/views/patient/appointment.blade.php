@@ -4,11 +4,19 @@
 <div class="container">
     
     <div class="panel panel-default">
-    <div class="panel-heading">Appointment</div>
+    <div class="panel-heading">Appointment
+    
+    <div class="pull-right">
+        <input type="text" class="form-control input-md" name="searchKey" v-model="searchKey" />
+    </div>
+
+    <div class="clr"></div>
+    
+    </div>
     <div class="panel-body">
 
 
-                            <div class="shadow"  v-for="appointment in appointments" >
+                            <div class="shadow"  v-for="appointment in filterBy(appointments,searchKey)" >
                             <div class="row">
                                 <div class="col-sm-1">
                                     <img :src="'/'+appointment.doctor.thumbnail" width="60px">

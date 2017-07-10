@@ -21,6 +21,7 @@ Route::get('search', 'SearchController@index');
 Route::get('{account_type}/profile/{id}', 'ProfileController@index');
 Route::get('about', 'AboutController@index');
 Route::get('contact', 'ContactController@index');
+Route::post('/contact/send/message' ,'ContactController@send_message');
 
 Route::post('hospital/register', 'Auth\RegisterController@post_register');
 Route::post('laboratory/register', 'Auth\RegisterController@post_register');

@@ -81,15 +81,7 @@ Route::group(['middleware' => ['web'  ]], function () {
 	Route::get('/doctors', 'doctor\DoctorPatientController@index');
 	Route::post('/api/upload/user/photo', 'ProfileController@api_upload_user_photo');
 
-	//doctor
-	/*Route::get('/patient/itr/{id}','ITRController@patient_itr');
-	Route::get('/api/patient/itr/get/{id}', 'ITRController@api_patient_itr_get');
-	Route::post('/api/itr/assessment/post', 'ITRController@api_itr_assessment_post');
 
-	Route::post('/api/itr/laboratory/post', 'ITRController@api_itr_laboratory_post');
-	Route::post('/api/itr/dx/post', 'ITRController@api_itr_dx_post');
-	Route::post('/api/itr/treatment/post', 'ITRController@api_itr_treatment_post');
-	Route::get('/print/dx/{id}','ITRController@print_dx');*/
 
 	Route::post('/api/itr/post','IndividualTreatmentRecordController@api_itr_post');
 	Route::post('/api/itr/delete/post','IndividualTreatmentRecordController@api_itr_delete_post');
@@ -130,6 +122,12 @@ Route::group(['middleware' => ['web'  ]], function () {
 	Route::post('/api/post/post' , 'PostController@api_post_post');
 	Route::get('/post/{id}', 'PostController@post');
 	Route::post('/api/consultation/admit/patient/post' , 'ConsultationController@api_consultation_admit_patient_post');
+
+	Route::get('/api/notifications/all/get','NotificationController@api_notifications_all_get');
+	Route::get('/api/notifications/unread/get','NotificationController@api_notifications_unread_get');
+	Route::get('/notifications','NotificationController@notifications');
+	Route::post('/api/mark/read/notification/post','NotificationController@api_mark_read_notification_post');
+
 });
 
 

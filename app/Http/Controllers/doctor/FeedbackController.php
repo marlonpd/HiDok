@@ -5,6 +5,7 @@ namespace App\Http\Controllers\doctor;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Feedback;
+use App\Events\NotifyUser;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -23,6 +24,8 @@ class FeedbackController extends Controller
     public function store(Request $request)
     {
     	$feedback = $this->createFeedback($request->input());
+        event(new NotifyUser($feedback->doctor_id,$feedback->patient_id, 'send_feedback' ,$feedback->id ,'feedback'));
+        //__construct($recepient_id, $sender_id, $action, $item_id,$type)
 
         if($feedback)
         {

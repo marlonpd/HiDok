@@ -10,6 +10,7 @@ use App\ITR;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\DoctorPatient;
+use App\Events\NotifyUser;
 
 class AppointmentController extends Controller
 {
@@ -39,6 +40,10 @@ class AppointmentController extends Controller
       
     	$appointment = $this->createAppointment($request->input());
 
+        //config('constants.individual_treatment_record_type')
+        
+        event(new NotifyUser($appointment->doctor_id,$appointment->patient_id, 'request_appointment' ,$appointment->id ,'appointment'));
+        //__construct($recepient_id, $sender_id, $action, $item_id,$type)
 
         if($appointment)
         {
@@ -97,29 +102,6 @@ class AppointmentController extends Controller
         }                
     }
 
-  /*  public function api_auth_appointment_get()
-    {
-    	$user_id = Auth::user()->id;
-
-    	if(Auth::user()->is_doctor())
-    	{
-        	$appointments = Appointment::with('patient')
-                                       ->where('doctor_id' , '=' ,$user_id )
-    								   ->get();
-    	}
-        else
-        {
-        	$appointments = Appointment::with('doctor')
-                                       ->where('patient_id' , '=' ,$user_id )
-						  			   ->get();
-        }
-
-
-        return $this->json_pretty(['appointments' => $appointments]);                    
- 
-    }*/
-
-
     public function api_auth_appointment_all_get()
     {
         $user_id = Auth::user()->id;
@@ -172,33 +154,21 @@ class AppointmentController extends Controller
 
         if($lastdate == '')
         {
-            $query = $query->with(array('doctor' => function($query)  use (&$key) {
-                                if($key != '')
-                                {
-                                    $query->orWhere('lastname', 'like',  '%'.$key.'%')
-                                          ->orWhere('firstname', 'like', '%'.$key.'%' )
-                                          ->orWhere('middlename', 'like', '%'.$key.'%' );
-                                }
-                            })) 
+            $query = $query->with('doctor') 
                             ->with('clinic')  
                             ->where('patient_id','=' , Auth::user()->id)
+                            ->where('confirmed' , '!=' , 2)
                             ->take(10)
                             ->orderBy('created_at', 'ASC');                          
         }
         else
         {
             $query = $query->with('patient')
-                            ->with(array('doctor' => function($query) use ($key) {
-                                if($key != '')
-                                {
-                                    $query->orWhere('lastname', 'like',  '%'.$key.'%')
-                                        ->orWhere('firstname', 'like', '%'.$key.'%' )
-                                        ->orWhere('middlename', 'like', '%'.$key.'%' );
-                                }
-                            }))
+                            ->with('doctor')
                             ->with('clinic')
                             ->where('patient_id','=' , Auth::user()->id)
                             ->where('created_at','>' , $lastdate)
+                            ->where('confirmed' , '!=' , 2)
                             ->take(10)
                             ->orderBy('created_at', 'ASC');
         }
@@ -211,31 +181,19 @@ class AppointmentController extends Controller
         {
             if($key != '')
             {
-                $remaining = Appointment::with(array('doctor' => function($query)  use (&$key) {
-                                            if($key != '')
-                                            {
-                                                $query->orWhere('lastname', 'like',  '%'.$key.'%')
-                                                        ->orWhere('firstname', 'like', '%'.$key.'%' )
-                                                        ->orWhere('middlename', 'like', '%'.$key.'%' );
-                                            }
-                                        }))
+                $remaining = Appointment::with('doctor')
                                         ->with('clinic')
                                         ->where('patient_id','=' , Auth::user()->id)
                                         ->where('created_at', '>' , $lastitem->created_at)
+                                        ->where('confirmed' , '!=' , 2)
                                         ->count();
             }
             else
             { 
-                $remaining = Appointment::with(array('doctor' => function($query)  use (&$key) {
-                                            if($key != '')
-                                            {
-                                                $query->orWhere('lastname', 'like',  '%'.$key.'%')
-                                                        ->orWhere('firstname', 'like', '%'.$key.'%' )
-                                                        ->orWhere('middlename', 'like', '%'.$key.'%' );
-                                            }
-                                        }))
+                $remaining = Appointment::with('doctor')
                                         ->with('clinic')
                                         ->where('patient_id','=' , Auth::user()->id)
+                                        ->where('confirmed' , '!=' , 2)
                                         ->where('created_at', '>' , $lastitem->created_at)
                                         ->count();
             }
@@ -346,6 +304,21 @@ class AppointmentController extends Controller
         $appointment = Appointment::findOrFail($id);
     	$appointment->update(['confirmed' => config('constants.appointment_status.confirm')]);
 
+        if(Auth::user()->is_patient())
+        {
+            event(new NotifyUser($appointment->doctor_id,$appointment->patient_id, 'confirm_appointment' ,$appointment->id ,'appointment'));
+            //__construct($recepient_id, $sender_id, $action, $item_id,$type)
+        }
+        else if(Auth::user()->is_doctor())
+        {
+            event(new NotifyUser($appointment->patient_id,$appointment->doctor_id, 'confirm_appointment' ,$appointment->id ,'appointment'));
+            //__construct($recepient_id, $sender_id, $action, $item_id,$type)
+        }
+        else
+        {
+            return "Not allowed";
+        }
+
     	if($appointment)
         {
             return "success";
@@ -415,6 +388,21 @@ class AppointmentController extends Controller
                               'note'              =>  $request->input('note'),
                               're_schedule_by_id' => Auth::user()->id,
                       ]);
+
+        if(Auth::user()->is_patient())
+        {
+            event(new NotifyUser($appointment->doctor_id,$appointment->patient_id, 'resched_appointment' ,$appointment->id ,'appointment'));
+            //__construct($recepient_id, $sender_id, $action, $item_id,$type)
+        }
+        else if(Auth::user()->is_doctor())
+        {
+            event(new NotifyUser($appointment->patient_id,$appointment->doctor_id, 'resched_appointment' ,$appointment->id ,'appointment'));
+            //__construct($recepient_id, $sender_id, $action, $item_id,$type)
+        }
+        else
+        {
+            return "Not allowed";
+        }
 
         if($appointment)
         {

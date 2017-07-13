@@ -28,10 +28,18 @@ class ProfileController extends Controller
      */
     public function index($account_type,$id)
     {	
-        
-        if($account_type == config('constants.account_type_rev.1'))
+        if($id == 0)
+        {
+            $user = Auth::user();
+        }
+        else
         {
             $user = User::findOrFail($id);
+        }
+
+        if($account_type == config('constants.account_type_rev.1'))
+        {
+            
             $user['clinic'] = Clinic::where('doctor_id', '=', $id)
                                     ->where('default_address', '=', 1)
                                     ->first();   
@@ -41,8 +49,7 @@ class ProfileController extends Controller
             return view($account_type.'/profile', compact('user', 'doctor_rate'));
         }
         elseif($account_type == config('constants.account_type_rev.0'))
-        {
-            $user = User::findOrFail($id);        
+        {      
             return view($account_type.'/profile', compact('user'));
         }
         else

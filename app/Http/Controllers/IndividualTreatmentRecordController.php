@@ -183,7 +183,7 @@ class IndividualTreatmentRecordController extends Controller
         else if($type == "doctors_order")
         {
             $consultation = Consultation::where('id','=',$id)
-                                    ->first();
+                                        ->first();
 
             return view("print/$type", compact('itr','type', 'clinic', 'patient', 'consultation'));
         }

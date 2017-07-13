@@ -1077,3 +1077,22 @@ span.date{
 .search-field{
     margin: 5px;
 }
+
+.noty_theme__mint.noty_type__success {
+    background-color: #2579A9!important;
+}
+
+.white{
+    color: #ffffff!important;
+}
+
+.button__badge {
+    background-color: #20895e;
+    border-radius: 25px;
+    color: white;
+    font-size: 10px;
+    padding: 1px 6px;
+    position: absolute;
+    right: 8px;
+    top: 16px;
+}

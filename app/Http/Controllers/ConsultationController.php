@@ -10,6 +10,7 @@ use App\Appointment;
 use App\IndividualTreatmentRecord;
 use Illuminate\Support\Facades\Auth;
 use Redirect;
+use App\Events\NotifyUser;
 
 class ConsultationController extends Controller
 {
@@ -52,6 +53,8 @@ class ConsultationController extends Controller
 
     public function api_consultations_get(Request $request)
     {
+        
+
         $lastdate= $request->input('lastdate');
         $patient_id = $request->input('patient_id');
 
@@ -162,7 +165,7 @@ class ConsultationController extends Controller
     {
 
         $appointment = Appointment::find($appointment_id);
-        $appointment->confirmed = config('constants.appointment_status.confirm'); // change later to consult
+        $appointment->confirmed = config('constants.appointment_status.consult'); // change later to consult
         $appointment->save();
 
         $consultation = new Consultation();
@@ -300,6 +303,8 @@ class ConsultationController extends Controller
         $consultation = Consultation::where('id','=',$id)
                                     ->first();
         $consultation->admit = $admit;
+
+
 
         if($consultation->save())
         {

@@ -26,7 +26,7 @@
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
                                             <strong> @{{ appointment.doctor.lastname }} , @{{ appointment.doctor.firstname  }}</strong> 
-                                            <span class="text-muted">You requested this 5 days ago</span>
+                                            <!--<span class="text-muted">You requested this 5 days ago</span>-->
                                         </div>
                                         <div class="panel-body">
                                             @{{ appointment.appointment_date }}
@@ -50,7 +50,11 @@
                             <div class="clearfix"></div>
                         </div>
 
-    
+                        
+                         <br>
+                <div v-show="showLoadMoreBtn" class="row loadmore-container" style="text-align:center;">
+                    <button value="Load More" @click="loadMore()" style="width:30%;" class="btn btn-primary ladda-button loader" data-style="expand-left"><span class="ladda-label">Load More</span></button>      
+                </div>  
 
 
 </div>
@@ -70,7 +74,8 @@
             mounted() {},
 
             created: function() {
-                this.fetchAllAppointments();
+                //this.fetchAllAppointments();
+                this.fetchAppointments();
             },
 
             data(){

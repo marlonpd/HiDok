@@ -77,6 +77,14 @@ return ['constants' =>
 				'symptom'					  => 'Symptom',
 
 		],
+		'notification_action' =>[
+			'request_appointment' => 'Requested for an appointment.',
+			'resched_appointment' => 'Rescheduled the appointment.',
+			'confirm_appointment' => 'Comfirmed the appointment.',
+			'send_feedback'		  => 'Sent you a feedback.',
+			'rate'				  => 'Rated you.',
+			'create_consultation' => 'Your new medical record has been created.',
+		],
 		'account_type_label' => [
 				'patient'    => 'Patient',
 				'doctor'     => 'Doctor',

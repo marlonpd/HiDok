@@ -103,6 +103,7 @@ const app = new Vue({
       userDoctors : {},
       defaultPhoto : '',
       searchKey : '',
+      unReadNotificationCount : 0,
     }
   },
 
@@ -242,9 +243,59 @@ const app = new Vue({
 
 
 
-
-
   },
 });
 
 
+socket.on("notification-channel:App\\Events\\NotifyUser", function(message){
+      var thumbnail = '/'+message.data['thumbnail'];
+      var name = message.data['name'];
+      var action = message.data['action'];
+      var url = message.data['url'];
+      var created_at = message.data['created_at'].date;
+      //this.unReadNotification.push(message.data['notification']);
+      var recepient_id = message.data['recepient_id'];
+
+      if(recepient_id == app.authUser.id ){
+
+          app.fetchUnReadNotifications();
+          new Noty({
+            type: 'success',
+            layout: 'topRight',
+            theme: 'mint',
+            text: '<a href="'+url+'"><div class="col-sm-4">'+
+            '<div class="thumbnail"><img src="'+thumbnail+'" class="img-responsive user-photo"></div>'+
+            '</div> '+
+            '<div class="col-sm-8"> '+
+              '<div class="pull-left">'+
+                ' <span class="white"><b>'+name+'</b></span>'+
+                ' <span class="white"><b>'+action+'</b></span>'+
+                ' <span class="date white row">Posted : '+created_at+'</span>'+
+              '</div><div class="clr"></div>'+
+            '</div>'+
+            '</a>',
+            timeout: 5000,
+            progressBar: true,
+            closeWith: ['click', 'button'],
+            animation: {
+              open: 'noty_effects_open',
+              close: 'noty_effects_close'
+            },
+            id: false,
+            force: false,
+            killer: false,
+            queue: 'global',
+            container: false,
+            buttons: [],
+            sounds: {
+              sources: [],
+              volume: 1,
+              conditions: []
+            },
+            titleCount: {
+              conditions: []
+            },
+            modal: false
+          }).show();
+      }
+});

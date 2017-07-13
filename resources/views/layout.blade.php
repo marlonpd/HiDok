@@ -45,11 +45,14 @@
 
             <script src="/js/all.js"></script>
             <script type="text/javascript" src="http://www.google.com/jsapi?key=AIzaSyANvZAZmHJVMI8lGIyCU4v-aduI1bhVIsg"></script> 
+            <script type="text/javascript" src="/js/socket.io/socket.io-1.4.5.js"></script> 
        
             @yield('javascripts')
 
             <script type="text/javascript">
-    
+
+              var socket = io.connect('hidok.dev:3000');
+
               function initMenu() {
                 $('#menu ul').hide();
                 $('#menu ul').children('.current').parent().show();
@@ -93,7 +96,8 @@
                 created: function() {    
                   @if (Auth::check())
                      this.fetchConstants();
-                     this.setAuthUser('{!! Auth::user() !!}');         
+                     this.setAuthUser('{!! Auth::user() !!}');    
+                     this.fetchUnReadNotifications();     
                   @endif 
                 },
 
@@ -102,16 +106,47 @@
                       dev : null,
                       id : null,
                       authUser : {},
+                      unReadNotification : {},
+                      notifications : {},
+                      unReadNotificationCount : 0,
+                      newNotification : {},
                     }
                 },
 
                 methods:{
                   setAuthUser : function(authUser){
-                      this.authUser = JSON.parse(authUser);
+                    this.authUser = JSON.parse(authUser);
+                  },
+
+                  fetchUnReadNotifications: function(){
+                    this.$http.get('/api/notifications/unread/get', function(data){
+                      this.unReadNotification = data['notifications'];
+                      this.unReadNotificationCount = data['unread_notification_count'];
+                    });
+                  },
+
+                  fetchNotifications: function(){
+                    this.$http.get('/api/notifications/get', function(data){
+                      this.notifications = data['notifications'];
+                    });
+                  },
+
+                  viewNotifications:function(){
+                    this.$http.post('/api/mark/read/notification/post', this.authUser ,function(data){
+                        if(data['status'] == 'success'){
+                          this.unReadNotificationCount = 0;
+                        }
+                    });
                   },
                 }
               };
 
+
+
+             
+
+
+            
             </script>
             
             <script src="/js/app.js"></script>

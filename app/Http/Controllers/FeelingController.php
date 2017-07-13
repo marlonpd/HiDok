@@ -58,24 +58,7 @@ class FeelingController extends Controller
 				        ]);
     }
 
-    /*public function api_feelings_get()
-    {
-        if(Auth::user()->is_patient())
-        {
-            $feelings = Feeling::where('patient_id' , '=' , Auth::user()->id)
-                                ->orderBy('created_at', 'DESC')
-                                ->get();
-                       
-        }
-        else
-        {
-
-        }                        
-
-        return json_pretty(['feelings' => $feelings]);                    
-  
-    }*/
- // /api/feeling/update/post
+ 
     // /api/feeling/delete/post
     public function api_feeling_delete_post(Request $request)
     {

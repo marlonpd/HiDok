@@ -96,8 +96,9 @@
                           <li><a  href="#" data-title="Login" data-toggle="modal" data-target="#login"><i class="fa fa-user" aria-hidden="true"></i>Login</a></li>
                         @else
                           <li class="dropdown">
-                              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                              <a @click="viewNotifications()" href="#" class="dropdown-toggle" data-toggle="dropdown">
                                   <i class="glyphicon glyphicon-bell"></i>
+                                   <span v-if="unReadNotificationCount > 0" class="button__badge">@{{ unReadNotificationCount }}</span>
                               </a>
                               <ul class="dropdown-menu notifications notification-menu" role="menu" aria-labelledby="dLabel">
                                 
@@ -106,26 +107,28 @@
                                 <li class="divider"></li>
                               <div class="notifications-wrapper">
 
-                                <a class="content" href="#">  
+                                <a v-for="notification in unReadNotification" class="content" :href="notification.url">  
                                   <div class="notification-item">
-                                    <h4 class="item-title">Appointment 1 · day ago</h4>
-                                    <p class="item-info">Asyong Salonga requested an appointment</p>
+                                    <h4 class="item-title">@{{ notification.type | capitalize  }} - @{{ notification.created_at }}</h4>
+                                    <div class="row">
+                                      <div class="col-sm-3">
+                                          <div class="thumbnail"><img :src="'/'+notification.sender.thumbnail" class="img-responsive user-photo"></div>
+
+                                      </div>
+                                      <div class="col-sm-9">
+                                        <div class="pull-left">
+                                            <p class="item-info">@{{ notification.sender.firstname | capitalize  }} @{{ notification.sender.lastname | capitalize  }}</p>
+                                            <p class="item-info">@{{ notification.content }}</p>
+                                        </div>
+                                      </div>
+
+                                    
+                                    </div>
+                                    
+                                    
                                   </div>  
                                 </a>
 
-                                <a class="content" href="#">
-                                  <div class="notification-item">
-                                    <h4 class="item-title">Feedback · day ago</h4>
-                                    <p class="item-info">Nardong Putik gives you a feedback</p>
-                                  </div>
-                                </a>
-
-                                 <a class="content" href="#">
-                                  <div class="notification-item">
-                                    <h4 class="item-title">Rating · day ago</h4>
-                                    <p class="item-info">Baby Ama rated you!</p>
-                                  </div>
-                                </a>
                                 
 
                               </div>
@@ -148,7 +151,9 @@
                                         <div class="row">
                                             <div class="col-lg-4">
                                                 <p class="text-center">
-                                                    <span class="glyphicon glyphicon-user icon-size"></span>
+                                                    <div class="post-userphoto thumbnail">
+                                                        <img src="/{{Auth::user()->thumbnail}}" class="img-responsive user-photo">
+                                                    </div>
                                                 </p>
                                             </div>
                                             <div class="col-lg-8">

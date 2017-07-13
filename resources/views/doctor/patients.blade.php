@@ -26,11 +26,13 @@
                             <span class="hand-pointer" @click="deletePatient(index , patient, $event)">X</div>
                         </div>
 
-                        <div class="col-md-4">
-                            <img  :src="patient.patient.thumbnail" class="img-responsive user-photo thumb">
+                        <div class="col-md-4 padding-lr-0">
+                            <div class="thumbnail">
+                                <img  :src="'/'+patient.patient.thumbnail" class="img-responsive user-photo thumb">
+                            </div>
                         </div>
                         <div class="col-md-8">
-                            <h6><a :href="'/patient/profile/'+patient.patient.id"> @{{ patient.patient.firstname }} @{{ patient.patient.lastname }}</a></h6>
+                            <h6><a :href="'/patient/consultations/'+patient.patient.id"> @{{ patient.patient.firstname }} @{{ patient.patient.lastname }}</a></h6>
                             <p>@{{ patient.created_at}}
                         </div>
 

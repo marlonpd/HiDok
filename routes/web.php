@@ -47,14 +47,13 @@ Route::group(['middleware' => ['web'  ]], function () {
 
 	Route::get('/appointment', 'AppointmentController@index');
 	Route::post('/api/appointment/request/post ','AppointmentController@api_appointment_request_post');
-	Route::get('/api/auth/appointment/get/{clinic_id}', 'AppointmentController@api_auth_appointment_get');
+	Route::get('/api/auth/appointment/get', 'AppointmentController@api_auth_appointment_get');
 	Route::get('/api/auth/appointment/patient/get/', 'AppointmentController@api_auth_appointment_patient_get');
 	Route::get('/api/auth/appointment/all/get', 'AppointmentController@api_auth_appointment_all_get');
-	Route::get('/api/appointment/delete/post', 'AppointmentController@api_appointment_delete_post');
+	Route::post('/api/appointment/delete/post', 'AppointmentController@api_appointment_delete_post');
 	Route::get('/api/auth/appointment/get/{id}', 'AppointmentController@api_auth_schedule_appointment_get');
 	Route::post('/api/appointment/confirm/post', 'AppointmentController@api_appointment_confirm_post');
 	Route::post('/api/appointment/consult/post', 'AppointmentController@api_appointment_consult_post');
-	Route::post('/api/appointment/delete/post', 'AppointmentController@api_appointment_delete_post');
 	Route::post('/api/appointment/reschedule/post', 'AppointmentController@api_appointment_reschedule_post');
 	Route::get('/api/appointments/get' , 'AppointmentController@api_appointments_get');
 

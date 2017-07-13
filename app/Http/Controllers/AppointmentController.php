@@ -419,8 +419,24 @@ class AppointmentController extends Controller
     //api/appointment/delete/post
     public function api_appointment_delete_post(Request $request)
     {
+        $appointment = Appointment::findOrFail($request->input('id'));
+        if(Auth::user()->is_doctor())
+        {
+            event(new NotifyUser($appointment->patient_id,$appointment->doctor_id, 'cancel_consultation' ,$appointment->id ,'consultation'));
+            //__construct($recepient_id, $sender_id, $action, $item_id,$type)
+        
+        }
+        else
+        {
+            event(new NotifyUser($appointment->doctor_id,$appointment->patient_id, 'cancel_consultation' ,$appointment->id ,'consultation'));
+            //__construct($recepient_id, $sender_id, $action, $item_id,$type)
+        
+        }
+
     	$appointment = Appointment::destroy($request->input());
 
+        
+        
         if($appointment)
         {
             return "success";

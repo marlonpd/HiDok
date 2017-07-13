@@ -5,11 +5,11 @@
     <div class="modal-content">
           <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times-circle fa-1" aria-hidden="true"></i></button>
-        <h4 class="modal-title custom_align" id="Heading">vital-signs</h4>
+        <h4 class="modal-title custom_align" id="Heading">Add Vital Signs</h4>
       </div>
           <div class="modal-body">
 
-                  <input id="vital-sign-autocomplete" v-model="value" autofocus type="text" name="q" placeholder="Vital sign..." style="width:100%;max-width:600px;outline:0">
+                  <input id="vital-sign-autocomplete" v-on:keyup="keyMonitor($event)" v-model="value" autofocus type="text" name="q" placeholder="Vital sign..." style="width:100%;max-width:600px;outline:0">
                               
           </div>
           <div class="modal-footer ">
@@ -45,7 +45,7 @@
                 searchkey : '',
                 selectedVitalSigns : [],
                 other: '',
-                value : null
+                value : "",
             }
         },
 
@@ -54,6 +54,12 @@
         events: {},
 
         methods: {
+
+            keyMonitor : function(event){
+                if(event.key == 'Enter'){
+                    this.submitSelectedVitalSigns();
+                }
+            },
 
             fetchVitalSign:function(){
                 this.$http.get('/api/terms/get?type=vital_sign',function(data){
@@ -70,7 +76,7 @@
                 
             },
 
-             onOptionSelect(option) {
+            onOptionSelect(option) {
                 console.log('Selected option:', option)
             },
 

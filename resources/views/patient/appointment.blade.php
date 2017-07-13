@@ -41,8 +41,8 @@
                                         <button  v-if="appointment.confirmed == 0 && appointment.re_schedule_by_id != authUser.id" type="button" class="btn btn-primary btn-success" @click="confirmAppointment(appointment, $event)">Confirm</button>
                                         <button  v-if="appointment.confirmed == 0 && appointment.re_schedule_by_id == authUser.id" type="button" class="btn btn-primary btn-success disabled" @click="confirmAppointment(appointment, $event)">Confirm</button>
                                         <button  v-if="appointment.confirmed == 1" type="button" class="btn btn-primary btn-success disabled" >Confirmed</button>                          
-                                        <button type="button" class="btn btn-primary btn-infor" @click="reschedAppointment(appointment, $event)" data-title="Patient re-Schedule" data-toggle="modal" data-target="#patient-reschedule">Re-Schedule</button>
-                                        <button type="button" class="btn btn-primary btn-danger" @click="deleteAppointment(appointment, $event)">Delete</button>
+                                        <button v-if="appointment.confirmed < 1" type="button" class="btn btn-primary btn-infor" @click="reschedAppointment(appointment, $event)" data-title="Patient re-Schedule" data-toggle="modal" data-target="#patient-reschedule">Re-Schedule</button>
+                                        <button v-if="appointment.confirmed < 1" type="button" class="btn btn-primary btn-danger" @click="deleteAppointment(appointment, $event)">Cancel</button>
                                 </div>
                             </div>
                             <div class="clearfix"></div>

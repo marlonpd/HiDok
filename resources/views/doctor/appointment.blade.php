@@ -30,11 +30,11 @@
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
                                             <strong> @{{ appointment.patient.lastname }} , @{{ appointment.patient.firstname  }}</strong> 
-                                            <span class="text-muted">You requested this 5 days ago</span>
+                                            
                                         </div>
                                         <div class="panel-body">
                                             <strong> @{{ appointment.patient.lastname }} , @{{ appointment.patient.firstname  }}</strong> 
-                                            <span class="text-muted">requested 5 days ago</span>
+                                            
                                             </div>
                                             <div class="panel-body">
                                              Clinic: @{{ appointment.clinic.name }}
@@ -57,8 +57,8 @@
                                         <button  v-if="appointment.confirmed == 1 && appointment.re_schedule_by_id == authUser.id" type="button" class="btn btn-primary btn-success disabled" @click="newConsultation(appointment)">Consult</button>
 
                                         <button  v-if="appointment.confirmed == 2" type="button" class="btn btn-primary btn-success disabled" >Consult</button>
-                                        <button type="button" class="btn btn-primary btn-infor"  data-title="Re-Schedule" data-toggle="modal" data-target="#reschedule" @click="setAppointmentChild(appointment)">Re-Schedule</button>
-                                        <button type="button" class="btn btn-primary btn-danger" @click="deleteAppointment(appointment, $event)">Delete</button>
+                                        <button  v-if="appointment.confirmed == 0" type="button" class="btn btn-primary btn-infor"  data-title="Re-Schedule" data-toggle="modal" data-target="#reschedule" @click="setAppointmentChild(appointment)">Re-Schedule</button>
+                                        <button type="button" class="btn btn-primary btn-danger" @click="deleteAppointment(appointment, $event)">Cancel</button>
                                  </div>
                             </div>
                             <div class="clearfix"></div>
@@ -293,7 +293,8 @@
                                     'success'
                                     );
 
-                                    this.fetchScheduleAppointment(self.clinic_id);
+                                    this.fetchAllUserAppointments();
+                                   
                                 }
                                 });
                     

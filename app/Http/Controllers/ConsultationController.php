@@ -18,9 +18,6 @@ class ConsultationController extends Controller
     {
         $this->middleware(['auth']);
     }
-
-    
-
     // /healthhistory
     public function health_history()
     {
@@ -28,13 +25,8 @@ class ConsultationController extends Controller
     }
 
     // /consultations
-
     public function consultations()
     {
-        /*$consultations = Consultation::with('patient') 
-                                    ->where('doctor_id','=' ,  Auth::user()->id)
-                                    ->first();*/
-
         return view('doctor/consultations');
     }
 
@@ -143,9 +135,14 @@ class ConsultationController extends Controller
         $consultation->patient_id = $patient_id;
         $consultation->doctor_id = Auth::user()->id;
         $consultation->type = 0;
+
+        
+        
         
         if($consultation->save())
         {
+            event(new NotifyUser($consultation->patient_id,$consultation->doctor_id, 'create_consultation' ,$consultation->id ,'consultation'));
+        //__construct($recepient_id, $sender_id, $action, $item_id,$type)
             $consultation = Consultation::with('doctor')
                                         ->with('patient')
                                         ->where('id' ,'=' , $consultation->id)
@@ -173,9 +170,12 @@ class ConsultationController extends Controller
         $consultation->doctor_id = Auth::user()->id;
         $consultation->type = $consultation_type;
         $patient = User::findOrFail($patient_id);
+
         
         if($consultation->save())
         {
+            event(new NotifyUser($consultation->patient_id,$consultation->doctor_id, 'create_consultation' ,$consultation->id ,'consultation'));
+            //__construct($recepient_id, $sender_id, $action, $item_id,$type)
             $consultation = $consultation->id;
             $this->add_patient($patient_id);
 
@@ -289,7 +289,8 @@ class ConsultationController extends Controller
 
         if($consultation)
         {
-           	return json_pretty(['status' => 'success']);
+            
+            return json_pretty(['status' => 'success']);
         }
         else{
             return json_pretty(['status' => 'error']);

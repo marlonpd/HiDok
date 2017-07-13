@@ -1096,3 +1096,12 @@ span.date{
     right: 8px;
     top: 16px;
 }
+
+.padding-lr-0{
+    padding-left: 0!important;
+    padding-right: 0!important;
+}
+
+.paddint-top-0{
+    padding-top:0!important;
+}

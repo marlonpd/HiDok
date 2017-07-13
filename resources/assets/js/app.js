@@ -216,8 +216,8 @@ const app = new Vue({
     },
 
     fetchAppointment : function(){
-      this.$http.get('/api/auth/appointment/get', function(data){
-        this.appointments = data['appointments'];
+      this.$http.get('/api/appointments/get?lastdate='+this.lastdate, function(data){
+          this.appointments = data['appointments'];
       });
     },
 
@@ -263,12 +263,12 @@ socket.on("notification-channel:App\\Events\\NotifyUser", function(message){
             type: 'success',
             layout: 'topRight',
             theme: 'mint',
-            text: '<a href="'+url+'"><div class="col-sm-4">'+
+            text: '<a href="'+url+'"><div class="col-sm-3 padding-lr-0 paddint-top-0">'+
             '<div class="thumbnail"><img src="'+thumbnail+'" class="img-responsive user-photo"></div>'+
             '</div> '+
-            '<div class="col-sm-8"> '+
+            '<div class="col-sm-9"> '+
               '<div class="pull-left">'+
-                ' <span class="white"><b>'+name+'</b></span>'+
+                ' <span class="white">From: <b>'+name+'</b></span><br>'+
                 ' <span class="white"><b>'+action+'</b></span>'+
                 ' <span class="date white row">Posted : '+created_at+'</span>'+
               '</div><div class="clr"></div>'+

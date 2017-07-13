@@ -7,8 +7,10 @@
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xs-offset-0 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 toppad" >
               <div class="col-md-3 pull-left">
                 
-                <div class="row" align="center"> 
-                  <img alt="User Pic" src="/{{$patient->thumbnail}}" class="img-responsive"> 
+                <div class="row"> 
+                  <div class="thumbnail" align="center">  
+                    <img alt="User Pic" src="/{{$patient->thumbnail}}" class="img-responsive"> 
+                  </div>
                 </div>
 
                      
@@ -529,6 +531,7 @@
                     skins : {},
                     heents : {},
                     necks : {},
+                    laboratories :{},
                     chestAndLungs : {},
                     cardiovascularSystems : {},
                     abdomens : {},
@@ -909,7 +912,8 @@
                                 for (i=0;i<choices.length;i++)
                                     if (~choices[i].toLowerCase().indexOf(term)) suggestions.push(choices[i]);
                                 suggest(suggestions);
-                            }
+                            },
+                            noSuggestionNotice: false,
                         });
 
                         $('#treatment-autocomplete').autoComplete({
@@ -924,7 +928,7 @@
                                 suggest(suggestions);
                             },
 
-                            
+                            noSuggestionNotice: false,
                         });
 
                     });

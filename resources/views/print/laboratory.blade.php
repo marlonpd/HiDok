@@ -8,21 +8,24 @@
 </div>
 
 <hr style="height:1px;border:none;color:#333;background-color:#333;">
-<div style="float:left">
-    Patient Name : <u>{{ $patient->firstname}} {{ $patient->lastname}}</u> 
-    <br>
-    Address : <u> {{ $patient->address }}</u> 
+<div>
+    <div style="float:left">
+        Patient Name : <u>{{ $patient->firstname}} {{ $patient->lastname}}</u> 
+        <br>
+        Address : <u> {{ $patient->address }}</u> 
+    </div>
+    <div style="float:right">
+        Age:______ &nbsp; Sex: <u>{{ $patient->gender }}</u> 
+        <br>
+        Date:<u>{{ date('Y-m-d') }}</u>
+    </div>
+    <div style="clear:both;"></div>
 </div>
-<div style="float:right">
-    Age:______ &nbsp; Sex: <u>{{ $patient->gender }}</u> 
-    <br>
-    Date:<u>{{ date('Y-m-d') }}</u>
-</div>
-<br><br><br>
+<hr style="height:1px;border:none;color:#333;background-color:#333;">
+<br>
 
-<img style="height:50px;" src="/images/rx.png">
+<h3>Diagnostic requests: </h3>
 
-<br><br>
 @foreach ($itr as $laboratory)
     <span>{{ trim($laboratory->value) }}</span>,&nbsp;&nbsp;&nbsp;
 @endforeach
@@ -30,7 +33,7 @@
 
 <div style="float: right;">
     __________________ <br>
-    {{ Auth::user()->firstname}} {{ Auth::user()->lastname}} <br>
+    {{  Auth::user()->fullname() }} <br>
     License no : ________<br>
     PTR No. : _________
     <br>

@@ -8,7 +8,10 @@
               <div class="col-md-3 pull-left">
                 
                 <div class="row" align="center"> 
-                  <img alt="User Pic" src="/{{$user->thumbnail}}" class="img-circle img-responsive"> 
+                  <!--<img alt="User Pic" src="/{{$user->thumbnail}}" class="img-circle img-responsive"> -->
+                  <div class="thumbnail">
+                    <img alt="User Pic" src="/{{$user->thumbnail}}" class="img-responsive"> 
+                  </div>
                 </div>
                  <span  class="row"> <h4 class="name-title">{{ $user->fullname() }} </h4>
                   <span > {{$user->specialization}}</span>
@@ -38,26 +41,33 @@
                    <a type="button" class="btn default-btn btn-block " href="#" data-title="Feedback" data-toggle="modal" data-target="#create-feedback-form">Write a feedback</a>
                  </span>
                  
+                 <!--
                  <span class="row">
                    <a type="button" class="btn default-btn btn-block " href="#" data-title="Feedback" data-toggle="modal" data-target="#ask-connect-form" @click="askConnect();">Connect+</a>
                  </span>
+                 -->
 
                  <div class="row">
                    <h2 class="header-title">Feedback</h2>
                    <div>
                       <ul class="chat">
-                        <li class="left clearfix" v-for="feedback in feedbacks"><span class="chat-img pull-left" >
-                            <img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" />
-                        </span>
-                            <div class="chat-body clearfix">
-                                <div class="header">
-                                    <strong class="primary-font">@{{ feedback.patient.lastname }} , @{{ feedback.patient.firstname  }}</strong> <small class="pull-right text-muted">
-                                        <i class="fa fa-clock-o" aria-hidden="true"></i> @{{ feedback.created_at }}</small>
+                        <li class="left clearfix " v-for="feedback in feedbacks"><span class="chat-img pull-left" >
+                            <div class="col-md-3 padding-lr-0">
+                                <div class=" thumbnail">
+                                  <img :src="'/'+feedback.patient.thumbnail" class="img-responsive user-photo">
                                 </div>
-                                <p>
-                                     @{{ feedback.content }}
-                                </p>
                             </div>
+
+                            <div class="col-md-9">
+                              <strong class="primary-font"><a :href="'/patient/consultations/'+feedback.patient.id">@{{ feedback.patient.lastname }} , @{{ feedback.patient.firstname  }}</a></strong> 
+                              
+                              <p>
+                                     @{{ feedback.content }}
+                              </p>
+                              <small class="pull-right text-muted"><i class="fa fa-clock-o" aria-hidden="true"></i> @{{ feedback.created_at }}</small>
+                              
+                            </div>
+                            <div class="clr"></div>
                         </li>  
                     </ul> 
 

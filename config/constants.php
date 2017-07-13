@@ -84,6 +84,7 @@ return ['constants' =>
 			'send_feedback'		  => 'Sent you a feedback.',
 			'rate'				  => 'Rated you.',
 			'create_consultation' => 'Your new medical record has been created.',
+			'cancel_consultation' => 'Your appointment has been cancelled',
 		],
 		'account_type_label' => [
 				'patient'    => 'Patient',

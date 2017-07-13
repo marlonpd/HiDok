@@ -102,7 +102,7 @@
                               </a>
                               <ul class="dropdown-menu notifications notification-menu" role="menu" aria-labelledby="dLabel">
                                 
-                                <div class="notification-heading"><h4 class="menu-title">Notifications</h4><h4 class="menu-title pull-right">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4>
+                                <div class="notification-heading"><h4 class="menu-title">Notifications</h4><h4 class="menu-title pull-right hide">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4>
                                 </div>
                                 <li class="divider"></li>
                               <div class="notifications-wrapper">
@@ -133,7 +133,7 @@
 
                               </div>
                                 <li class="divider"></li>
-                                <div class="notification-footer"><h4 class="menu-title">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4></div>
+                                <div class="notification-footer"><h4 class="menu-title hide" >View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4></div>
                               </ul>
                           </li>
 

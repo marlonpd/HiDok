@@ -8,7 +8,7 @@
         <h4 class="modal-title custom_align" id="Heading">Treatment</h4>
       </div>
           <div class="modal-body">
-                <input id="treatment-autocomplete" v-model="selectedTreatment" autofocus type="text" name="q" placeholder="Treatment..." style="width:100%;max-width:600px;outline:0">
+                <input id="treatment-autocomplete" v-on:keyup="keyMonitor($event)" v-model="selectedTreatment" autofocus type="text" name="q" placeholder="Treatment..." style="width:100%;max-width:600px;outline:0">
                                           
           </div>
           <div class="modal-footer ">
@@ -40,7 +40,7 @@
         data(){
             return {
                 searchkey : '',
-                selectedTreatment : null,
+                selectedTreatment : "",
                 other: '',
             }
         },
@@ -50,6 +50,12 @@
         events: {},
 
         methods: {
+
+            keyMonitor : function(event){
+                if(event.key == 'Enter'){
+                    this.submitSelectedTreatment();
+                }
+            },
 
 
             selectTreatment: function(event, treatment){

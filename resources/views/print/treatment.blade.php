@@ -9,6 +9,7 @@
 </div>
 
 <hr style="height:1px;border:none;color:#333;background-color:#333;">
+<div>
 <div style="float:left">
     Patient Name : <u>{{ $patient->firstname}} {{ $patient->lastname}}</u> 
     <br>
@@ -20,7 +21,9 @@
     <br>
     Date:<u>{{ date('Y-m-d') }}</u>
 </div>
-
+<div style="clear:both;"></div>
+</div>
+<hr style="height:1px;border:none;color:#333;background-color:#333;">
 <br>
 <br>
 <br>
@@ -36,7 +39,7 @@
 
 <div style="float: right;">
     __________________ <br>
-    {{ Auth::user()->firstname}} {{ Auth::user()->lastname}} <br>
+    {{ Auth::user()->fullname() }} <br>
     License no : ________<br>
     PTR No. : _________
     <br>

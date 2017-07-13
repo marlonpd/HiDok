@@ -132,6 +132,7 @@
                   },
 
                   viewNotifications:function(){
+                    this.unReadNotificationCount = 0;
                     this.$http.post('/api/mark/read/notification/post', this.authUser ,function(data){
                         if(data['status'] == 'success'){
                           this.unReadNotificationCount = 0;

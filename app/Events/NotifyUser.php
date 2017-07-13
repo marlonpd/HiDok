@@ -35,8 +35,14 @@ class NotifyUser  extends Event implements ShouldBroadcast
         $notification->content = config('constants.notification_action.'.$action);
         $notification->item_id = $item_id;
         $notification->type = $type;
-        $type =  $type == 'rate' ? '/doctor/profile/0' : $type;
-        $notification->url = 'http://hi-dok.com/'.$type;
+
+        if($type == 'rate'){
+            $type= 'doctor/profile/0';
+        }else if($type == 'consultation'){
+            $type= 'patient/consultations/'.$recepient_id;
+        }
+        
+        $notification->url = 'http://hidok.dev/'.$type;
         $notification->read = 0;
         $notification->save();
 

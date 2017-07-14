@@ -28,7 +28,7 @@ class ProfileController extends Controller
      */
     public function index($account_type,$id)
     {	
-        if($id == 0)
+        if($id == "0")
         {
             $user = Auth::user();
         }
@@ -36,6 +36,8 @@ class ProfileController extends Controller
         {
             $user = User::findOrFail($id);
         }
+
+        
 
         if($account_type == config('constants.account_type_rev.1'))
         {

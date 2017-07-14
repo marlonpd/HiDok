@@ -27,10 +27,12 @@
                         <div class="col-sm-6">
                         <div class="panel panel-default">
                         <div class="panel-heading">
-                        <strong> @{{ feedback.patient.lastname }} , @{{ feedback.patient.firstname  }}</strong> <span class="text-muted">commented 5 days ago</span>
+                        <a :href="'/patient/consultations/'+feedback.patient.id"><strong> @{{ feedback.patient.lastname }} , @{{ feedback.patient.firstname  }}</strong></a> 
+                        <!--<span class="text-muted">commented 5 days ago</span>-->
                         </div>
                         <div class="panel-body">
-                        @{{ feedback.content }}
+                        <p>@{{ feedback.content }}</p>
+                        <p>@{{ feedback.created_at }}]</p>
                         </div><!-- /panel-body -->
                         </div><!-- /panel panel-default -->
                         </div><!-- /col-sm-5 -->
@@ -104,7 +106,7 @@
                         }
 
                         if(data['error'] == 'Unauthenticated'){
-                            windows.location = 'http://hidok.com';
+                            windows.location = 'http://'+this.APP_DOMAIN;
                         }
 
                         items.forEach(function(item , index){

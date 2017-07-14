@@ -4,14 +4,20 @@
 <div class="container">
 
         <div class="panel panel-default">
-        <div class="panel-heading">Doctors</div>
+        <div class="panel-heading">Doctors
+        
+        <div class="pull-right">
+            <input type="text" class="form-control input-md" name="searchKey" v-model="searchKey" />
+        </div>
+        <div class="clr"></div>
+        </div>
 
         <div class="panel-body">
 
 
 
         <div class="row">
-        <div class="col-md-4" v-for="doctor in userDoctors">
+        <div class="col-md-4" v-for="doctor in  filterBy(userDoctors,searchKey)">
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="row">
@@ -21,9 +27,11 @@
                         </div>
 
                         <div class="col-md-4">
-                            <img v-if="doctor.doctor.thumbnail != ''" :src="doctor.doctor.thumbnail" class="img-responsive user-photo">
-                            <div v-else>
-                                <img :src="defaultPhoto"  class="img-responsive user-photo">
+                            <div v-if="doctor.doctor.thumbnail != ''" class="thumbnail">
+                                <img  :src="doctor.doctor.thumbnail" class="img-responsive user-photo">
+                            </div>   
+                            <div v-else class="thumbnail">
+                                    <img :src="defaultPhoto"  class="img-responsive user-photo">
                             </div>
                         </div>
                         <div class="col-md-8">
@@ -70,6 +78,7 @@
                 return {
                     lastdate : "",
                     showLoadMoreBtn : true, 
+                    searchKey : '',
                 }
             },
 

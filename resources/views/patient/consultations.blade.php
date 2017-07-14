@@ -692,7 +692,9 @@
                 fetchFirstConsultation: function(){
                     this.$http.get('/api/consultations/get?lastdate='+this.lastdate+'&patient_id={!! $patient->id!!}', function(data){
                         this.consultations = data['consultations'];
-                        this.consultation = this.consultations[0];
+                        if(this.consultations[0]){
+                            this.consultation = this.consultations[0];
+                        }
                         this.fetchITR('all');
                         this.remaining = data['remaining'];
                         if(this.remaining > 0 ){
@@ -777,6 +779,7 @@
                             if(isConfirm){
                                 self.$http.post('/api/consultation/create', data ,function(data){
                                     if(data['status'] == 'success'){
+                                        self.consultation = data['consultation'];
                                         self.consultations.unshift(data['consultation']);
                                     }else{
                                         alert('Please try again!');
@@ -935,50 +938,20 @@
                 },
 
                 fetchITR: function(type){
-
-                    this.$http.get('/api/itr/get/'+this.consultation.id+'/'+type ,function(data){
-                        
-                        if(type == 'all'){
-                            this.itr = data['itr'];
-                            this.itr['present_illness_history']  =  this.itr['present_illness_history'].length > 0 ? this.itr['present_illness_history'][0].value : ''; 
-                            this.itr['past_medical_history']  =  this.itr['past_medical_history'].length > 0 ? this.itr['past_medical_history'][0].value : ''; 
-                            this.itr['other_medical_intervention']  =  this.itr['other_medical_intervention'].length > 0 ? this.itr['other_medical_intervention'][0].value : ''; 
-                        }else{
-                            this.itr[type] = data[type];
-                        }
-                        
-                        
-                        
-                        /*if(type == 'diagnosis'){
-                             this.diagnoses = data['diagnosis'];
-                        }else if(type== 'vital_sign'){
-                            this.selectedVitalSigns = data['vital_sign'];
-                        }else if(type== 'chief_complaint'){
-                            this.selectedSymptoms = data['chief_complaint'];
-                        }else if(type== 'skin'){
-                            this.selectedSkins = data['skin'];
-                        }else if(type== 'laboratory'){
-                            this.selectedLaboratory = data['laboratory'];
-                        }else if(type== 'general_appearance'){
-                            this.selectedGeneralAppearances = data['general_appearance'];
-                        }else if(type== 'heent'){
-                            this.selectedHeents = data['heent'];
-                        }else if(type== 'neck'){
-                            this.selectedNecks = data['neck'];
-                        }else if(type== 'chest_and_lungs'){
-                            this.selectedChestAndLungs = data['chest_and_lungs'];
-                        }else if(type== 'cardiovascular_system'){
-                            this.selectedCardiovascularSystems= data['cardiovascular_system'];
-                        }else if(type== 'abdomen'){
-                            this.selectedAbdomens = data['abdomen'];
-                        }else if(type== 'genito_urinary_system'){
-                            this.selectedGenitoUrinarySystems = data['genito_urinary_system'];
-                        }else if(type== 'extremities'){
-                            this.selectedExtremities = data['extremities'];
-                        }else{
+                    if(this.consultation.id){
+                        this.$http.get('/api/itr/get/'+this.consultation.id+'/'+type ,function(data){
                             
-                        }     */
-                    });
+                            if(type == 'all'){
+                                this.itr = data['itr'];
+                                this.itr['present_illness_history']  =  this.itr['present_illness_history'].length > 0 ? this.itr['present_illness_history'][0].value : ''; 
+                                this.itr['past_medical_history']  =  this.itr['past_medical_history'].length > 0 ? this.itr['past_medical_history'][0].value : ''; 
+                                this.itr['other_medical_intervention']  =  this.itr['other_medical_intervention'].length > 0 ? this.itr['other_medical_intervention'][0].value : ''; 
+                            }else{
+                                this.itr[type] = data[type];
+                            }
+                        
+                        });
+                    }
                 },
  
       

@@ -29,14 +29,11 @@
                                 <div class="col-sm-6">
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
-                                            <strong> @{{ appointment.patient.lastname }} , @{{ appointment.patient.firstname  }}</strong> 
+                                            <a :href="'/patient/consultations/'+appointment.patient.id"><strong> @{{ appointment.patient.lastname }} , @{{ appointment.patient.firstname  }}</strong></a> 
                                             
                                         </div>
                                         <div class="panel-body">
-                                            <strong> @{{ appointment.patient.lastname }} , @{{ appointment.patient.firstname  }}</strong> 
                                             
-                                            </div>
-                                            <div class="panel-body">
                                              Clinic: @{{ appointment.clinic.name }}
                                              <br>
                                              @{{ appointment.appointment_date }}
@@ -54,7 +51,7 @@
                                                             
                                         <button  v-if="appointment.confirmed == 1 && appointment.re_schedule_by_id != authUser.id" type="button" class="btn btn-primary btn-success" @click="newConsultation(appointment)">Consult</button>
 
-                                        <button  v-if="appointment.confirmed == 1 && appointment.re_schedule_by_id == authUser.id" type="button" class="btn btn-primary btn-success disabled" @click="newConsultation(appointment)">Consult</button>
+                                        <button  v-if="appointment.confirmed == 1 && appointment.re_schedule_by_id == authUser.id" type="button" class="btn btn-primary btn-success" @click="newConsultation(appointment)">Consult</button>
 
                                         <button  v-if="appointment.confirmed == 2" type="button" class="btn btn-primary btn-success disabled" >Consult</button>
                                         <button  v-if="appointment.confirmed == 0" type="button" class="btn btn-primary btn-infor"  data-title="Re-Schedule" data-toggle="modal" data-target="#reschedule" @click="setAppointmentChild(appointment)">Re-Schedule</button>
@@ -256,7 +253,7 @@
                         }
 
                         if(data['error'] == 'Unauthenticated'){
-                            windows.location = 'http://hidok.com';
+                            windows.location = 'http://'+this.APP_DOMAIN;
                         }
 
                         items.forEach(function(item , index){

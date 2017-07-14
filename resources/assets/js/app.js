@@ -117,7 +117,7 @@ const app = new Vue({
   methods:{
     reSchedAppointments : function(appointmentId, clinicId){
         self = this;
-        this.appointments[clinicId].forEach(function(appointment , index){
+        this.appointments.forEach(function(appointment , index){
           if(appointment['id'] == appointmentId){
             appointment['confirm'] = 1;
             appointment['re_schedule_by_id'] = self.authUser.id;

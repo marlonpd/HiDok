@@ -36,13 +36,14 @@ class NotifyUser  extends Event implements ShouldBroadcast
         $notification->item_id = $item_id;
         $notification->type = $type;
 
-        if($type == 'rate'){
+        /*if($type == 'rate'){
             $type= 'doctor/profile/0';
         }else if($type == 'consultation'){
             $type= 'patient/consultations/'.$recepient_id;
-        }
-        
-        $notification->url = 'http://hidok.dev/'.$type;
+        }*/
+
+        $type = ( $action == 'create_consultation' || $action == 'cancel_consultation' ) ? '/patient/consultations/'.$recepient_id : '/'.$type;        
+        $notification->url = 'http://'.env('APP_DOMAIN').$type;
         $notification->read = 0;
         $notification->save();
 

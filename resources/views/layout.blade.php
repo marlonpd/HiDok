@@ -51,7 +51,7 @@
 
             <script type="text/javascript">
 
-              var socket = io.connect('hidok.dev:3000');
+              var socket = io.connect("{!! env('APP_DOMAIN') !!}:3000");
 
               function initMenu() {
                 $('#menu ul').hide();
@@ -110,6 +110,7 @@
                       notifications : {},
                       unReadNotificationCount : 0,
                       newNotification : {},
+                      APP_DOMAIN: "{!! env('APP_DOMAIN') !!}",
                     }
                 },
 

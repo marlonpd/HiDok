@@ -17,7 +17,7 @@
                                     <img :src="consultation.patient.thumbnail" width="60px">
                                     </div>
                                     <div class="col-sm-9">
-                                    <h4><a href="#">@{{ consultation['patient'].firstname }} @{{ consultation['patient'].lastname }}</a></h4>
+                                    <h4><a :href="'/patient/consultations/'+consultation['patient'].id">@{{ consultation['patient'].firstname }} @{{ consultation['patient'].lastname }}</a></h4>
                                     <p><a href="#">Consultaiton date : @{{ consultation.created_at }}</a></p>
                                     </div>
                                     <div class="col-sm-2">
@@ -131,7 +131,7 @@
                         }
 
                         if(data['error'] == 'Unauthenticated'){
-                            windows.location = 'http://hidok.com';
+                            windows.location = 'http://'+this.APP_DOMAIN;
                         }
 
                         consultaions.forEach(function(consultaion , index){

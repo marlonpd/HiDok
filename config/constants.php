@@ -86,6 +86,15 @@ return ['constants' =>
 			'create_consultation' => 'Your new medical record has been created.',
 			'cancel_consultation' => 'Your appointment has been cancelled',
 		],
+		'notification_action_path' =>[
+			'request_appointment' => '/appointment',
+			'resched_appointment' => '/appointment',
+			'confirm_appointment' => '/appointment',
+			'send_feedback'		  => '/feeedback',
+			'rate'				  => '/profile/doctor/0',
+			'create_consultation' => '/patient/consultations',
+			'cancel_consultation' => '/patient/consultations',
+		],
 		'account_type_label' => [
 				'patient'    => 'Patient',
 				'doctor'     => 'Doctor',

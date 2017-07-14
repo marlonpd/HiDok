@@ -19,13 +19,14 @@
                             <div class="shadow"  v-for="appointment in filterBy(appointments,searchKey)" >
                             <div class="row">
                                 <div class="col-sm-1">
+
                                     <img :src="'/'+appointment.doctor.thumbnail" width="60px">
                                 </div>
                                 
                                 <div class="col-sm-6">
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
-                                            <strong> @{{ appointment.doctor.lastname }} , @{{ appointment.doctor.firstname  }}</strong> 
+                                            <a :href="'/doctor/profile/'+appointment.doctor.id"><strong> @{{ appointment.doctor.lastname }} , @{{ appointment.doctor.firstname  }}</strong></a> 
                                             <!--<span class="text-muted">You requested this 5 days ago</span>-->
                                         </div>
                                         <div class="panel-body">
@@ -85,6 +86,7 @@
                     editAppointment : {},
                     lastdate : "",
                     showLoadMoreBtn : true, 
+                    searchKey : '',
                 }
             },
 
@@ -172,7 +174,7 @@
                         }
 
                         if(data['error'] == 'Unauthenticated'){
-                            windows.location = 'http://hidok.com';
+                            windows.location = 'http://'+this.APP_DOMAIN;
                         }
 
                         apps.forEach(function(app , index){

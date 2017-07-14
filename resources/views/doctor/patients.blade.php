@@ -135,7 +135,7 @@
                                 self.showLoadMoreBtn = false;
                             }
                             if(data['error'] == 'Unauthenticated'){
-                                windows.location = 'http://hidok.dev';
+                                windows.location = 'http://'.this.APP_DOMAIN;
                             }
 
                             patients.forEach(function(patient , index){

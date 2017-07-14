@@ -41,7 +41,12 @@
                         <div class="col-md-10">
                             <div class="row">
                                 <div class="pull-left">
-                                 @{{ post.firstname | capitalize}} @{{ post.lastname | capitalize}}
+                                     <a v-if="post.account_type ==1 " :href="'/doctor/profile/'+post.id">
+                                            @{{ post.firstname | capitalize}} @{{ post.lastname | capitalize}}
+                                        </a>
+                                        <a v-else :href="'/patient/consultations/'+post.id">
+                                            @{{ post.firstname | capitalize}} @{{ post.lastname | capitalize}}
+                                        </a>   
                                 </div>
 
                                 <div  class="pull-right">

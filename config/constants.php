@@ -43,11 +43,11 @@ return ['constants' =>
 				'default_photo' => '/images/default_avatar_male.jpg',
 		],
 		'account_type' => [
-				'patient'    => 0,
-				'doctor'     => 1,
-				'hospital'   => 2,
-				'laboratory' => 3,
-				'pharmacy'   => 4,
+				'patient'    => '0',
+				'doctor'     => '1',
+				'hospital'   => '2',
+				'laboratory' => '3',
+				'pharmacy'   => '4',
 		],
 		'individual_treatment_record_set' =>[
 				0 => 'Chief Complaint',

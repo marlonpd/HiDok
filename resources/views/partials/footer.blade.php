@@ -11,9 +11,9 @@
 				<div class="pull-left company-details">
 					<h3>{{env('APP_NAME')}}, Inc.</h3>
 					<span>Davao City, Philippines <br>
-					   Telephone  no.: 305-2688 <br>
-					   Mobile no.: 09308131882<br>
-					   Email Address : info@hi-dok.com
+					   Telephone  no.: 298-8687 <br>
+					   Mobile no.: +639984441269<br>
+					   Email Address : hidokinc@gmail.com
 					</span><br>
 
 					<p class="footer-links hide" >

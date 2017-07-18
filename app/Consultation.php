@@ -13,7 +13,7 @@ class Consultation extends Model
     public $incrementing = false;
     private static $uuidOptimization = true;
 
-    protected $fillable = [ 'doctor_id','patient_id', 'type','admit', 'hospital'];
+    protected $fillable = [ 'doctor_id','patient_id', 'type','admit', 'hospital', 'doctors_order'];
 
     public function patient()
     {

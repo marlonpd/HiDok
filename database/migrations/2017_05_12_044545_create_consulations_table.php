@@ -20,6 +20,7 @@ class CreateConsulationsTable extends Migration
             $table->tinyInteger('type')->default(0); 
             $table->string('hospital',70);
             $table->tinyInteger('admit')->default(0);
+            $table->text('doctors_order')->nullable();
             $table->timestamps();
         });
     }

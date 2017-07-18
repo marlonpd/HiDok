@@ -135,6 +135,7 @@ class ConsultationController extends Controller
         $consultation->patient_id = $patient_id;
         $consultation->doctor_id = Auth::user()->id;
         $consultation->type = 0;
+        $consultation->hospital = ''; 
 
         
         if($consultation->save())

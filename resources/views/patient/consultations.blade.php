@@ -36,10 +36,10 @@
                  </span>
 
                  <div class="row consultations-pnl "  >
-                        <div v-for="consultation in consultations" class="consultation-detail hand-pointer shadow" @click="viewConsultation(consultation, $event)">
+                        <div v-for="consultation in consultations" class="consultation-detail hand-pointer shadow" @click="viewConsultation(consultation, $event,'')">
                             <span>Date :  @{{ consultation.created_at }}</span><br>
-                            <span>Dr: @{{ consultation.doctor.firstname }} @{{ consultation.doctor.lastname }}</span>
-                        </div>
+                            <span>Dr. @{{ consultation.doctor.firstname | capitalize }}  @{{ consultation.doctor.lastname | capitalize }}   </span>
+                          </div>
 
                         
 
@@ -56,9 +56,9 @@
               <div class="col-md-9 pull-left">
                      <!---Start Of Tabs -->
                         <div class="panel panel-default">
-                <div class="panel-heading">
-                    Consultation Date : @{{ consultation.created_at}}         
-                    
+                <div class="panel-heading consultation-heading">
+                   @{{ newConsultation }} Consultation <br> Date : @{{ consultation.created_at}} <br> Dr. @{{ consultation.doctor.firstname | capitalize }}  @{{ consultation.doctor.lastname | capitalize }}    
+                          
                 </div>
 
                 <div class="panel-body">
@@ -521,6 +521,7 @@
             data(){
                 return {
                     lastdate : "",
+                    newConsultation : '',
                     showLoadMoreBtn : true, 
                     consultations : {},
                     appointments : {},
@@ -590,7 +591,12 @@
                     },
                     diagnoses : {},
                     itr  : {},
-                    consultation :{},
+                    consultation :{
+                        doctor : {
+                            firstname :'',
+                            lastname : '',
+                        }
+                    },
                     remaining : 0,
                 }
             },
@@ -781,7 +787,11 @@
                                     if(data['status'] == 'success'){
                                         self.consultation = data['consultation'];
                                         self.consultations.unshift(data['consultation']);
-                                        self.viewConsultation(self.consultaion, event);
+                                        self.newConsultation = 'New';
+                                        $('.consultation-heading').addClass('new-consultation');
+                                        $('div.consultations-pnl div:first-child').css('background-color','#F1FCEE!important');
+                   
+                                        //self.viewConsultation(self.consultation, event,'new');
                                     }else{
                                         alert('Please try again!');
                                     }
@@ -796,8 +806,13 @@
                     });
                 },
 
-                viewConsultation(consultation, event){
+                viewConsultation(consultation, event, caller){
                     var clickedElement =event.target;
+                    if(caller != 'new'){
+                        self.newConsultation = '';
+                        $('.consultation-heading').removeClass('new-consultation');
+                    }
+                    
                     $(clickedElement).siblings().removeClass('consultation-active');
                     $(clickedElement).addClass('consultation-active');
                     this.consultation = consultation;

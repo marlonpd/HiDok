@@ -78,6 +78,8 @@
                     }
 
                     var data = {email : this.email};
+                    var l = Ladda.create(document.querySelector( '.btn-block' ));
+                    l.start();
                     this.$http.post('/api/send/password/reset/email/post', data , function(data){
                         if(data['status'] == 'success'){
                            swal({
@@ -120,6 +122,7 @@
                             );
 
                         }
+                        l.stop();
                     });
 
                 }

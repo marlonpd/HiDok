@@ -250,7 +250,7 @@ const app = new Vue({
 
 
 socket.on("notification-channel:App\\Events\\NotifyUser", function(message){
-      var thumbnail = '/'+message.data['thumbnail'];
+      var thumbnail = message.data['thumbnail'];
       var name = message.data['name'];
       var action = message.data['action'];
       var url = message.data['url'];
@@ -276,7 +276,7 @@ socket.on("notification-channel:App\\Events\\NotifyUser", function(message){
               '</div><div class="clr"></div>'+
             '</div>'+
             '</a>',
-            timeout: 5000,
+            timeout: 50000,
             progressBar: true,
             closeWith: ['click', 'button'],
             animation: {

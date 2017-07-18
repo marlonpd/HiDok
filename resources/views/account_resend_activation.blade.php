@@ -59,8 +59,12 @@
                     event.preventDefault();
                     var data = { email : this.email };
 
+                    var l = Ladda.create(document.querySelector( '.btn-block' ));
+                    l.start();
+
                     this.$http.post('/api/resend/account/activation', data ,function(data){
                         if(data['status'] == 'success'){
+                            
                             swal({
                                 title: 'Success!',
                                 text: 'An email has been sent to '+this.email+'. Please check to acctivate your account.',
@@ -86,6 +90,7 @@
                                 }
                             );
                         }
+                        l.stop();
                     });
                 },
             },

@@ -120,6 +120,8 @@
                                   password : this.password,
                                   reset_password_code : this.reset_password_code,
                        };
+                    var l = Ladda.create(document.querySelector( '.btn-block' ));
+                    l.start();
 
                     this.$http.post('/api/reset/password/post', data ,function(data){
                         if(data['status'] == 'success'){
@@ -163,6 +165,7 @@
                                 }
                             );
                         }
+                        l.stop();
                     });
                 },
             },

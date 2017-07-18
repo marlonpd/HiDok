@@ -33,7 +33,7 @@
 
                                         <div class="col-md-4  padding-lr-0">
                                             <div class="thumbnail">    
-                                            <img  src="/{{$doctor->thumbnail}}" class="img-responsive user-photo thumb">
+                                            <img  src="{{$doctor->thumbnail}}" class="img-responsive user-photo thumb">
                                             </div>
                                         </div>
                                         <div class="col-md-8">

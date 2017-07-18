@@ -77,30 +77,30 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         return User::create([
-            'lastname'        => $data['lastname'],
-            'firstname'       => $data['firstname'],
-            'middlename'      => $data['middlename'],
-            'email'           => $data['email'],
-            'account_type'    => $data['account_type'],
-            'password'        => bcrypt($data['password']),
-            'photo'           => config('constants.images.default_photo'),
-            'thumbnail'       => config('constants.images.default_photo'),
-            'activation_code' => str_random(20),
-            'reset_password_code'      => str_random(20),  
+            'lastname'            => $data['lastname'],
+            'firstname'           => $data['firstname'],
+            'middlename'          => $data['middlename'],
+            'email'               => $data['email'],
+            'account_type'        => $data['account_type'],
+            'password'            => bcrypt($data['password']),
+            'photo'               => config('constants.images.default_photo'),
+            'thumbnail'           => config('constants.images.default_photo'),
+            'activation_code'     => str_random(20),
+            'reset_password_code' => '',  
         ]);
     }
 
     protected function create_non_human_account(array $data)
     {
         return User::create([
-            'name'            => $data['name'],
-            'email'           => $data['email'],
-            'account_type'    => $data['account_type'],
-            'password'        => bcrypt($data['password']),
-            'photo'           => config('constants.images.default_photo'),
-            'thumbnail'       => config('constants.images.default_photo'),
-            'activation_code' => str_random(20),
-            'reset_password_code'      => str_random(20),
+            'name'                => $data['name'],
+            'email'               => $data['email'],
+            'account_type'        => $data['account_type'],
+            'password'            => bcrypt($data['password']),
+            'photo'               => config('constants.images.default_photo'),
+            'thumbnail'           => config('constants.images.default_photo'),
+            'activation_code'     => str_random(20),
+            'reset_password_code' => '',
         ]);
     }
 

@@ -23,14 +23,21 @@ Route::get('about', 'AboutController@index');
 Route::get('contact', 'ContactController@index');
 Route::post('/contact/send/message' ,'ContactController@send_message');
 
-Route::post('hospital/register', 'Auth\RegisterController@post_register');
+/*Route::post('hospital/register', 'Auth\RegisterController@post_register');
 Route::post('laboratory/register', 'Auth\RegisterController@post_register');
-Route::post('pharmacy/register', 'Auth\RegisterController@post_register');
+Route::post('pharmacy/register', 'Auth\RegisterController@post_register');*/
 
 Route::post('/api/login/post','Auth\LoginController@login_post');
-Route::post('doctor/register', 'Auth\RegisterController@post_register');
-
+Route::post('/doctor/register', 'Auth\RegisterController@post_register');
 Route::get('/api/constants/get', 'PublicController@api_constants_get');
+Route::get('/account/activation/{id}/{activation_code}' , 'AccountController@index');
+Route::get('/account/forgot' , 'AccountController@forgot_account');
+Route::get('/account/resend/activation' ,'AccountController@resend_activation');
+
+Route::post('/api/resend/account/activation' ,'AccountController@api_resend_account_activation');
+Route::post('/api/send/password/reset/email/post', 'AccountController@api_send_password_reset_email_post');
+Route::post('/api/reset/password/post', 'AccountController@api_reset_password_post');
+Route::get('/account/password/reset/{id}/{reset_password_code}', 'AccountController@account_password_reset');
 
 Route::group(['middleware' => ['web'  ]], function () {
 	

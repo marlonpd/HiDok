@@ -38,7 +38,7 @@
                       <!-- Nav tabs -->
                       <ul class="nav nav-tabs tabs-left search-tabs-left">
                         <li class="active"><a href="#home" data-toggle="tab">Doctor</a></li>
-                        <li class=""><a href="#profile" data-toggle="tab">Hospital</a></li>
+                        <li class="hide"><a href="#profile" data-toggle="tab">Hospital</a></li>
                         <li class="hide"><a href="#messages" data-toggle="tab">Pharmacy</a></li>
                         <li class="hide"><a href="#settings" data-toggle="tab">Laboratory</a></li>
                       </ul>
@@ -121,7 +121,7 @@
     <div class="download-pnl">
         <h4>The quickest access to healthcare</h4>
         <p>The quickest access to healthcare</p>
-        <div class="download-btns">
+        <div class="download-btns hide">
             <img src="images/btnappstore.png" width="170">
             <img src="images/btnappstoregoogle.png" width="170">
         </div>

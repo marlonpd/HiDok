@@ -60,3 +60,35 @@
     </div>
   </div>
 @stop
+
+
+
+@section('javascripts')
+    <script>
+
+
+        var childMixin = {
+
+            mounted() {
+            },
+
+            created: function() {
+            },
+
+            data(){
+                return {
+                }
+            },
+
+            events: {
+
+            },
+
+            methods: {
+            },
+
+
+
+        };
+    </script>
+@endsection

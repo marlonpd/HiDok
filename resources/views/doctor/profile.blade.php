@@ -10,7 +10,7 @@
                 <div class="row" align="center"> 
                   <!--<img alt="User Pic" src="/{{$user->thumbnail}}" class="img-circle img-responsive"> -->
                   <div class="thumbnail">
-                    <img alt="User Pic" src="/{{$user->thumbnail}}" class="img-responsive"> 
+                    <img alt="User Pic" src="{{ $user->thumbnail }}" class="img-responsive"> 
                   </div>
                 </div>
                  <span  class="row"> <h4 class="name-title">{{ $user->fullname() }} </h4>
@@ -54,7 +54,7 @@
                         <li class="left clearfix " v-for="feedback in feedbacks"><span class="chat-img pull-left" >
                             <div class="col-md-3 padding-lr-0">
                                 <div class=" thumbnail">
-                                  <img :src="'/'+feedback.patient.thumbnail" class="img-responsive user-photo">
+                                  <img :src="feedback.patient.thumbnail" class="img-responsive user-photo">
                                 </div>
                             </div>
 

@@ -9,7 +9,7 @@
                 
                 <div class="row"> 
                   <div class="thumbnail" align="center">  
-                    <img alt="User Pic" src="/{{$patient->thumbnail}}" class="img-responsive"> 
+                    <img alt="User Pic" src="{{$patient->thumbnail}}" class="img-responsive"> 
                   </div>
                 </div>
 
@@ -781,6 +781,7 @@
                                     if(data['status'] == 'success'){
                                         self.consultation = data['consultation'];
                                         self.consultations.unshift(data['consultation']);
+                                        self.viewConsultation(self.consultaion, event);
                                     }else{
                                         alert('Please try again!');
                                     }
@@ -878,7 +879,7 @@
                         }
 
                         if(data['error'] == 'Unauthenticated'){
-                            windows.location = 'http://hidok.com';
+                            windows.location = 'http://'+this.APP_DOMAIN;
                         }
 
                         consultaions.forEach(function(consultaion , index){

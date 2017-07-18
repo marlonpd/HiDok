@@ -12,7 +12,7 @@
                         <div class="shadow"  v-for="consultation in consultations" >
                             <div class="col-sm-12">
                                 <div class="col-sm-1">
-                                <img :src="'/'+consultation.doctor.thumbnail" width="60px">
+                                <img :src="consultation.doctor.thumbnail" width="60px">
                                 </div>
                                 <div class="col-sm-9">
                                 <h4><a :href="'/profile/doctor/'+consultation.doctor.id">@{{ consultation['doctor'].firstname | capitalize }} @{{ consultation['doctor'].lastname | capitalize }}</a></h4>
@@ -97,7 +97,7 @@
                         }
 
                         if(data['error'] == 'Unauthenticated'){
-                            windows.location = 'http://hidok.com';
+                            windows.location = 'http://'+this.APP_DOMAIN;
                         }
 
                         consultaions.forEach(function(consultaion , index){

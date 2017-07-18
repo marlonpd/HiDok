@@ -28,7 +28,7 @@ class User extends Eloquent implements Authenticatable
         'lastname','firstname','middlename','account_type','name', 
         'email', 'password','address','contact_no','height','weight',
         'religion','gender','photo', 'thumbnail','health_history','specialization',
-        'consultation_fee'
+        'consultation_fee', 'activation_code', 'activated','reset_password_code',
     ];
 
     /**

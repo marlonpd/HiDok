@@ -37,7 +37,7 @@ class ProfileController extends Controller
             $user = User::findOrFail($id);
         }
 
-        
+        //$user = $id == "0" ?  Auth::user() : User::findOrFail($id);
 
         if($account_type == config('constants.account_type_rev.1'))
         {

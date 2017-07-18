@@ -12,7 +12,7 @@
                   </form>
                     
                   <div class="login-help">
-                    <a href="#">Register</a> - <a href="#">Forgot Password</a>
+                     <a href="/account/forgot">Forgot Password</a>
                   </div>
                 </div>
 
@@ -72,7 +72,7 @@
 
                         window.location = "/home";    
                         
-                    }else{
+                    }else if(data == "error"){
                         
                         swal({
                           title: 'Error!',
@@ -87,9 +87,25 @@
                               console.log('I was closed by the timer')
                             }
                           }
-                        )
+                        );
                         
+                    }else{
+                        swal({
+                          title: 'Error!',
+                          html: 'Your account needs to be activated please check your email!. Click <a href="/account/resend/activation">here</a> to resend activation code to your email.',
+                          type : 'error',
+                          showConfirmButton : true,
+                        }).then(
+                          function () {},
+                          function (dismiss) {
+                            if (dismiss === 'timer') {
+                              console.log('I was closed by the timer')
+                            }
+                          }
+                        );
+
                     }
+
                 });
             },
 

@@ -77,24 +77,30 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         return User::create([
-         //   'id'    => Uuid::generate(),
-            'lastname'     => $data['lastname'],
-            'firstname'    => $data['firstname'],
-            'middlename'   => $data['middlename'],
-            'email'        => $data['email'],
-            'account_type' => $data['account_type'],
-            'password'     => bcrypt($data['password']),
-            'photo'        => config('constants.default_photo'),
+            'lastname'        => $data['lastname'],
+            'firstname'       => $data['firstname'],
+            'middlename'      => $data['middlename'],
+            'email'           => $data['email'],
+            'account_type'    => $data['account_type'],
+            'password'        => bcrypt($data['password']),
+            'photo'           => config('constants.images.default_photo'),
+            'thumbnail'       => config('constants.images.default_photo'),
+            'activation_code' => str_random(20),
+            'reset_password_code'      => str_random(20),  
         ]);
     }
 
     protected function create_non_human_account(array $data)
     {
         return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'account_type' => $data['account_type'],
-            'password' => bcrypt($data['password']),
+            'name'            => $data['name'],
+            'email'           => $data['email'],
+            'account_type'    => $data['account_type'],
+            'password'        => bcrypt($data['password']),
+            'photo'           => config('constants.images.default_photo'),
+            'thumbnail'       => config('constants.images.default_photo'),
+            'activation_code' => str_random(20),
+            'reset_password_code'      => str_random(20),
         ]);
     }
 
@@ -107,18 +113,41 @@ class RegisterController extends Controller
         
         if($account_type == config('constants.account_type.patient') || $account_type == config('constants.account_type.doctor') )
         {
-            event(new Registered($user = $this->create($request->all())));
+            //event(new Registered($user = $this->create($request->all())));
+            $user = $this->create($request->all());
+            $this->send_email($user);
         }
         else
         {
             event(new Registered($user = $this->create_non_human_account($request->all())));
         }
-        
-        $this->guard()->login($user);
 
-        return $this->registered($request, $user)
-            ?: redirect($this->redirectPath());
-    
+        return view('email_sent',compact('user'));
+        //$this->guard()->login($user);
+        //return $this->registered($request, $user)
+        //    ?: redirect($this->redirectPath());
+    }
+
+    public function send_email($user)
+    {   
+ 
+        $data =  array('firstname'       => $user->first_name,
+                       'id'              => $user->id, 
+                       'lastname'        => $user->last_name,
+                       'activation_code' => $user->activation_code,
+                       'url'             => env('APP_DOMAIN'),
+                       'email'           => $user->email,
+                       'from'            => env('MAIL_USERNAME')
+                 );
+
+        \Mail::send('email.account_activation', $data, function($message) use ($user)
+        {   
+            $message->from(env('MAIL_USERNAME'), 'HiDok');
+            $message->to($user->email, $user->first_name)->subject('HiDok Account Activation');
+        });
+
+        //return '<a href="/account/activation/'.$activation_code.'">click here</a>'; 
+        
     }
 
 

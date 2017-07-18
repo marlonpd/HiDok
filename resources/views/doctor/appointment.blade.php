@@ -22,7 +22,7 @@
                             <div class="row">
                                 <div class="col-sm-1">
                                     <div class="thumbnail">         
-                                        <img :src="'/'+appointment.patient.thumbnail" width="60px">
+                                        <img :src="appointment.patient.thumbnail" width="60px">
                                     </div>
                                 </div>
                                 

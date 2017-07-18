@@ -53,6 +53,13 @@ class LoginController extends Controller
             $email = $request->input("email");
             $password = $request->input("password");
 
+            $user = User::where('email' , '=' , $email)->first();
+
+            if($user->activated == 0)
+            {
+                return "not_activated"; 
+            }
+
             if(Auth::attempt(['email' => $email, 'password' => $password])) {
                 return "success";
             } else {

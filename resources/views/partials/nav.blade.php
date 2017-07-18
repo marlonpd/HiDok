@@ -20,7 +20,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                       </button>
-                      <a class="navbar-brand" href="/home"><img src="/images/logo.png" alt="" width="60px;" class="img-rounded img-responsive"><h4>HiDok</h4></a>
+                      <a class="navbar-brand" href="/home"><img src="/images/logo.png" alt="" width="60px;" class="img-rounded img-responsive"><h4>{{ env('APP_NAME') }}</h4></a>
                     </div>
                     <div id="navbar" class="collapse navbar-collapse">
                       <ul class="nav navbar-nav">
@@ -98,7 +98,7 @@
                           <li class="dropdown">
                               <a @click="viewNotifications()" href="#" class="dropdown-toggle" data-toggle="dropdown">
                                   <i class="glyphicon glyphicon-bell"></i>
-                                   <span v-if="unReadNotificationCount > 0" class="button__badge">@{{ unReadNotificationCount }}</span>
+                                   <span v-if="unReadNotificationCount > 0" class="button__badge" v-cloak>@{{ unReadNotificationCount }}</span>
                               </a>
                               <ul class="dropdown-menu notifications notification-menu" role="menu" aria-labelledby="dLabel">
                                 
@@ -112,8 +112,7 @@
                                     <h4 class="item-title">@{{ notification.type | capitalize  }} - @{{ notification.created_at }}</h4>
                                     <div class="row">
                                       <div class="col-sm-3">
-                                          <div class="thumbnail"><img :src="'/'+notification.sender.thumbnail" class="img-responsive user-photo"></div>
-
+                                          <div class="thumbnail"><img :src="notification.sender.thumbnail" class="img-responsive user-photo"></div>
                                       </div>
                                       <div class="col-sm-9">
                                         <div class="pull-left">
@@ -152,7 +151,7 @@
                                             <div class="col-lg-4">
                                                 <p class="text-center">
                                                     <div class="post-userphoto thumbnail">
-                                                        <img src="/{{Auth::user()->thumbnail}}" class="img-responsive user-photo">
+                                                        <img src="{{Auth::user()->thumbnail}}" class="img-responsive user-photo">
                                                     </div>
                                                 </p>
                                             </div>

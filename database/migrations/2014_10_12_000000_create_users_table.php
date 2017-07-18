@@ -35,6 +35,9 @@ class CreateUsersTable extends Migration
             $table->timestamp('birthdate')->nullable();
             $table->string('health_history')->nullable();
             $table->string('consultation_fee',40)->nullable();
+            $table->integer('activated')->default(0);
+            $table->string('activation_code');
+            $table->string('reset_password_code');
             $table->rememberToken();
             $table->timestamps();
         });

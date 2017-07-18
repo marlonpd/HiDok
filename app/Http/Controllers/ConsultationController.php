@@ -55,7 +55,7 @@ class ConsultationController extends Controller
             $consultations = Consultation::with('doctor')
                                          ->where('patient_id','=' ,$patient_id)
                                          ->take(10)
-                                         ->orderBy('created_at', 'ASC')
+                                         ->orderBy('created_at', 'DESC')
                                          ->get();
         }
         else
@@ -64,7 +64,7 @@ class ConsultationController extends Controller
                                          ->where('patient_id','=' ,$patient_id)
                                          ->where('created_at', '>' , $lastdate)
                                          ->take(10)
-                                         ->orderBy('created_at', 'ASC')
+                                         ->orderBy('created_at', 'DESC')
                                          ->get();
         }
         $remaining = 0;
@@ -96,7 +96,7 @@ class ConsultationController extends Controller
                                              ->with('doctor')
                                              ->where('doctor_id','=' , Auth::user()->id)
                                              ->take(10)
-                                             ->orderBy('created_at', 'ASC')
+                                             ->orderBy('created_at', 'DESC')
                                              ->get();
             }
             else
@@ -106,7 +106,7 @@ class ConsultationController extends Controller
                                              ->where('doctor_id','=' , Auth::user()->id)
                                              ->where('created_at', '>' , $lastdate)
                                              ->take(10)
-                                             ->orderBy('created_at', 'ASC')
+                                             ->orderBy('created_at', 'DESC')
                                              ->get();
             }
             $remaining = 0;
@@ -137,13 +137,11 @@ class ConsultationController extends Controller
         $consultation->type = 0;
 
         
-        
-        
         if($consultation->save())
         {
             event(new NotifyUser($consultation->patient_id,$consultation->doctor_id, 'create_consultation' ,$consultation->id ,'consultation'));
-        //__construct($recepient_id, $sender_id, $action, $item_id,$type)
-           $consultation = Consultation::with('doctor')
+            //__construct($recepient_id, $sender_id, $action, $item_id,$type)
+            $consultation = Consultation::with('doctor')
                                         ->with('patient')
                                         ->where('id' ,'=' , $consultation->id)
                                         ->first();
@@ -160,9 +158,6 @@ class ConsultationController extends Controller
 
     public function consultation_create($consultation_type , $patient_id, $appointment_id)
     {
-
-        
-
         $appointment = Appointment::find($appointment_id);
         $appointment->confirmed = config('constants.appointment_status.consult'); // change later to consult
         $appointment->save();
@@ -174,8 +169,6 @@ class ConsultationController extends Controller
         $consultation->doctor_id = Auth::user()->id;
         $consultation->type = $consultation_type;
         $patient = User::findOrFail($patient_id);
-
-        
         if($consultation->save())
         {
             $consultation = $consultation->id;

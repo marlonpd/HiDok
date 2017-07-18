@@ -9,7 +9,7 @@
 				</div>
 
 				<div class="pull-left company-details">
-					<h3>HiDok, Inc.</h3>
+					<h3>{{env('APP_NAME')}}, Inc.</h3>
 					<span>Davao City, Philippines <br>
 					   Telephone  no.: 305-2688 <br>
 					   Mobile no.: 09308131882<br>

@@ -14,6 +14,10 @@ return ['constants' =>
 		 'term_type',
 		 'individual_treatment_record_type',
         ],
+		'account_status' =>[
+			'not_activated'	=> 0,
+			'activated' 	=> 1,
+		],
 		'term_type' =>[
 			'vital_sign'   ,
 			'symptom'      ,

@@ -61,8 +61,8 @@
 
             data(){
                 return {
-                    email               : '',
-                    reset_password_code : '',
+                    email               : '{!! $user->email !!}',
+                    reset_password_code : '{!! $user->reset_password_code !!}',
                     password1           : '',
                     password            : '',
                 }
@@ -85,6 +85,7 @@
                         }).then(
                             function () {},
                             function (dismiss) {
+
                                 if (dismiss === 'timer') {
                                     console.log('I was closed by the timer')
                                 }
@@ -129,8 +130,23 @@
                                 timer: 1000,
                                 type : 'success',
                             }).then(function () {},function (dismiss) {});
-
                             this.email = '';
+                            window.location = "/home";
+                        }else if(data['status'] == 'invalid_reset_code'){
+                            swal({
+                                title: 'Error!',
+                                text: 'Request a new again!.',
+                                timer: 1000,
+                                type : 'error',
+                                showConfirmButton : true,
+                            }).then(
+                                function () {},
+                                function (dismiss) {
+                                    if (dismiss === 'timer') {
+                                        console.log('I was closed by the timer')
+                                    }
+                                }
+                            );
                         }else{
                             swal({
                                 title: 'Error!',

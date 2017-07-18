@@ -230,7 +230,7 @@
                         }
 
                         if(data['error'] == 'Unauthenticated'){
-                            windows.location = 'http://hidok.com';
+                            windows.location = 'http://'+this.APP_DOMAIN;
                         }
 
                         moreposts.forEach(function(morepost , index){

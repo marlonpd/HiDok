@@ -29,7 +29,7 @@
                     @foreach ($non_humans as $non_human)
                         <div class="col-md-12  col-md-offset-0 search-items-pnl">
                             <div class="pull-left col-md-3 photo-container">
-                              <img src="/{{$non_human->thumbnail}}" width="100%" >
+                              <img src="{{$non_human->thumbnail}}" width="100%" >
                             </div>
 
                             <div class="pull-right col-md-8 ">

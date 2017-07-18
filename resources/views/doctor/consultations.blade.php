@@ -22,6 +22,7 @@
                                     </div>
                                     <div class="col-sm-2">
                                         <label class="pull-right">
+                                            
                                             <a  class="btn btn-success btn-xs glyphicon glyphicon-eye-open" :href="'/consultation/'+consultation.id" title="View"></a>
                                             <a  class="btn btn-danger  btn-xs glyphicon glyphicon-trash" href="#" title="Delete" @click="deleteConsultation(consultation, $event)"></a>
                                         </label>

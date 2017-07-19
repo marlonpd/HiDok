@@ -32,7 +32,7 @@
                             </div>
                         </div>
                         <div class="col-md-8">
-                            <h6><a :href="'/patient/consultations/'+patient.patient.id"> @{{ patient.patient.firstname }} @{{ patient.patient.lastname }}</a></h6>
+                            <h6><a :href="'/patient/consultations/'+patient.patient.id"> @{{ patient.patient.firstname | capitalize }} @{{ patient.patient.lastname | capitalize }}</a></h6>
                             <p>@{{ patient.created_at}}
                         </div>
 

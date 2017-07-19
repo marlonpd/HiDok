@@ -142,6 +142,7 @@ class ConsultationController extends Controller
         {
             event(new NotifyUser($consultation->patient_id,$consultation->doctor_id, 'create_consultation' ,$consultation->id ,'consultation'));
             //__construct($recepient_id, $sender_id, $action, $item_id,$type)
+            $this->add_patient($patient_id);
             $consultation = Consultation::with('doctor')
                                         ->with('patient')
                                         ->where('id' ,'=' , $consultation->id)
@@ -302,6 +303,23 @@ class ConsultationController extends Controller
         $consultation->admit = $admit;
 
 
+
+        if($consultation->save())
+        {
+           	return json_pretty(['status' => 'success']);
+        }
+        else{
+            return json_pretty(['status' => 'error']);
+        }
+    }
+
+    public function api_consultation_doctors_order_post(Request $request)
+    {
+        $id = $request->input('id');
+        $doctors_order = $request->input('doctors_order');
+        $consultation = Consultation::where('id','=',$id)
+                                    ->first();
+        $consultation->doctors_order = $doctors_order;
 
         if($consultation->save())
         {

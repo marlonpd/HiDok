@@ -18,6 +18,7 @@ class CreateIndividualTreatmentRecordTable extends Migration
             $table->char('consultation_id',36);
             $table->char('patient_id',36);
             $table->char('doctor_id',36);
+            $table->string('name')->nullable();
             $table->string('value')->nullable();
             $table->string('type',50);
         });

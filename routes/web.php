@@ -128,6 +128,8 @@ Route::group(['middleware' => ['web'  ]], function () {
 	Route::post('/api/post/post' , 'PostController@api_post_post');
 	Route::get('/post/{id}', 'PostController@post');
 	Route::post('/api/consultation/admit/patient/post' , 'ConsultationController@api_consultation_admit_patient_post');
+	Route::post('/api/consultation/doctors/order/post' , 'ConsultationController@api_consultation_doctors_order_post');
+	
 
 	Route::get('/api/notifications/all/get','NotificationController@api_notifications_all_get');
 	Route::get('/api/notifications/unread/get','NotificationController@api_notifications_unread_get');

@@ -10,7 +10,7 @@
 <hr style="height:1px;border:none;color:#333;background-color:#333;">
 <div>
 <div style="float:left">
-    Patient Name : <u>{{ $patient->firstname}} {{ $patient->lastname}}</u> 
+    Patient Name : <u>{{ $patient->fullname() }}</u> 
     <br>
     Address : <u> {{ $patient->address }}</u> 
 </div>
@@ -24,8 +24,8 @@
 <hr style="height:1px;border:none;color:#333;background-color:#333;">
 <br>
 <h3>Doctor's order:</h3>
-<br>
-Admit patient to {{ $consultation->hospital }}.
+<p>Admit patient to {{ $consultation->hospital }}.</p>
+<p>{{ $consultation->doctors_order }} </p>
 <br><br><br>
 
 <div style="float: right;">

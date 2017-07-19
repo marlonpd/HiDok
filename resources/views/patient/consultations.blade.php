@@ -35,14 +35,11 @@
                     @endif
                  </span>
 
-                 <div class="row consultations-pnl "  >
+                 <div class="row consultations-pnl">
                         <div v-for="consultation in consultations" class="consultation-detail hand-pointer shadow" @click="viewConsultation(consultation, $event,'')">
                             <span>Date :  @{{ consultation.created_at }}</span><br>
                             <span>Dr. @{{ consultation.doctor.firstname | capitalize }}  @{{ consultation.doctor.lastname | capitalize }}   </span>
-                          </div>
-
-                        
-
+                        </div>
                         <div class="clr"></div>
 
                         <br>
@@ -458,10 +455,26 @@
 
                         @if(Auth::user()->is_doctor())
                         <div>
-                            <span><input type="checkbox" v-model="consultation.admit" v-bind:true-value="1" v-bind:false-value="0" @click="admitPatient($event)"> Admint patient?</span> 
-                            <span v-if="consultation.admit == 1">Hospital: <input type="text" v-model="consultation.hospital"  v-on:keyup="assignHospital($event)"></span>
-                            <span v-if="consultation.admit == 1">(<a href="#" @click="print('doctors_order',$event)">doctor's order</a>)</span>
-                        
+                            <span><input type="checkbox" v-model="consultation.admit" v-bind:true-value="1" v-bind:false-value="0" @click="admitPatient($event)"> Admit patient?</span> 
+                            
+                            
+                            
+                            <span v-if="consultation.admit == 1">
+                                  <a class="btn btn-info" target="_blank" @click="print('doctors_order',$event)" ><i class="fa fa-print" aria-hidden="true"></i>Print</a>
+                            </span>
+                            <div class="form-group" v-if="consultation.admit == 1">
+                                <label for="hospital">Hospital:</label>
+                                <input type="text" v-model="consultation.hospital" class="form-control"  v-on:keyup="assignHospital($event)">
+                            </div>
+                            
+                            <div class="form-group" v-if="consultation.admit == 1">
+                                <label for="comment">Doctor's order:</label>
+                                <textarea class="form-control" rows="5" v-model="consultation.doctors_order" id="doctors_order"></textarea>
+                            </div> 
+                            <div v-if="consultation.admit == 1" class="span6 pull-right">
+                                <button class="btn btn-primary btn-default doctors_order-loading"  @click="saveDoctorsOrder($event)"><i class="fa fa-pencil-square-o fa-1" aria-hidden="true"></i>Save</button>
+                            </div>  
+                            
                         </div>
                         @endif
 
@@ -507,15 +520,17 @@
     <script>
         $(function(){
             $( "#accordion" ).accordion();
+                   
         });
 
         var childMixin = {
-            mounted() {},
+            mounted() {
+                 $('div.consultations-pnl div:first-child').addClass('consultation-active');
+            },
 
             created: function() {
                 this.fetchFirstConsultation();
                 this.fetchTerms();
-                //this.fetchITR();
             },
 
             data(){
@@ -626,6 +641,30 @@
                     }, 2000);
                 },
 
+                
+                saveDoctorsOrder: function(event){
+                    event.preventDefault();
+                    var l = Ladda.create(document.querySelector( '.doctors_order-loading' ));
+                    l.start();
+                    this.$http.post('/api/consultation/doctors/order/post',this.consultation,function(data){
+                        if(data['status'] == 'success'){
+                            swal({
+                                title: 'Success!',
+                                text: 'Data saved.',
+                                showConfirmButton : false,
+                                timer: 500,
+                                type : 'success',
+                            }).then(function () {},function (dismiss) {});
+                            
+                        }else{
+                             swal("Error","Please try again!", "error");
+                        }
+                        l.stop();
+                        
+                    });
+                    $('.doctors_order-loading').removeClass('ladda-button');
+                },
+
                admitPatient: function(event){
                     event.preventDefault();
                     this.$http.post('/api/consultation/admit/patient/post',this.consultation,function(data){
@@ -701,14 +740,20 @@
                         if(this.consultations[0]){
                             this.consultation = this.consultations[0];
                         }
+                        
+                   
                         this.fetchITR('all');
                         this.remaining = data['remaining'];
+                        //$('div.consultations-pnl div:first-child').css('background-color','#F1FCEE!important');
+                        //$('div.consultation-detail').first().css( "background-color", "red" );
                         if(this.remaining > 0 ){
                             this.showLoadMoreBtn = true;
                         }else{
                             this.showLoadMoreBtn = false;
                         }
                     });
+                    //$('div.consultations-pnl div:first-child').css('background-color','#F1FCEE!important');
+               
                 },
 
                 deleteITRItem : function(type,value){
@@ -734,9 +779,6 @@
                                 swal("Error","Please, try again!", "error");
                         }
                     });
-
-
-         
                 },
                 
                 saveITR: function(type){
@@ -791,7 +833,6 @@
                                         $('.consultation-heading').addClass('new-consultation');
                                         $('div.consultations-pnl div:first-child').css('background-color','#F1FCEE!important');
                    
-                                        //self.viewConsultation(self.consultation, event,'new');
                                     }else{
                                         alert('Please try again!');
                                     }

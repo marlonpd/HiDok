@@ -55,15 +55,24 @@ class LoginController extends Controller
 
             $user = User::where('email' , '=' , $email)->first();
 
-            if($user->activated == 0)
+            if($user)
             {
-                return "not_activated"; 
-            }
+                if($user->activated == 0)
+                {
+                    return "not_activated"; 
+                }
 
-            if(Auth::attempt(['email' => $email, 'password' => $password])) {
-                return "success";
-            } else {
-                return "error";
+                if(Auth::attempt(['email' => $email, 'password' => $password])) 
+                {
+                    return "success";
+                } else {
+                    return "error";
+                }
+            }
+            else
+            {
+                    return "error";
+                
             }
         }
     }

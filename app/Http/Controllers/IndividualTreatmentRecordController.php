@@ -115,17 +115,7 @@ class IndividualTreatmentRecordController extends Controller
 
                                    
     }
-    
-    /*public function api_itr_get($consultation_id,$type)
-    {
-        $itr = IndividualTreatmentRecord::where('consultation_id','=',$consultation_id)
-                                        ->where('type', '=', $type)
-                                        ->get();
 
-       return json_pretty(['status'   => 'success',
-                           $type => $itr,
-              ]);                                  
-    }*/
 
     // '/api/itr/delete/post''
     public function api_itr_delete_post(Request $request)
@@ -191,6 +181,12 @@ class IndividualTreatmentRecordController extends Controller
         {
             return view("print/$type", compact('itr','type', 'clinic', 'patient'));
         }
+    }
+
+
+    public function api_save_itr_post($type, Request $request)
+    {
+        
     }
 
 

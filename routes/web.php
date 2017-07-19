@@ -93,6 +93,7 @@ Route::group(['middleware' => ['web'  ]], function () {
 	Route::post('/api/itr/delete/post','IndividualTreatmentRecordController@api_itr_delete_post');
 	Route::get('/api/itr/get/{consultation_id}/{type}','IndividualTreatmentRecordController@api_itr_get');
 	Route::get('/print/{type}/{id}/{patient_id}','IndividualTreatmentRecordController@show_print');
+	Route::post('/api/save/itr/{type}/post','IndividualTreatmentRecordController@api_save_itr_post');
 
 
 	Route::post('/api/update/profile/post' , 'ProfileController@api_update_profile_post');

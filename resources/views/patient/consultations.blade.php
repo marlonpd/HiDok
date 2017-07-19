@@ -94,6 +94,43 @@
                             <div>
                                 <p>
                                     <div class="row">
+                                        
+           
+
+                                        <div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="hospital">Blood pressure:</label>
+                                                    <input type="text" class="form-control"  v-on:keyup="">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="hospital">Temperature:</label>
+                                                    <input type="text" class="form-control"  v-on:keyup="">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="hospital">Respiratory rate:</label>
+                                                    <input type="text" class="form-control"  v-on:keyup="">
+                                                </div>
+                                                <div class="form-group" >
+                                                    <label for="hospital">Pulse rate:</label>
+                                                    <input type="text" class="form-control"  v-on:keyup="">
+                                                </div>
+                                            </div>
+
+                                            @if(Auth::user()->is_doctor())
+                                            <div class="span6 pull-right">
+                                                <button class="btn btn-primary btn-default past_medical_history-loading"  @click="saveITR('past_medical_history')"><i class="fa fa-pencil-square-o fa-1" aria-hidden="true"></i>Save</button>
+                                            </div>  
+                                            <div class=" clr"></div>
+                                            @endif
+                                        </div>
+
+                                        <div class="form-group" >
+                                            <label for="hospital">Others:</label>
+                                        </div>
+
                                         <div class="pull-left"> 
                                               @if(Auth::user()->is_doctor())  
                                                 <button class="btn btn-primary btn-default" data-title="Create" data-toggle="modal" data-target="#add-vital-signs-form" ><i class="fa fa-plus fa-1" aria-hidden="true"></i>Add</button>
@@ -102,6 +139,8 @@
                                         
                                         <div class=" clr"></div>
                                         <hr>
+
+
                                         <template v-for="vitalSign in itr['vital_sign']">
                                             <div class="col-md-4">
                                                 <div class="checkbox">
@@ -466,7 +505,7 @@
                                 <label for="hospital">Hospital:</label>
                                 <input type="text" v-model="consultation.hospital" class="form-control"  v-on:keyup="assignHospital($event)">
                             </div>
-                            
+
                             <div class="form-group" v-if="consultation.admit == 1">
                                 <label for="comment">Doctor's order:</label>
                                 <textarea class="form-control" rows="5" v-model="consultation.doctors_order" id="doctors_order"></textarea>
@@ -589,7 +628,12 @@
                     },
                     itr: {
                         diagnosis    : null,  
-                        vital_sign   : null, 
+                        vital_sign   : {
+                            blood_pressure   : '',
+                            body_temperature : '',
+                            respiratory_rate : '',
+                            pulse_rate       : '',
+                        }, 
                         symptom : null,
                         skin  : null,
                         laboratory   : null,
@@ -619,6 +663,22 @@
             events: {},
 
             methods: {
+                saveDetails: function(){
+                    this.$http.post('/api/save/itr/vital_sign/post', this.itr,function(data){
+                        if(data['status'] == 'success'){
+                            swal({
+                                title: 'Success!',
+                                text: 'Data saved.',
+                                showConfirmButton : false,
+                                timer: 500,
+                                type : 'success',
+                            }).then(function () {},function (dismiss) {});
+                        }else{
+                            swal("Error","Please try again!", "error");
+                        }
+                    });
+                },
+
                 assignHospital: function(event){
                     event.preventDefault();
                     self = this; 

@@ -50,7 +50,7 @@
                     </div> 
 
                     <br>
-                    <div v-show="showLoadMoreBtn" class="row loadmore-container" style="text-align:center;">
+                    <div v-if="showLoadMoreBtn" class="row loadmore-container" style="text-align:center;">
                         <button value="Load More" @click="loadMore()" style="width:30%;" class="btn btn-primary ladda-button loader" data-style="expand-left"><span class="ladda-label">Load More</span></button>      
                     </div>
 
@@ -88,6 +88,12 @@
                 fetchUserFeedbacks: function(){
                     this.$http.get('/api/feedbacks/get?lastdate='+this.lastdate, function(data){
                         this.feedbacks = data['feedbacks'];
+                        if(data['remaining'] <= 10){
+                            this.showLoadMoreBtn = false;
+                        }else{
+                            this.showLoadMoreBtn = true;
+                            
+                        }
                     });
                 },
                 
@@ -99,10 +105,11 @@
                     l.start();
                     this.$http.get('/api/feedbacks/get?lastdate='+this.lastdate, function(data){
                         var items = data['feedbacks'];
-                        if(data['remaining'] == 0){
-                            self.showLoadMoreBtn = false;
+                        if(data['remaining'] <= 10){
+                            this.showLoadMoreBtn = false;
                         }else{
-                            self.showLoadMoreBtn = false;
+                            this.showLoadMoreBtn = true;
+                            
                         }
 
                         if(data['error'] == 'Unauthenticated'){

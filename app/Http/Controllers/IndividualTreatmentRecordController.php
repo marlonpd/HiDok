@@ -186,7 +186,8 @@ class IndividualTreatmentRecordController extends Controller
 
     public function api_save_itr_post($type, Request $request)
     {
-        
+        $in = $request->input();
+        return json_pretty(['status'   => $in ]);   
     }
 
 

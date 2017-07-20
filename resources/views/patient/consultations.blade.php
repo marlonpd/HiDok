@@ -94,34 +94,33 @@
                             <div>
                                 <p>
                                     <div class="row">
-                                        
-           
+                                    
 
                                         <div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="hospital">Blood pressure:</label>
-                                                    <input type="text" class="form-control"  v-on:keyup="">
+                                                    <input type="text" v-model="itr.vital_sign.blood_pressure" class="form-control"  v-on:keyup="">
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="hospital">Temperature:</label>
-                                                    <input type="text" class="form-control"  v-on:keyup="">
+                                                    <input type="text" v-model="itr.vital_sign.body_temperature" class="form-control"  v-on:keyup="">
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="hospital">Respiratory rate:</label>
-                                                    <input type="text" class="form-control"  v-on:keyup="">
+                                                    <input type="text" v-model="itr.vital_sign.respiratory_rate" class="form-control"  v-on:keyup="">
                                                 </div>
                                                 <div class="form-group" >
                                                     <label for="hospital">Pulse rate:</label>
-                                                    <input type="text" class="form-control"  v-on:keyup="">
+                                                    <input type="text" v-model="itr.vital_sign.pulse_rate" class="form-control"  v-on:keyup="">
                                                 </div>
                                             </div>
 
                                             @if(Auth::user()->is_doctor())
                                             <div class="span6 pull-right">
-                                                <button class="btn btn-primary btn-default past_medical_history-loading"  @click="saveITR('past_medical_history')"><i class="fa fa-pencil-square-o fa-1" aria-hidden="true"></i>Save</button>
+                                                <button class="btn btn-primary btn-default vital_sign-loading"  @click="saveDetails('vital_sign', $event)"><i class="fa fa-pencil-square-o fa-1" aria-hidden="true"></i>Save</button>
                                             </div>  
                                             <div class=" clr"></div>
                                             @endif
@@ -440,7 +439,7 @@
 
 
 
-                            <h3>Treatment</h3>
+                            <h3>Treatments</h3>
                             <div>
                                 <p>
                                     <div class="col-md-4"> 
@@ -453,13 +452,14 @@
                                     <hr>
 
                                     <div class="row">
-                                        <template v-for='treatment in itr["treatment"]'>
-                                            <div class="col-md-4">
+                                        <template v-for='(treatment,index) in itr["treatment"]'>
+                                            <div class="row margin-left-xs">
                                                 <div class="checkbox">
                                                     @if(Auth::user()->is_doctor())
                                                     <i @click="deleteITRItem('treatment',treatment)" class="hand-pointer fa fa-times-circle fa-1 color-red" aria-hidden="true"></i>
                                                     @endif
-                                                    <label> @{{ treatment.value }}</label>
+                                                    <label class="lbl-padding-l-0">@{{ (index+1) }}. @{{ treatment.value }}</label>
+                                                    <p>Sig : 2x a day</p>
                                                 </div>
                                             </div>
                                         </template>   
@@ -570,6 +570,12 @@
             created: function() {
                 this.fetchFirstConsultation();
                 this.fetchTerms();
+                this.itr.vital_sign   = {
+                            blood_pressure   : 'sfd',
+                            body_temperature : 'asffd',
+                            respiratory_rate : 'sadf',
+                            pulse_rate       : 'asdf',
+                        };
             },
 
             data(){
@@ -629,10 +635,6 @@
                     itr: {
                         diagnosis    : null,  
                         vital_sign   : {
-                            blood_pressure   : '',
-                            body_temperature : '',
-                            respiratory_rate : '',
-                            pulse_rate       : '',
                         }, 
                         symptom : null,
                         skin  : null,
@@ -663,7 +665,8 @@
             events: {},
 
             methods: {
-                saveDetails: function(){
+                saveDetails: function(type,$event){
+                    alert(JSON.stringify(itr.vital_sign));
                     this.$http.post('/api/save/itr/vital_sign/post', this.itr,function(data){
                         if(data['status'] == 'success'){
                             swal({

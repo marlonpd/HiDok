@@ -128,6 +128,25 @@ class RegisterController extends Controller
         //    ?: redirect($this->redirectPath());
     }
 
+    protected function api_register_post(Request $request)
+    {
+        $this->validator($request->all())->validate();
+
+        $account_type = $request->input('account_type');
+        
+        if($account_type == config('constants.account_type.patient') || $account_type == config('constants.account_type.doctor') )
+        {
+            $user = $this->create($request->all());
+            $this->send_email($user);
+        }
+        else
+        {
+            event(new Registered($user = $this->create_non_human_account($request->all())));
+        }
+
+        return json_pretty(['status' => 'success']); 
+    }
+
     public function send_email($user)
     {   
  

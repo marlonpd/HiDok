@@ -42,7 +42,7 @@
             </div>
         </div>
        
-            <div v-show="showLoadMoreBtn" class="row loadmore-container" style="text-align:center;">
+            <div v-if="showLoadMoreBtn" class="row loadmore-container" style="text-align:center;">
                 <button value="Load More" @click="loadMore()" style="width:30%;" class="btn btn-primary ladda-button loader" data-style="expand-left"><span class="ladda-label">Load More</span></button>      
             </div>
     </div>
@@ -85,6 +85,9 @@
                     fetchUserPatients: function(){
                         this.$http.get('/api/user/patients/get?lastdate='+this.lastdate, function(data){
                             this.userPatients = data['patients'];
+                            if(data['remaining'] == 0){
+                                this.showLoadMoreBtn = false;
+                            }
                         });
                     },
 

@@ -8,8 +8,15 @@
         <h4 class="modal-title custom_align" id="Heading">Treatment</h4>
       </div>
           <div class="modal-body">
-                <input id="treatment-autocomplete" v-on:keyup="keyMonitor($event)" v-model="selectedTreatment" autofocus type="text" name="q" placeholder="Treatment..." style="width:100%;max-width:600px;outline:0">
-                                          
+
+                <div class="form-group">
+                    <label for="email">Medicine:</label>
+                    <input id="treatment-autocomplete" v-on:keyup="keyMonitor($event)" v-model="selectedTreatment" autofocus type="text" name="q" placeholder="Treatment..." style="width:100%;max-width:600px;outline:0">
+                </div>
+                <div class="form-group">
+                    <label for="sig">Sig:</label>
+                    <input id="sig" v-on:keyup="keyMonitor($event)" v-model="selectedTreatment" type="text" style="width:100%;max-width:600px;outline:0">
+                </div>                             
           </div>
           <div class="modal-footer ">
                 <button type="button" @click="submitSelectedTreatment()" class="btn btn-warning btn-lg treatment-loading" style="width: 100%;"><span class="fa fa-plus fa-1"></span>Add</button>
@@ -45,7 +52,7 @@
             }
         },
 
-        props : ['treatment', 'patient_id', 'consultation_id'],
+        props : ['treatment', 'patient_id', 'consultation_id' ,'sig'],
 
         events: {},
 
@@ -80,11 +87,12 @@
 
             submitSelectedTreatment: function(){
 
-                var data = { value        :  $('#treatment-autocomplete').val(),   
+                var data = { value           :  $('#treatment-autocomplete').val(),   
                              patient_id      : this.patient_id,
                              consultation_id : this.consultation_id,
-                             type : 'treatment',
-                    };
+                             sig             : this.sig,
+                             type            : 'treatment',
+                           };
                 
                 var l = Ladda.create(document.querySelector( '.treatment-loading' ));
                 l.start();

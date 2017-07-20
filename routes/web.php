@@ -34,6 +34,10 @@ Route::get('/account/activation/{id}/{activation_code}' , 'AccountController@ind
 Route::get('/account/forgot' , 'AccountController@forgot_account');
 Route::get('/account/resend/activation' ,'AccountController@resend_activation');
 
+Route::post('/api/doctor/register/post', 'Auth\RegisterController@api_register_post');
+Route::post('/api/patient/register/post', 'Auth\RegisterController@api_register_post');
+
+
 Route::post('/api/resend/account/activation' ,'AccountController@api_resend_account_activation');
 Route::post('/api/send/password/reset/email/post', 'AccountController@api_send_password_reset_email_post');
 Route::post('/api/reset/password/post', 'AccountController@api_reset_password_post');

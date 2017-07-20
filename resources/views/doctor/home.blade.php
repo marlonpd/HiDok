@@ -179,9 +179,9 @@
                     this.$http.get('/api/posts/get?filter='+filter , function(data){
                         this.posts = data['posts'];
                         if(data['remaining'] > 10){
-                            self.showLoadMoreBtn = true;
+                            this.showLoadMoreBtn =true;
                         }else{
-                            self.showLoadMoreBtn = false;
+                            this.showLoadMoreBtn =false;
                             
                         }
                     });

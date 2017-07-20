@@ -224,9 +224,9 @@
                     this.$http.get('/api/posts/get?lastdate='+this.lastdate, function(data){
                         var moreposts = data['posts'];
                         if(data['remaining'] == 0){
-                            self.showLoadMoreBtn = false;
+                            this.showLoadMoreBtn = false;
                         }else{
-                            self.showLoadMoreBtn = true;
+                            this.showLoadMoreBtn = true;
                         }
 
                         if(data['error'] == 'Unauthenticated'){

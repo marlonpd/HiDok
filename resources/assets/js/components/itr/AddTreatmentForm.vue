@@ -9,13 +9,14 @@
       </div>
           <div class="modal-body">
 
+            <!-- v-on:keyup="keyMonitor($event)"-->
                 <div class="form-group">
                     <label for="email">Medicine:</label>
-                    <input id="treatment-autocomplete" v-on:keyup="keyMonitor($event)" v-model="selectedTreatment" autofocus type="text" name="q" placeholder="Treatment..." style="width:100%;max-width:600px;outline:0">
+                    <input id="treatment-autocomplete"  v-model="selectedTreatment" autofocus type="text" name="q" placeholder="Treatment..." style="width:100%;max-width:600px;outline:0">
                 </div>
                 <div class="form-group">
                     <label for="sig">Sig:</label>
-                    <input id="sig" v-on:keyup="keyMonitor($event)" v-model="selectedTreatment" type="text" style="width:100%;max-width:600px;outline:0">
+                    <input id="sig" v-model="sig" type="text" style="width:100%;max-width:600px;outline:0">
                 </div>                             
           </div>
           <div class="modal-footer ">

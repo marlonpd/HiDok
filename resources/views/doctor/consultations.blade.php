@@ -18,7 +18,7 @@
                                     </div>
                                     <div class="col-sm-9">
                                     <h4><a :href="'/patient/consultations/'+consultation['patient'].id">@{{ consultation['patient'].firstname }} @{{ consultation['patient'].lastname }}</a></h4>
-                                    <p><a href="#">Consultaiton date : @{{ consultation.created_at }}</a></p>
+                                    <p><a href="#">Consultaiton date : @{{ consultation.created_at | formatDate }}</a></p>
                                     </div>
                                     <div class="col-sm-2">
                                         <label class="pull-right">

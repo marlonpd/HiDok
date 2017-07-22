@@ -11,7 +11,7 @@
 <hr style="height:1px;border:none;color:#333;background-color:#333;">
 <div>
 <div style="float:left">
-    Patient Name : <u>{{ $patient->firstname}} {{ $patient->lastname}}</u> 
+    Patient Name : <u>{{ $patient->fullname() }}</u> 
     <br>
     Address : <u> {{ $patient->address }}</u> 
 </div>
@@ -31,8 +31,10 @@
 <img style="height:50px;" src="/images/rx.png">
 
 
-@foreach ($itr as $treatment)
-    <span>{{ $treatment->value }}</span>,&nbsp;&nbsp;&nbsp;
+@foreach ($itr as $key=>$treatment)
+    <p style="margin-bottom:0;padding-bottom:0;">{{ ($key+1) }}.  {{ $treatment->value }}</p>
+    <p style="margin-top:0;padding-top:0;">&nbsp;&nbsp;&nbsp;&nbsp;Sig : {{ $treatment->sig }}</p>
+    <p></p>
 @endforeach
 
 <br><br><br><br>

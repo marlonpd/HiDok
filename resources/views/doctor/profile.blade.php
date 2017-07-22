@@ -64,7 +64,7 @@
                               <p>
                                      @{{ feedback.content }}
                               </p>
-                              <small class="pull-right text-muted"><i class="fa fa-clock-o" aria-hidden="true"></i> @{{ feedback.created_at }}</small>
+                              <small class="pull-right text-muted"><i class="fa fa-clock-o" aria-hidden="true"></i> @{{ feedback.created_at | formatDate }}</small>
                               
                             </div>
                             <div class="clr"></div>

@@ -3,7 +3,6 @@
 @section('content')
 <div class="container">
     <div class="row">
-
             <div class="panel panel-default">
                 <div class="panel-heading">Appointments
                 
@@ -64,32 +63,10 @@
                         </div>
 
 
-
-
-
-
-
-
-
-
-
-                               
-
-
-
-
-
-
-
-
-
-
-
-
                 </div>
 
                  <br>
-                <div v-show="showLoadMoreBtn" class="row loadmore-container" style="text-align:center;">
+                <div v-if="showLoadMoreBtn" class="row loadmore-container" style="text-align:center;">
                     <button value="Load More" @click="loadMore()" style="width:30%;" class="btn btn-primary ladda-button loader" data-style="expand-left"><span class="ladda-label">Load More</span></button>      
                 </div>        
 
@@ -208,6 +185,9 @@
                 fetchAllUserAppointments: function(){
                     this.$http.get('/api/appointments/get?lastdate='+this.lastdate+'&key='+this.searchKey, function(data){
                         this.appointments = data['appointments'];
+                        if(data['remaining'] == 0){
+                            this.showLoadMoreBtn = false;
+                        }
                     });
                 },
 
@@ -248,8 +228,9 @@
                     l.start();
                     this.$http.get('/api/appointments/get?lastdate='+this.lastdate+'&key='+this.searchKey, function(data){
                         var items = data['appointments'];
+                        
                         if(data['remaining'] == 0){
-                            self.showLoadMoreBtn = false;
+                            this.showLoadMoreBtn = false;
                         }
 
                         if(data['error'] == 'Unauthenticated'){

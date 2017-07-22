@@ -16,7 +16,7 @@
                                 </div>
                                 <div class="col-sm-9">
                                 <h4><a :href="'/profile/doctor/'+consultation.doctor.id">@{{ consultation['doctor'].firstname | capitalize }} @{{ consultation['doctor'].lastname | capitalize }}</a></h4>
-                                <p><a :href="'/consultation/'+consultation.id" >Consultaiton date : @{{ consultation.created_at }}</a></p>
+                                <p><a :href="'/consultation/'+consultation.id" >Consultaiton date : @{{ consultation.created_at | formatDate }}</a></p>
                                 </div>
                                 <div class="col-sm-2">
                                     <label class="pull-right">

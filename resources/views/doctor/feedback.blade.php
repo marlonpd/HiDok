@@ -32,7 +32,7 @@
                         </div>
                         <div class="panel-body">
                         <p>@{{ feedback.content }}</p>
-                        <p>@{{ feedback.created_at }}]</p>
+                        <p>@{{ feedback.created_at | formatDate}}]</p>
                         </div><!-- /panel-body -->
                         </div><!-- /panel panel-default -->
                         </div><!-- /col-sm-5 -->

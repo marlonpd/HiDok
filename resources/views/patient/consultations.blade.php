@@ -37,7 +37,7 @@
 
                  <div class="row consultations-pnl">
                         <div v-for="consultation in consultations" class="consultation-detail hand-pointer shadow" @click="viewConsultation(consultation, $event,'')">
-                            <span>Date :  @{{ consultation.created_at }}</span><br>
+                            <span>Date :  @{{ consultation.created_at | formatDate }}</span><br>
                             <span>Dr. @{{ consultation.doctor.firstname | capitalize }}  @{{ consultation.doctor.lastname | capitalize }}   </span>
                         </div>
                         <div class="clr"></div>
@@ -54,8 +54,9 @@
                      <!---Start Of Tabs -->
                         <div class="panel panel-default">
                 <div class="panel-heading consultation-heading">
-                   @{{ newConsultation }} Consultation <br> Date : @{{ consultation.created_at}} <br> Dr. @{{ consultation.doctor.firstname | capitalize }}  @{{ consultation.doctor.lastname | capitalize }}    
-                          
+                   @{{ newConsultation }} Consultation <br> Date : @{{ consultation.created_at}} <br>
+                    Dr. @{{ consultation.doctor.firstname | capitalize }}  @{{ consultation.doctor.lastname | capitalize }}    
+    
                 </div>
 
                 <div class="panel-body">
@@ -380,6 +381,48 @@
                             <div>
                                 <p>
 
+                                    <div>
+                                        <h4>Laboratory</h4>
+                                        @if(Auth::user()->is_doctor())
+                                        <button class="btn btn-primary btn-default" data-title="Create" data-toggle="modal" data-target="#add-laboratory-form" ><i class="fa fa-plus fa-1" aria-hidden="true"></i>Add</button>
+                                        @endif
+                                        <hr>
+                                            <div class="row">
+                                                <template v-for='laboratory in itr["laboratory"]'>
+                                                    <div class="col-md-4">
+                                                        <div class="checkbox">
+                                                            @if(Auth::user()->is_doctor())
+                                                            <i @click="deleteITRItem('laboratory',laboratory)" class="hand-pointer fa fa-times-circle fa-1 color-red" aria-hidden="true"></i>
+                                                            @endif
+                                                            <label> @{{ laboratory.value }}</label>
+                                                        </div>
+                                                    </div>
+                                                </template>   
+                                            </div>
+                                    </div>
+
+
+                                    <div>
+                                        <h4>Other diagnostic tests</h4>
+                                        @if(Auth::user()->is_doctor())
+                                        <button class="btn btn-primary btn-default" data-title="Create" data-toggle="modal" data-target="#add-other-diagnostic-test-form" ><i class="fa fa-plus fa-1" aria-hidden="true"></i>Add</button>
+                                        @endif
+                                        <hr>
+                                            <div class="row">
+                                                <template v-for='other_diagnostic_test in itr["other_diagnostic_test"]'>
+                                                    <div class="col-md-4">
+                                                        <div class="checkbox">
+                                                            @if(Auth::user()->is_doctor())
+                                                            <i @click="deleteITRItem('other_diagnostic_test',other_diagnostic_test)" class="hand-pointer fa fa-times-circle fa-1 color-red" aria-hidden="true"></i>
+                                                            @endif
+                                                            <label> @{{ other_diagnostic_test.value }}</label>
+                                                        </div>
+                                                    </div>
+                                                </template>   
+                                            </div>
+                                    </div>
+
+                                    <!--
                                     <div class="pull-left"> 
                                         @if(Auth::user()->is_doctor())
                                         <button class="btn btn-primary btn-default" data-title="Create" data-toggle="modal" data-target="#add-laboratory-form" ><i class="fa fa-plus fa-1" aria-hidden="true"></i>Add</button>
@@ -400,7 +443,7 @@
                                                 </div>
                                             </div>
                                         </template>   
-                                    </div>   
+                                    </div>   -->
 
 
                                 </p>
@@ -439,7 +482,7 @@
 
 
 
-                            <h3>Treatments</h3>
+                            <h3>Treatment</h3>
                             <div>
                                 <p>
                                     <div class="col-md-4"> 
@@ -459,7 +502,7 @@
                                                     <i @click="deleteITRItem('treatment',treatment)" class="hand-pointer fa fa-times-circle fa-1 color-red" aria-hidden="true"></i>
                                                     @endif
                                                     <label class="lbl-padding-l-0">@{{ (index+1) }}. @{{ treatment.value }}</label>
-                                                    <p>Sig : 2x a day</p>
+                                                    <p>Sig : @{{ treatment.sig }}</p>
                                                 </div>
                                             </div>
                                         </template>   
@@ -543,6 +586,7 @@
 <add-diagnosis-form :consultation_id="consultation.id" :patient_id="'{{ $patient->id }}'" :diagnose="diagnose"></add-diagnosis-form>
 <add-treatment-form :consultation_id="consultation.id" :patient_id="'{{ $patient->id }}'" :treatment="terms['treatment']"></add-treatment-form>
 <add-laboratory-form :consultation_id="consultation.id" :patient_id="'{{ $patient->id }}'" :laboratories="laboratories"></add-laboratory-form>
+<add-other-diagnostic-test-form :consultation_id="consultation.id" :patient_id="'{{ $patient->id }}'" :laboratories="otherDiagnosticTests"></add-other-diagnostic-test-form>
 <add-general-appearances-form :consultation_id="consultation.id" :patient_id="'{{ $patient->id }}'" :general_appearances="generalAppearances"></add-general-appearances-form>
 <add-skins-form :consultation_id="consultation.id" :patient_id="'{{ $patient->id }}'" :skins="skins"></add-skins-form>
 <add-heent-form :consultation_id="consultation.id" :patient_id="'{{ $patient->id }}'" :heents="heents"></add-heent-form>
@@ -589,6 +633,7 @@
                     editAppointment : {},
                     appointmentITR : {},
                     symptoms: {},
+                    otherDiagnosticTests : {},
                     skins : {},
                     heents : {},
                     necks : {},
@@ -937,6 +982,7 @@
                         }else{
                             this.itr['other_medical_intervention'] = '';
                         }
+                       
                     });
                 },
 
@@ -1024,7 +1070,7 @@
                         this.abdomens = data['abdomen'];
                         this.genitoUrinarySystems = data['genito_urinary_system'];
                         this.extremities = data['extremities'];
-                        
+                        this.otherDiagnosticTests = data['other_diagnostic_test'];
                          $('#vital-sign-autocomplete').autoComplete({
                             minChars: 1,
                             source: function(term, suggest){

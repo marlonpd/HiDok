@@ -34,6 +34,7 @@ return ['constants' =>
 			'abdomen',
 			'genito_urinary_system',
 			'extremities',
+			'other_diagnostic_test',
 		],
 		'path' => [
 			'user_photo' => '/images/photo',
@@ -79,6 +80,7 @@ return ['constants' =>
 				'neck'						  => 'Neck',
 				'skin'						  => 'Skin',
 				'symptom'					  => 'Symptom',
+				'other_diagnostic_test'		  => 'Other Diagnostic Test',	
 
 		],
 		'notification_action' =>[

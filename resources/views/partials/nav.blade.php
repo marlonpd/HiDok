@@ -109,7 +109,7 @@
 
                                 <a v-for="notification in unReadNotification" class="content" :href="notification.url">  
                                   <div class="notification-item">
-                                    <h4 class="item-title">@{{ notification.type | capitalize  }} - @{{ notification.created_at }}</h4>
+                                    <h4 class="item-title">@{{ notification.type | capitalize  }} - @{{ notification.created_at | formatDate }}</h4>
                                     <div class="row">
                                       <div class="col-sm-3">
                                           <div class="thumbnail"><img :src="notification.sender.thumbnail" class="img-responsive user-photo"></div>

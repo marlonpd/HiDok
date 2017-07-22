@@ -70,6 +70,7 @@ Vue.component('add-vitalsigns-form', require('./components/itr/AddVitalSignsForm
 Vue.component('add-diagnosis-form', require('./components/itr/AddDiagnosisForm.vue'));
 Vue.component('add-treatment-form', require('./components/itr/AddTreatmentForm.vue'));
 Vue.component('add-laboratory-form', require('./components/itr/AddLaboratoryForm.vue'));
+Vue.component('add-other-diagnostic-test-form', require('./components/itr/AddOtherDiagnosticTestForm.vue'));
 Vue.component('add-general-appearances-form', require('./components/itr/AddGeneralAppearanceForm.vue'));
 Vue.component('add-skins-form', require('./components/itr/AddSkinForm.vue'));
 Vue.component('add-heent-form', require('./components/itr/AddHeentForm.vue'));
@@ -82,7 +83,11 @@ Vue.component('add-extremity-form', require('./components/itr/AddExtremityForm.v
 Vue.component('edit-post-form', require('./components/EditPostForm.vue'));
 
 
-
+Vue.filter('formatDate', function(value) {
+  if (value) {
+    return moment(String(value)).format('MMM DD, YYYY hh:mm a');
+  }
+});
 
 const app = new Vue({
   router,

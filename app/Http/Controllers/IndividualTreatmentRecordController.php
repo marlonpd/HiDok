@@ -28,6 +28,7 @@ class IndividualTreatmentRecordController extends Controller
         $type = $request->input('type');
         $patient_id = $request->input('patient_id');
         $consultation_id = $request->input('consultation_id');
+        $sig = $request->input('sig');
 
         if(is_array($value) ){
             foreach ($value as $item) 
@@ -43,7 +44,18 @@ class IndividualTreatmentRecordController extends Controller
             
         }else{
 
-            if($type == 'treatment' || $type=='vital_sign')
+            if($type == 'treatment')
+            {
+                $itr = new IndividualTreatmentRecord(); 
+                $itr->patient_id = $patient_id;
+                $itr->doctor_id =Auth::user()->id;
+                $itr->consultation_id = $consultation_id;
+                $itr->value = $value;
+                $itr->type = $type;
+                $itr->sig = $sig;
+                $itr->save();
+            }
+            else if( $type=='vital_sign')
             {
                 $itr = new IndividualTreatmentRecord(); 
                 $itr->patient_id = $patient_id;
@@ -130,6 +142,7 @@ class IndividualTreatmentRecordController extends Controller
 
     public function show_print( $type, $id , $patient_id)
     {
+        
         if($type == "consultation")
         {
             $itr = array();
@@ -154,6 +167,8 @@ class IndividualTreatmentRecordController extends Controller
                                             ->where('consultation_id','=',$id)
                                             ->where('type','=' , $type)
                                             ->get();
+
+           
         }
 
         $patient = User::where('id', '=', $patient_id)

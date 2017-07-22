@@ -77,7 +77,7 @@
                                 </p> 
 
                                 <div>
-                                    <span class="date">Posted @{{ post.created_at }}</span><div class="pull-right"><span class="label">alice</span> <span class="label">story</span> <span class="label">blog</span> <span class="label">personal</span></div>
+                                    <span class="date">Posteds @{{ post.created_at | formatDate }}</span><div class="pull-right"><span class="label">alice</span> <span class="label">story</span> <span class="label">blog</span> <span class="label">personal</span></div>
                                 </div> 
 
                             </div>

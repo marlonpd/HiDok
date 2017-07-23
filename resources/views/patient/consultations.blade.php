@@ -569,7 +569,7 @@
 
                     @if(Auth::user()->is_doctor())
                     <div class="pull-right margin-sm">
-                        <button class="btn btn-success btn-default doctors_order-loading"  @click=""><i class="fa fa-check-square-o fa-1" aria-hidden="true"></i>Done</button>
+                        <button class="btn btn-success btn-default doctors_order-loading"  @click="doneConsultation($event)"><i class="fa fa-check-square-o fa-1" aria-hidden="true"></i>Done</button>
                         <button type="button" class="btn btn-primary btn-danger" @click="deleteConsultation( $event)">Delete</button>       
                         <a class="btn btn-info" target="_blank" @click="print('consultation',$event)" ><i class="fa fa-print" aria-hidden="true"></i>Print</a>
                     </div>
@@ -717,6 +717,38 @@
             events: {},
 
             methods: {
+                doneConsultation: function(event){
+                    event.preventDefault();
+                    swal({
+                        title: 'Are you sure?',
+                        text: "You are about to delete the selected consultation!",
+                        type: 'info',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: "Yes, I'm done!"
+                    }).then(function (isConfirm) {
+                            if(isConfirm){
+                                swal({
+                                    title: 'Success!',
+                                    text: 'Data saved. Redirecting....',
+                                    showConfirmButton : false,
+                                    timer: 500,
+                                    type : 'success',
+                                }).then(function () {},function (dismiss) {});
+
+                                window.location = "/home";    
+                            }else
+                            {
+                                swal("cancelled","Please try again!", "error");
+                            }
+
+                    
+                    });
+
+                    
+                },
+
                 saveDetails: function(type,event){
                     event.preventDefault();
                     this.$http.post('/api/save/itr/'+type+'/post?consultation_id='+this.consultation.id, this.vital_sign,function(data){
@@ -946,6 +978,8 @@
                                         self.consultation = data['consultation'];
                                         self.consultations.unshift(data['consultation']);
                                         self.newConsultation = 'New';
+                                        self.itr = {};
+                                        self.vital_sign = {};
                                         $('.consultation-heading').addClass('new-consultation');
                                         $('div.consultations-pnl div:first-child').css('background-color','#F1FCEE!important');
                    

@@ -136,18 +136,29 @@
 <script type="text/javascript">
           $(function(){
             $(".Fr-star.userChoose").Fr_star(function(rating){
+              @if($is_friend > 0)
+                swal({
+                  title: 'Rating!',
+                  text: 'You rate '+rating,
+                  showConfirmButton : false,
+                  timer: 1000,
+                  type : 'info',
+                }).then(function () {},function (dismiss) {});
+                
+                $.post("/api/rate/post", {'doctor_id' :'{!! $user->id !!}', 'rating': rating}, function(){                 
+                  $("#current-user-rate").html(rating);
+                });
+              @else
+                swal({
+                  title: 'Error!',
+                  text: "You can't rate this doctor  ",
+                  showConfirmButton : false,
+                  timer: 1000,
+                  type : 'error',
+                }).then(function () {},function (dismiss) {});
+              @endif
 
-              swal({
-                title: 'Rating!',
-                text: 'You rate '+rating,
-                showConfirmButton : false,
-                timer: 1000,
-                type : 'info',
-              }).then(function () {},function (dismiss) {});
-              
-              $.post("/api/rate/post", {'doctor_id' :'{!! $user->id !!}', 'rating': rating}, function(){                 
-                $("#current-user-rate").html(rating);
-              });
+
             });
           });
 

@@ -8,6 +8,7 @@ use App\Clinic;
 use App\Ratings;
 use Illuminate\Support\Facades\Auth;
 use Image;
+use App\DoctorPatient;
 
 class ProfileController extends Controller
 {
@@ -48,7 +49,11 @@ class ProfileController extends Controller
 
             $doctor_rate = $this->get_doctor_ratings($id);
 
-            return view($account_type.'/profile', compact('user', 'doctor_rate'));
+            $is_friend = DoctorPatient::where('doctor_id','=',$id)
+                                      ->where('patient_id', '=', Auth::user()->id)
+                                      ->count();
+
+            return view($account_type.'/profile', compact('user', 'doctor_rate', 'is_friend'));
         }
         elseif($account_type == config('constants.account_type_rev.0'))
         {      

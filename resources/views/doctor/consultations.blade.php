@@ -111,6 +111,7 @@
                     this.$http.get('/api/doctor/consultations/get?lastdate='+this.lastdate, function(data){
                         this.consultations = data['consultations'];
                         
+                        
                         if(this.consultations.length <= 10 ){
                             this.showLoadMoreBtn = false;
                         }else{

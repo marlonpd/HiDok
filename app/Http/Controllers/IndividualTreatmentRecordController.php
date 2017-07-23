@@ -201,8 +201,42 @@ class IndividualTreatmentRecordController extends Controller
 
     public function api_save_itr_post($type, Request $request)
     {
-        $in = $request->input();
-        return json_pretty(['status'   => $in ]);   
+
+        if($type == 'vital_sign')
+        {
+            $consultation_id = $request->input('consultation_id');
+            /*"blood_pressure": "bp1asdf",
+        "body_temperature": "bt1asdfasdf",
+        "respiratory_rate": "rr1asdfasdf",
+        "pulse_rate": "pr1sadfasdf",*/
+            $blood_pressure = $request->input('blood_pressure');
+            $body_temperature = $request->input('body_temperature');
+            $respiratory_rate = $request->input('respiratory_rate');
+            $pulse_rate = $request->input('pulse_rate');
+
+            
+
+            IndividualTreatmentRecord::where('consultation_id' , '=' , $consultation_id)
+                                     ->where('name', '=' , 'blood_pressure')
+                                     ->update(['value' => $blood_pressure]);
+                                
+            IndividualTreatmentRecord::where('consultation_id' , '=' , $consultation_id)
+                                     ->where('name', '=' , 'body_temperature')
+                                     ->update(['value' => $body_temperature]);
+            
+            IndividualTreatmentRecord::where('consultation_id' , '=' , $consultation_id)
+                                     ->where('name', '=' , 'respiratory_rate')
+                                     ->update(['value' => $respiratory_rate]);
+
+            IndividualTreatmentRecord::where('consultation_id' , '=' , $consultation_id)
+                                     ->where('name', '=' , 'pulse_rate')
+                                     ->update(['value' => $pulse_rate]);
+
+
+            return json_pretty(['status' => 'success',]);   
+        }
+
+        
     }
 
 

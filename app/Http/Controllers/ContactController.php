@@ -15,15 +15,11 @@ class ContactController extends Controller
 
     public function send_message(Request $request)
     {
-        $name = $request->input('name');
-        $email = $request->input('email');
-        $subject = $request->input('subject');
-        $inquiry = $request->input('message');
     
-        $data = array('name'    => $name,
-                      'subject' => $subject, 
-                      'email'   => $email,
-                      'inquiry' => $inquiry, 
+        $data = array('name'    => $request->input('name'),
+                      'subject' => $request->input('subject'), 
+                      'email'   => $request->input('email'),
+                      'inquiry' => $request->input('message'), 
         );
         Mail::send('mail', $data, function($message) use($name,$email,$subject,$inquiry) {
             $message->to('hidokinc@gmail.com', 'Contact-'.$subject)->subject

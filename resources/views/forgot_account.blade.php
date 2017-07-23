@@ -7,7 +7,6 @@
             <h4 class="">
             Forgot your password?
             </h4>
-            <form accept-charset="UTF-8" role="form" id="login-recordar" method="post">
             <fieldset>
                 <span class="help-block">
                 Email address you use to log in to your account
@@ -26,7 +25,7 @@
                 <p class="help-block">
                 </p>
             </fieldset>
-            </form>
+
         </div>
     </div>
 </div>

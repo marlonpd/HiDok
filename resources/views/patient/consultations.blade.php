@@ -101,21 +101,21 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="hospital">Blood pressure:</label>
-                                                    <input type="text" v-model="itr.vital_sign.blood_pressure" class="form-control"  v-on:keyup="">
+                                                    <input type="text" v-model="vital_sign.blood_pressure" class="form-control"  >
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="hospital">Temperature:</label>
-                                                    <input type="text" v-model="itr.vital_sign.body_temperature" class="form-control"  v-on:keyup="">
+                                                    <input type="text" v-model="vital_sign.body_temperature" class="form-control"  >
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="hospital">Respiratory rate:</label>
-                                                    <input type="text" v-model="itr.vital_sign.respiratory_rate" class="form-control"  v-on:keyup="">
+                                                    <input type="text" v-model="vital_sign.respiratory_rate" class="form-control">
                                                 </div>
                                                 <div class="form-group" >
                                                     <label for="hospital">Pulse rate:</label>
-                                                    <input type="text" v-model="itr.vital_sign.pulse_rate" class="form-control"  v-on:keyup="">
+                                                    <input type="text" v-model="vital_sign.pulse_rate" class="form-control" >
                                                 </div>
                                             </div>
 
@@ -126,6 +126,8 @@
                                             <div class=" clr"></div>
                                             @endif
                                         </div>
+
+                                        <!--
 
                                         <div class="form-group" >
                                             <label for="hospital">Others:</label>
@@ -150,7 +152,7 @@
                                                     <label> @{{ vitalSign.value }}</label>
                                                 </div>
                                             </div>
-                                        </template>
+                                        </template> -->
 
                                        
 
@@ -567,6 +569,7 @@
 
                     @if(Auth::user()->is_doctor())
                     <div class="pull-right margin-sm">
+                        <button class="btn btn-success btn-default doctors_order-loading"  @click=""><i class="fa fa-check-square-o fa-1" aria-hidden="true"></i>Done</button>
                         <button type="button" class="btn btn-primary btn-danger" @click="deleteConsultation( $event)">Delete</button>       
                         <a class="btn btn-info" target="_blank" @click="print('consultation',$event)" ><i class="fa fa-print" aria-hidden="true"></i>Print</a>
                     </div>
@@ -614,12 +617,6 @@
             created: function() {
                 this.fetchFirstConsultation();
                 this.fetchTerms();
-                this.itr.vital_sign   = {
-                            blood_pressure   : 'sfd',
-                            body_temperature : 'asffd',
-                            respiratory_rate : 'sadf',
-                            pulse_rate       : 'asdf',
-                        };
             },
 
             data(){
@@ -680,6 +677,10 @@
                     itr: {
                         diagnosis    : null,  
                         vital_sign   : {
+                            blood_pressure   : '',
+                            body_temperature : '',
+                            respiratory_rate : '',
+                            pulse_rate       : '',
                         }, 
                         symptom : null,
                         skin  : null,
@@ -694,6 +695,12 @@
                         genito_urinary_system : null,
                         extremities : null,
                         present_illness_history : {},
+                    },
+                    vital_sign   : {
+                        blood_pressure   : '',
+                        body_temperature : '',
+                        respiratory_rate : '',
+                        pulse_rate       : '',
                     },
                     diagnoses : {},
                     itr  : {},
@@ -710,9 +717,9 @@
             events: {},
 
             methods: {
-                saveDetails: function(type,$event){
-                    alert(JSON.stringify(itr.vital_sign));
-                    this.$http.post('/api/save/itr/vital_sign/post', this.itr,function(data){
+                saveDetails: function(type,event){
+                    event.preventDefault();
+                    this.$http.post('/api/save/itr/'+type+'/post?consultation_id='+this.consultation.id, this.vital_sign,function(data){
                         if(data['status'] == 'success'){
                             swal({
                                 title: 'Success!',
@@ -847,6 +854,7 @@
                         this.consultations = data['consultations'];
                         if(this.consultations[0]){
                             this.consultation = this.consultations[0];
+                            
                         }
                         
                    
@@ -982,6 +990,11 @@
                         }else{
                             this.itr['other_medical_intervention'] = '';
                         }
+                        self = this;
+                        this.itr['vital_sign'].forEach(function(vs , index){
+
+                            self.vital_sign[vs.name] = vs.value;
+                        });
                        
                     });
                 },
@@ -1107,11 +1120,19 @@
                     if(this.consultation.id){
                         this.$http.get('/api/itr/get/'+this.consultation.id+'/'+type ,function(data){
                             
+                        
                             if(type == 'all'){
+                                self = this;
                                 this.itr = data['itr'];
+                                
                                 this.itr['present_illness_history']  =  this.itr['present_illness_history'].length > 0 ? this.itr['present_illness_history'][0].value : ''; 
                                 this.itr['past_medical_history']  =  this.itr['past_medical_history'].length > 0 ? this.itr['past_medical_history'][0].value : ''; 
                                 this.itr['other_medical_intervention']  =  this.itr['other_medical_intervention'].length > 0 ? this.itr['other_medical_intervention'][0].value : ''; 
+                                
+                                this.itr['vital_sign'].forEach(function(vs , index){
+                                   self.vital_sign[vs.name] = vs.value;
+                                });
+                            
                             }else{
                                 this.itr[type] = data[type];
                             }

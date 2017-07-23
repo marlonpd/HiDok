@@ -16,7 +16,7 @@
                 </div>
                 <div class="form-group">
                     <label for="sig">Sig:</label>
-                    <input id="sig" v-model="sig" type="text" style="width:100%;max-width:600px;outline:0">
+                    <textarea id="sig" style="width:100%;max-width:600px;outline:0"  placeholder="add multiple lines"></textarea>
                 </div>                             
           </div>
           <div class="modal-footer ">
@@ -50,10 +50,11 @@
                 searchkey : '',
                 selectedTreatment : "",
                 other: '',
+                sig : '',
             }
         },
 
-        props : ['treatment', 'patient_id', 'consultation_id' ,'sig'],
+        props : ['treatment', 'patient_id', 'consultation_id' ],
 
         events: {},
 
@@ -91,7 +92,7 @@
                 var data = { value           :  $('#treatment-autocomplete').val(),   
                              patient_id      : this.patient_id,
                              consultation_id : this.consultation_id,
-                             sig             : this.sig,
+                             sig             : $("#sig").val(),
                              type            : 'treatment',
                            };
                 
@@ -103,10 +104,12 @@
                         this.$parent.fetchITR('treatment');
                         this.selectedTreatment = null;
                         $('#treatment-autocomplete').val(''), 
-                         l.stop();
+                         
                         $('#add-treatment-form').modal('hide');
+                        $("#sig").val("");
                     }
                 });
+                l.stop();
             }
         },
 

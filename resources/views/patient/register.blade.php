@@ -5,7 +5,7 @@
     <div class="col-sm-4 col-sm-offset-4">
       <h2>Please sign up | Patient</h2>
 
-      <form method="post" action="{{ url('/register') }}">
+      <form method="post" action="{{ url('/patient/register') }}">
         {!! csrf_field() !!}
 
         <input type="hidden" name="account_type" id="account_type" value="{{ Config::get('constants.account_type.patient') }}">

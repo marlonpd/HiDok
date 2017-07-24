@@ -29,6 +29,7 @@ Route::post('pharmacy/register', 'Auth\RegisterController@post_register');*/
 
 Route::post('/api/login/post','Auth\LoginController@login_post');
 Route::post('/doctor/register', 'Auth\RegisterController@post_register');
+Route::post('/patient/register', 'Auth\RegisterController@post_register');
 Route::get('/api/constants/get', 'PublicController@api_constants_get');
 Route::get('/account/activation/{id}/{activation_code}' , 'AccountController@index');
 Route::get('/account/forgot' , 'AccountController@forgot_account');

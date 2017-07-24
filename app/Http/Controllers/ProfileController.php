@@ -162,8 +162,8 @@ class ProfileController extends Controller
 
             $request->file('photo')->move($photo_dir, $safename);
             Image::make($public_path.'/'.$photo_dir.'/'.$safename)->resize(200, 200)->save($public_path.'/'.$photo_dir.'/thumb/'.$safename);
-            $user->update(['photo' => $photo_dir.'/'.$safename,
-                           'thumbnail' => $photo_dir.'/thumb/'.$safename]);
+            $user->update(['photo' => '/'.$photo_dir.'/'.$safename,
+                           'thumbnail' => '/'.$photo_dir.'/thumb/'.$safename]);
 
             if($user)
             {

@@ -25,7 +25,8 @@
                         <span class="row">Weight:  {{ $patient->weight }}</span>
                         <span class="row">Contact no.: {{ $patient->contact_no }}</span>
                         <span class="row">Address:  {{ $patient->address }}</span>
-                        <span class="row">Bithdate: {{$patient->birthdate }}</span>
+                        <!--
+                        <span class="row">Bithdate: {{$patient->birthdate }}</span> -->
                     </div>      
                  </span>
                  

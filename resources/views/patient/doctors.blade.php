@@ -35,7 +35,7 @@
                             </div>
                         </div>
                         <div class="col-md-8">
-                            <h6><a :href="'/doctor/profile/'+doctor.doctor.id"> @{{ doctor.doctor.firstname }} @{{ doctor.doctor.lastname }}</a></h6>
+                            <h6><a :href="'/doctor/profile/'+doctor.doctor.id"> @{{ doctor.doctor.firstname | capitalize }} @{{ doctor.doctor.lastname | capitalize }}</a></h6>
                             <p>@{{ doctor.created_at | formatDate}}</p>
                 
                         </div>

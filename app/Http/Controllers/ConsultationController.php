@@ -164,14 +164,6 @@ class ConsultationController extends Controller
 
     public function insert_vital_sign_set($patient_id , $consultation_id)
     {
-        /*$data = array(
-            array('patient_id'=>$patient_id, 'doctor_id' => Auth::user()->id , 'consultation_id' => $consultation_id ,'value' => '', 'type' => 'vital_sign' , 'name' => 'Blood Pressure'),
-            array('patient_id'=>$patient_id, 'doctor_id' => Auth::user()->id , 'consultation_id' => $consultation_id ,'value' => '', 'type' => 'vital_sign' , 'name' => 'Respiratory Rate'), 
-            array('patient_id'=>$patient_id, 'doctor_id' => Auth::user()->id , 'consultation_id' => $consultation_id ,'value' => '', 'type' => 'vital_sign' , 'name' => 'Respiratory Rate''Pulse Rate'), 
-            array('patient_id'=>$patient_id, 'doctor_id' => Auth::user()->id , 'consultation_id' => $consultation_id ,'value' => '', 'type' => 'vital_sign' , 'name' => 'Respiratory Rate''Pulse Rate''Body Temperature'), 
-        );
-
-        IndividualTreatmentRecord::insert($data);*/
 
         $itr = new IndividualTreatmentRecord(); 
         $itr->patient_id = $patient_id;
@@ -179,7 +171,7 @@ class ConsultationController extends Controller
         $itr->consultation_id = $consultation_id;
         $itr->name = 'blood_pressure';
         $itr->type = 'vital_sign';
-        $itr->value = 'bp1';
+        $itr->value = '';
         $itr->save();
 
         $itr = new IndividualTreatmentRecord(); 
@@ -188,7 +180,7 @@ class ConsultationController extends Controller
         $itr->consultation_id = $consultation_id;
         $itr->name = 'respiratory_rate';
         $itr->type = 'vital_sign';
-        $itr->value = 'rr1';
+        $itr->value = '';
         $itr->save();
 
         $itr = new IndividualTreatmentRecord(); 
@@ -197,7 +189,7 @@ class ConsultationController extends Controller
         $itr->consultation_id = $consultation_id;
         $itr->name = 'pulse_rate';
         $itr->type = 'vital_sign';
-        $itr->value = 'pr1';
+        $itr->value = '';
         $itr->save();
 
 
@@ -207,7 +199,7 @@ class ConsultationController extends Controller
         $itr->consultation_id = $consultation_id;
         $itr->name = 'body_temperature';
         $itr->type = 'vital_sign';
-        $itr->value = 'bt1';
+        $itr->value = '';
         $itr->save();
     }
 
